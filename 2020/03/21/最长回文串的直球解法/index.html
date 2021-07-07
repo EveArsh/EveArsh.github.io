@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>最长回文串的直球解法(JAVA) | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="不得不说，你在尝试暴力解法的时候真的很直男好吧，先把题目贴出来  给你一份『词汇表』（字符串数组） words 和一张『字母表』（字符串） chars。 假如你可以用 chars 中的『字母』（字符）拼写出 words 中的某个『单词』（字符串），那么我们就认为你掌握了这个单词。 注意：每次拼写时，chars 中的每个字母都只能用一次。 返回词汇表 words 中你掌握的所有单词的 长度之和。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="最长回文串的直球解法(JAVA)">
+<meta property="og:url" content="http://example.com/2020/03/21/%E6%9C%80%E9%95%BF%E5%9B%9E%E6%96%87%E4%B8%B2%E7%9A%84%E7%9B%B4%E7%90%83%E8%A7%A3%E6%B3%95/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="不得不说，你在尝试暴力解法的时候真的很直男好吧，先把题目贴出来  给你一份『词汇表』（字符串数组） words 和一张『字母表』（字符串） chars。 假如你可以用 chars 中的『字母』（字符）拼写出 words 中的某个『单词』（字符串），那么我们就认为你掌握了这个单词。 注意：每次拼写时，chars 中的每个字母都只能用一次。 返回词汇表 words 中你掌握的所有单词的 长度之和。">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2020-03-20T23:10:11.000Z">
+<meta property="article:modified_time" content="2020-03-23T02:48:50.976Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-最长回文串的直球解法" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/03/21/%E6%9C%80%E9%95%BF%E5%9B%9E%E6%96%87%E4%B8%B2%E7%9A%84%E7%9B%B4%E7%90%83%E8%A7%A3%E6%B3%95/" class="article-date">
+  <time datetime="2020-03-20T23:10:11.000Z" itemprop="datePublished">2020-03-21</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      最长回文串的直球解法(JAVA)
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="不得不说，你在尝试暴力解法的时候真的很直男"><a href="#不得不说，你在尝试暴力解法的时候真的很直男" class="headerlink" title="不得不说，你在尝试暴力解法的时候真的很直男"></a>不得不说，你在尝试暴力解法的时候真的很直男</h2><p>好吧，先把题目贴出来</p>
+<hr>
+<pre><code>给你一份『词汇表』（字符串数组） words 和一张『字母表』（字符串） chars。
+假如你可以用 chars 中的『字母』（字符）拼写出 words 中的某个『单词』（字符串），那么我们就认为你掌握了这个单词。
+注意：每次拼写时，chars 中的每个字母都只能用一次。
+返回词汇表 words 中你掌握的所有单词的 长度之和。
+</code></pre>
+<hr>
+<p>我知道，绝对有人看到这个题目最先想的就是把这个字符串拆掉</p>
+<p>没错我也是，嘿嘿（。。）</p>
+<p>结果往往是一个百把行的代码还出现了Bug还不知道那里错了，难受 &gt;_&lt;</p>
+<p>好吧不废话了，来点实在的</p>
+<hr>
+<pre><code>public static void main(String[] args) &#123;
+    String s = new String();
+    s = &quot;Bansanana&quot;;
+    //提交算法
+    final int N = 26;
+    int[] Capital = new int[N]; //放大写字母
+    int[] Lower = new int[N];   //放小写字母
+    char[] Loge = new char[s.length()];
+    int counst = 0,Fia = 0;
+
+    Loge = s.toCharArray();  //拆分字符串
+    
+    //区分大小写，分开处理
+    for(int i=0;i&lt;s.length();i++)&#123;
+        if(Loge[i] &gt;= &#39;A&#39; &amp;&amp; Loge[i] &lt;= &#39;Z&#39;)
+            Capital[Loge[i] - &#39;A&#39;]++;  //统计出现次数
+        if(Loge[i] &gt;= &#39;a&#39; &amp;&amp; Loge[i] &lt;= &#39;z&#39;)
+            Lower[Loge[i] - &#39;a&#39;]++; 
+    &#125;
+
+    //判断字符串的长度，分奇偶情况
+    if(s.length() % 2 == 0)&#123;
+    //偶数情况
+        for(int i=0;i&lt;N;i++)&#123;
+            if(Capital[i] &gt;= 2)
+                counst = counst + Capital[i] / 2;  //统计成对的字符
+        &#125;
+        for(int i=0;i&lt;N;i++)&#123;
+            if(Lower[i] &gt;= 2)
+                counst = counst + Lower[i] / 2;
+        &#125;
+
+        //偶数情况下，如果成对的字符数*2和字符串的长度相对，那么这个字符串本身就是最长的回文串
+        //否则，就说明这个字符串中有至少两个单独字符，随便拿一个出来组成回文串即可
+        if(counst * 2 == s.length())
+            Fia = s.length();
+        else
+            Fia = counst * 2 + 1;
+    &#125;
+    else&#123;
+    //奇数情况
+        //这一段的操作和上面一模一样的，可以直接烤过来
+        for(int i=0;i&lt;N;i++)&#123;
+            if(Capital[i] &gt;= 2)
+                counst = counst + Capital[i] / 2;
+        &#125;
+        for(int i=0;i&lt;N;i++)&#123;
+            if(Lower[i] &gt;= 2)
+                counst = counst + Lower[i] / 2;
+        &#125;
+        //奇数情况从这里开始不同了
+        //在奇数情况下，至少有一个字符注孤生
+        //当只有一个单独字符时，说明这个字符串本身就是最长回文串（单独字符做中间字符）
+        //否则，这个字符串就会有至少三个字符是单独字符，随便抽一个单独字符当中间字符即可构成回文串
+        if(counst * 2 + 1 == s.length())
+            Fia = s.length();
+        else
+            Fia = counst * 2 + 1;
+    &#125;
+
+    System.out.println(&quot;\n&quot;);
+    System.out.println(Fia);
+&#125;
+</code></pre>
+<p>}</p>
+<hr>
+<p>我知道有很多人被那个超长的例子给拦住了，有相同经历的在心中扣个一OK？</p>
+<p>大概解释一下思路</p>
+<p>用两个数组分别存储大写字母和小写字母的出现次数，每个字母的出现次数默认为0，如果出现一次就在相应位置上加1</p>
+<p>最后在确认长度时，只要将成对的字母提取出来，再根据总长度的奇偶情况判断即可求出题目所求<br>（具体操作写在代码注释里面）</p>
+<p>总之，这个题目并不是要我们去拼合字符串而是需要我们去统计出成对的字符，回文串的长度只是一个顺带的操作</p>
+<p>在网上还有很多大佬们写的高度简洁、精简的算法，大家可以去看看（我这个学JAVA还不到一个月的砸砸是着实看不懂）</p>
+<h2 id="在此感谢我家门口斗地主的老大爷们，就是他们给予了我灵感"><a href="#在此感谢我家门口斗地主的老大爷们，就是他们给予了我灵感" class="headerlink" title="在此感谢我家门口斗地主的老大爷们，就是他们给予了我灵感"></a>在此感谢我家门口斗地主的老大爷们，就是他们给予了我灵感</h2>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2020/03/21/%E6%9C%80%E9%95%BF%E5%9B%9E%E6%96%87%E4%B8%B2%E7%9A%84%E7%9B%B4%E7%90%83%E8%A7%A3%E6%B3%95/" data-id="ckqtakgei00053gvc6wg509ny" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2020/03/21/%E5%85%B3%E4%BA%8E%E6%88%91%E5%AE%B6%E7%9A%84%E6%A9%99%E5%AD%90/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          关于我家的橙子
+        
+      </div>
+    </a>
+  
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/07/">July 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/10/">October 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">July 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">May 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2021/07/07/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2020/10/18/%E4%BB%8E%E9%AA%B0%E5%AD%90%E6%B8%B8%E6%88%8F%E8%8E%B7%E5%BE%97%E7%9A%84%E7%9F%A5%E8%AF%86%E5%92%8C%E6%95%99%E8%AE%AD/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2020/07/01/%E5%85%B3%E4%BA%8EJava%E6%92%AD%E6%94%BE%E9%9F%B3%E4%B9%90%E7%9A%84%E4%B8%80%E4%BA%9B%E9%97%AE%E9%A2%98/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2020/05/03/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E5%85%B3%E4%BA%8EOJptionPane%E7%9A%84%E4%B8%80%E4%BA%9B%E4%B8%9C%E8%A5%BF/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2020/03/24/%E4%BD%93%E5%86%85%E6%80%AA%E7%89%A9/">体内怪物</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2021 John Doe<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>
