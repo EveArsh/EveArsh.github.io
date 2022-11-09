@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Kirang Haerang:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="屁话​        这一篇文章主要探讨 Java 多线程学习中比较重要的一个问题：消费者和生产者模式。 这个并不是 23 种设计模式之一，但是属于 Java 多线程中不可绕开的一个问题。 生产者和消费者问题叙述​        生产者消费者问题（ Producer-consumer problem），也称有限缓冲问题（ Bounded-buffer problem ），是一个多线程 同步 问题的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java多线程的学习笔记--消费者和生产者问题">
+<meta property="og:url" content="http://example.com/2021/12/02/Java%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%9A%84%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E6%B6%88%E8%B4%B9%E8%80%85%E5%92%8C%E7%94%9F%E4%BA%A7%E8%80%85%E9%97%AE%E9%A2%98/index.html">
+<meta property="og:site_name" content="神秘的世界">
+<meta property="og:description" content="屁话​        这一篇文章主要探讨 Java 多线程学习中比较重要的一个问题：消费者和生产者模式。 这个并不是 23 种设计模式之一，但是属于 Java 多线程中不可绕开的一个问题。 生产者和消费者问题叙述​        生产者消费者问题（ Producer-consumer problem），也称有限缓冲问题（ Bounded-buffer problem ），是一个多线程 同步 问题的">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2021-12-02T11:16:43.612Z">
+<meta property="article:modified_time" content="2022-07-13T14:24:11.519Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://example.com/2021/12/02/Java%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%9A%84%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E6%B6%88%E8%B4%B9%E8%80%85%E5%92%8C%E7%94%9F%E4%BA%A7%E8%80%85%E9%97%AE%E9%A2%98/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>Java多线程的学习笔记--消费者和生产者问题 | 神秘的世界</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">神秘的世界</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/12/02/Java%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%9A%84%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E6%B6%88%E8%B4%B9%E8%80%85%E5%92%8C%E7%94%9F%E4%BA%A7%E8%80%85%E9%97%AE%E9%A2%98/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="神秘的世界">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Java多线程的学习笔记--消费者和生产者问题
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-12-02 19:16:43" itemprop="dateCreated datePublished" datetime="2021-12-02T19:16:43+08:00">2021-12-02</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-07-13 22:24:11" itemprop="dateModified" datetime="2022-07-13T22:24:11+08:00">2022-07-13</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="屁话"><a href="#屁话" class="headerlink" title="屁话"></a>屁话</h2><p>​        这一篇文章主要探讨 Java 多线程学习中比较重要的一个问题：消费者和生产者模式。 这个并不是 23 种设计模式之一，但是属于 Java 多线程中不可绕开的一个问题。</p>
+<h2 id="生产者和消费者问题叙述"><a href="#生产者和消费者问题叙述" class="headerlink" title="生产者和消费者问题叙述"></a>生产者和消费者问题叙述</h2><p>​        生产者消费者问题（ Producer-consumer problem），也称有限缓冲问题（ Bounded-buffer problem ），是一个多线程 <a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E5%90%8C%E6%AD%A5">同步</a> 问题的经典案例。</p>
+<p>​        该问题描述了两个共享固定大小 <a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E7%BC%93%E5%86%B2%E5%8C%BA/4830555">缓冲区</a> 的 <a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E7%BA%BF%E7%A8%8B/103101">线程</a> ——即所谓的“生产者”和“消费者”——在实际运行时会发生的问题。生产者的主要作用是生成一定量的数据放到缓冲区中，然后重复此过程。与此同时，消费者也在缓冲区消耗这些数据。</p>
+<p>​        该问题的关键就是要保证生产者不会在缓冲区满时加入数据，消费者也不会在缓冲区中空时 <a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E6%B6%88%E8%80%97/6755144">消耗</a> 数据。</p>
+<p>​        针对该问题的处理方法主要有两种 ： 管程法 和 信号灯法</p>
+<h2 id="问题处理"><a href="#问题处理" class="headerlink" title="问题处理"></a>问题处理</h2><p>​        这里就使用上文中提到的两种方法 管程法 和 信号灯法</p>
+<h4 id="管程法"><a href="#管程法" class="headerlink" title="管程法"></a>管程法</h4><p>​        先上代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> TestThread.ThreadCommunication;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 测试使用 管程法 来实现 消费者和生产者 的情景问题</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ConsumersAndProducers_Monitor</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        WareHouse wareHouse = <span class="keyword">new</span> WareHouse(); <span class="comment">// 新建一个仓库</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">new</span> Consumers( wareHouse ).start();</span><br><span class="line">        <span class="keyword">new</span> Producers( wareHouse ).start();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 我们需要 消费者，生产者, 作为仓库的缓冲区，产品</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 产品</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Product</span></span>&#123;</span><br><span class="line">    String id; <span class="comment">// 产品编号</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Product</span><span class="params">(String id)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.id = id;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 消费者</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Consumers</span> <span class="keyword">extends</span> <span class="title">Thread</span> </span>&#123;</span><br><span class="line">    WareHouse wareHouse = <span class="keyword">new</span> WareHouse();</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Consumers</span><span class="params">( WareHouse wareHouse )</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.wareHouse = wareHouse;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">// 消费 100 件产品</span></span><br><span class="line">        <span class="keyword">for</span> ( <span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">100</span>; i++ ) &#123;</span><br><span class="line">            wareHouse.consumeProduct();</span><br><span class="line"></span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                Thread.sleep( <span class="number">500</span> );</span><br><span class="line">            &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 生产者</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Producers</span> <span class="keyword">extends</span> <span class="title">Thread</span> </span>&#123;</span><br><span class="line">    WareHouse wareHouse = <span class="keyword">new</span> WareHouse();</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Producers</span><span class="params">( WareHouse wareHouse )</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.wareHouse = wareHouse;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">// 生产 100 件产品</span></span><br><span class="line">        <span class="keyword">for</span> ( <span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= <span class="number">100</span>; i++ ) &#123;</span><br><span class="line">            wareHouse.depositProduct( <span class="keyword">new</span> Product( String.valueOf( i ) ) );</span><br><span class="line"></span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                Thread.sleep( <span class="number">500</span> );</span><br><span class="line">            &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 仓库</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">WareHouse</span></span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> Size = <span class="number">10</span>; <span class="comment">// 仓库的最大容量</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> Count = <span class="number">0</span>; <span class="comment">// 仓库中当前的产品数量</span></span><br><span class="line">    <span class="keyword">private</span> Product[] ProductWareHouse = <span class="keyword">new</span> Product[ Size ];</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 生产者生产产品</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">depositProduct</span><span class="params">( Product product )</span></span>&#123;</span><br><span class="line">        <span class="comment">// 判断：此时仓库中是否还有剩余可以放入产品的空间</span></span><br><span class="line">        <span class="keyword">if</span> ( Count == Size )&#123;</span><br><span class="line">            <span class="comment">// 此时仓库已满，生产者停止生产，通知消费者消费</span></span><br><span class="line">            System.out.println( <span class="string">&quot;==================================仓库已满==================================&quot;</span> );</span><br><span class="line"></span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                <span class="keyword">this</span>.wait();</span><br><span class="line">            &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 此时仓库未满，生产者可以继续生产</span></span><br><span class="line">        ProductWareHouse[ Count ] = product;</span><br><span class="line">        Count = Count + <span class="number">1</span>;</span><br><span class="line">        System.out.println( <span class="string">&quot;生产者生产了编号为：&quot;</span> + product.id + <span class="string">&quot; 的产品&quot;</span> );</span><br><span class="line"></span><br><span class="line">        <span class="keyword">this</span>.notifyAll();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 消费者消费产品</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">consumeProduct</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="comment">// 判断：此时仓库中是否还有产品</span></span><br><span class="line">        <span class="keyword">if</span> ( Count == <span class="number">0</span> )&#123;</span><br><span class="line">            <span class="comment">// 此时仓库已空，没有产品可以被消费，消费者等待，通知生产者生产</span></span><br><span class="line">            System.out.println( <span class="string">&quot;==================================仓库已空==================================&quot;</span> );</span><br><span class="line"></span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                <span class="keyword">this</span>.wait();</span><br><span class="line">            &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 此时仓库中还有可以被消费的产品，消费者可以继续消费</span></span><br><span class="line">        Count = Count - <span class="number">1</span>;</span><br><span class="line">        Product product = ProductWareHouse[ Count ];</span><br><span class="line">        System.out.println( <span class="string">&quot;消费者消费了编号为：&quot;</span> + product.id + <span class="string">&quot; 的产品&quot;</span> );</span><br><span class="line"></span><br><span class="line">        <span class="keyword">this</span>.notifyAll();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>​        解析：</p>
+<p>​        首先，管程法的核心思想就是利用一个 仓库 来作为 生产者 和 消费者 之间的 中转站。生产者 所生产的产品并不直接交给 消费者，而是全部存入作为中转站的 仓库 中； 相对的，消费者 并不直接从 生产者 处获取产品，而是从作为中转站的 仓库 中提取。</p>
+<p>​        如果 生产者 在生产产品时检测到作为中转站的 仓库 中的产品已经到达存放的上限，那么就让 生产者 停止生产，同时通知消费者可以消费； 如果 仓库 没有到达上限，则继续进行生产。</p>
+<p>​        代码实现如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">depositProduct</span><span class="params">( Product product )</span></span>&#123;</span><br><span class="line">       <span class="comment">// 判断：此时仓库中是否还有剩余可以放入产品的空间</span></span><br><span class="line">       <span class="keyword">if</span> ( Count == Size )&#123;</span><br><span class="line">           <span class="comment">// 此时仓库已满，生产者停止生产，通知消费者消费</span></span><br><span class="line">           System.out.println( <span class="string">&quot;仓库已满&quot;</span> );</span><br><span class="line"></span><br><span class="line">           <span class="keyword">try</span> &#123;</span><br><span class="line">               <span class="keyword">this</span>.wait();</span><br><span class="line">           &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">               e.printStackTrace();</span><br><span class="line">           &#125;</span><br><span class="line"></span><br><span class="line">       &#125;</span><br><span class="line">       <span class="comment">// 此时仓库未满，生产者可以继续生产</span></span><br><span class="line">       ProductWareHouse[ Count ] = product;</span><br><span class="line">       Count = Count + <span class="number">1</span>;</span><br><span class="line">       System.out.println( <span class="string">&quot;生产者生产了编号为：&quot;</span> + product.id + <span class="string">&quot; 的产品&quot;</span> );</span><br><span class="line"></span><br><span class="line">       <span class="keyword">this</span>.notifyAll();</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+
+<p>​        </p>
+<p>​        相对的，如果 消费者 在消费产品时发现作为中转站的 仓库 并没有产品，那么就让 消费者 停止消费， 同时通知 生产者 可以生产； 如果 仓库 存在产品，则继续消费。</p>
+<p>​        代码实现如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">consumeProduct</span><span class="params">()</span></span>&#123;</span><br><span class="line">       <span class="comment">// 判断：此时仓库中是否还有产品</span></span><br><span class="line">       <span class="keyword">if</span> ( Count == <span class="number">0</span> )&#123;</span><br><span class="line">           <span class="comment">// 此时仓库已空，没有产品可以被消费，消费者等待，通知生产者生产</span></span><br><span class="line">           System.out.println( <span class="string">&quot;仓库已空&quot;</span> );</span><br><span class="line"></span><br><span class="line">           <span class="keyword">try</span> &#123;</span><br><span class="line">               <span class="keyword">this</span>.wait();</span><br><span class="line">           &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">               e.printStackTrace();</span><br><span class="line">           &#125;</span><br><span class="line"></span><br><span class="line">       &#125;</span><br><span class="line">       <span class="comment">// 此时仓库中还有可以被消费的产品，消费者可以继续消费</span></span><br><span class="line">       Count = Count - <span class="number">1</span>;</span><br><span class="line">       Product product = ProductWareHouse[ Count ];</span><br><span class="line">       System.out.println( <span class="string">&quot;消费者消费了编号为：&quot;</span> + product.id + <span class="string">&quot; 的产品&quot;</span> );</span><br><span class="line"></span><br><span class="line">       <span class="keyword">this</span>.notifyAll();</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+
+<p>​        </p>
+<p>​        综上所述，管程法的核心思想十分精简，使用 仓库 作为中转站，控制 消费者 和 生产者 的行动。如果 仓库 的状态有变 ( 仓库已满 或者 仓库已空 ) 就立刻使 消费者 或 生产者 的状态发生改变。</p>
+<h4 id="信号灯法"><a href="#信号灯法" class="headerlink" title="信号灯法"></a>信号灯法</h4><p>​        先上代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> TestThread.ThreadCommunication;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 测试使用信号灯法来解决消费者和生产者的问题</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ProducerAndConsumer_Semaphore</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Products products = <span class="keyword">new</span> Products();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">new</span> Thread( <span class="keyword">new</span> Producer( products ) ).start();</span><br><span class="line">        <span class="keyword">new</span> Thread( <span class="keyword">new</span> Consumer( products ) ).start();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 生产者</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Producer</span> <span class="keyword">implements</span> <span class="title">Runnable</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> Products products = <span class="keyword">new</span> Products();</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Producer</span><span class="params">( Products products )</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.products = products;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">for</span> ( <span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= <span class="number">10</span>; i++ ) &#123;</span><br><span class="line">            products.producer( String.valueOf( i ) );</span><br><span class="line"></span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                Thread.sleep( <span class="number">1000</span> );</span><br><span class="line">            &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 消费者</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Consumer</span> <span class="keyword">implements</span> <span class="title">Runnable</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> Products products = <span class="keyword">new</span> Products();</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Consumer</span><span class="params">( Products products )</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.products = products;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">for</span> ( <span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= <span class="number">10</span>; i++ ) &#123;</span><br><span class="line">            products.consumer( String.valueOf( i ) );</span><br><span class="line"></span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                Thread.sleep( <span class="number">1000</span> );</span><br><span class="line">            &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 产品</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Products</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">boolean</span> flag = <span class="keyword">true</span>; <span class="comment">// 用来判断 生产者是否生产 true 或者 消费者是否消费 false 的标志；</span></span><br><span class="line">    <span class="keyword">private</span> String productsId;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//  生产者的生产方法</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">producer</span><span class="params">( String productsId )</span></span>&#123;</span><br><span class="line">        <span class="comment">// 如果 flag 为真，生产者开始生产，消费者等待; 否则 生产者等待，消费者消费</span></span><br><span class="line">        <span class="keyword">if</span> ( !flag )&#123;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                <span class="keyword">this</span>.wait();</span><br><span class="line">            &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        System.out.println(<span class="string">&quot; 消费了编号为 ： &quot;</span> + productsId + <span class="string">&quot; 的产品&quot;</span>);</span><br><span class="line">        <span class="keyword">this</span>.flag = ! <span class="keyword">this</span>.flag;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">this</span>.notifyAll();</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 消费者的消费方法</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">consumer</span><span class="params">( String productsId )</span></span>&#123;</span><br><span class="line">        <span class="comment">// 如果 flag 为假， 消费者开始消费，生产者生产，否则 消费者等待，生产者生产</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> ( flag )&#123;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                <span class="keyword">this</span>.wait();</span><br><span class="line">            &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        System.out.println(<span class="string">&quot; 消费了编号为 ： &quot;</span> + productsId + <span class="string">&quot; 的产品&quot;</span>);</span><br><span class="line">        <span class="keyword">this</span>.flag = ! <span class="keyword">this</span>.flag;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">this</span>.notifyAll();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>​        解析：</p>
+<p>​        信号灯法 的基本思想和 管程法 基本相似，不相同的是，信号灯法 是使用一个标志位 flag 来控制 生产者 和 消费者 的状态。一般而言是使用一个 boolean 型变量来控制是否进行 生产 或 消费。</p>
+<p>​        同时要提前说明的一点是，如果使用 信号灯法 来控制 生产者 和 消费者，那么就会出现一个问题：消费者消费产品 和 生产者生产产品 是同步进行的，即使将二者使用延时代码来拉开 消费 和 生产 的速度。</p>
+<p>​        也就是说，生产者生产的产品 是会被 消费者即时消费 ，并且只有在 消费者消费完当前的产品后，生产者才会继续生产新的产品。</p>
+<p>​        回到对代码的分析，首先设置一个 boolean 型的变量 flag 作为 “ 信号灯 ”。</p>
+<p>​        当 flag 的值为 真 时，我们认为此时 生产者需要生产产品，同时通知消费者消费此产品，并将 flag 的值修改为 相反值 ，以便消费者执行代码。否则就等待，直到 消费者 消费完产品。代码实现如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//  生产者的生产方法</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">producer</span><span class="params">( String productsId )</span></span>&#123;</span><br><span class="line">    <span class="comment">// 如果 flag 为真，生产者开始生产，消费者等待; 否则 生产者等待，消费者消费</span></span><br><span class="line">    <span class="keyword">if</span> ( !flag )&#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="keyword">this</span>.wait();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    System.out.println(<span class="string">&quot; 消费了编号为 ： &quot;</span> + productsId + <span class="string">&quot; 的产品&quot;</span>);</span><br><span class="line">    <span class="keyword">this</span>.flag = ! <span class="keyword">this</span>.flag;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">this</span>.notifyAll();</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<p>​        同理，当 flag 的值为 假 时，我们认为此时消费者应该去消费产品，同时通知生产者生产新的产品，并将 flag 的值修改为相反值，以便生产者执行代码。否则就等待，直到 生产者 生产新的产品。代码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 消费者的消费方法</span></span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">consumer</span><span class="params">( String productsId )</span></span>&#123;</span><br><span class="line">       <span class="comment">// 如果 flag 为假， 消费者开始消费，生产者生产，否则 消费者等待，生产者生产</span></span><br><span class="line"></span><br><span class="line">       <span class="keyword">if</span> ( flag )&#123;</span><br><span class="line"></span><br><span class="line">           <span class="keyword">try</span> &#123;</span><br><span class="line">               <span class="keyword">this</span>.wait();</span><br><span class="line">           &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">               e.printStackTrace();</span><br><span class="line">           &#125;</span><br><span class="line"></span><br><span class="line">       &#125;</span><br><span class="line"></span><br><span class="line">       System.out.println(<span class="string">&quot; 消费了编号为 ： &quot;</span> + productsId + <span class="string">&quot; 的产品&quot;</span>);</span><br><span class="line">       <span class="keyword">this</span>.flag = ! <span class="keyword">this</span>.flag;</span><br><span class="line"></span><br><span class="line">       <span class="keyword">this</span>.notifyAll();</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>​        一般而言，通过 信号灯法 和 管程法 就可以处理大多数 消费者 和 生产者 的问题，其二者的区别也并不是很大。都是通过某样参数来间接或直接的控制 生产者 和 消费者 的线程状态，实其可以安全的同步运行。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/11/30/Java%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0Three/" rel="prev" title="Java多线程的学习笔记--线程优先级、守护线程、线程同步、锁">
+      <i class="fa fa-chevron-left"></i> Java多线程的学习笔记--线程优先级、守护线程、线程同步、锁
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/12/03/Java%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E7%BA%BF%E7%A8%8B%E6%B1%A0/" rel="next" title="Java多线程学习笔记--线程池">
+      Java多线程学习笔记--线程池 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B1%81%E8%AF%9D"><span class="nav-number">1.</span> <span class="nav-text">屁话</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%94%9F%E4%BA%A7%E8%80%85%E5%92%8C%E6%B6%88%E8%B4%B9%E8%80%85%E9%97%AE%E9%A2%98%E5%8F%99%E8%BF%B0"><span class="nav-number">2.</span> <span class="nav-text">生产者和消费者问题叙述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%97%AE%E9%A2%98%E5%A4%84%E7%90%86"><span class="nav-number">3.</span> <span class="nav-text">问题处理</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%AE%A1%E7%A8%8B%E6%B3%95"><span class="nav-number">3.0.1.</span> <span class="nav-text">管程法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BF%A1%E5%8F%B7%E7%81%AF%E6%B3%95"><span class="nav-number">3.0.2.</span> <span class="nav-text">信号灯法</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">John Doe</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">31</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">John Doe</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"live2d-widget-model-haruto"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":false},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>
+
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/love.js"></script>
+
+<!--动态线条背景-->
+<script type="text/javascript"
+color="220,220,220" opacity='0.7' zIndex="-2" count="200" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js">
+</script>
+
+<!--浏览器搞笑标题-->
+<script type="text/javascript" src="\js\FunnyTitle.js"></script>

@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Kirang Haerang:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="屁话​    这是算法课上的弄到的题目，一共7个，加上 附加的 汉诺塔 和 背包问题，下面对他们进行解答（给上题目）。 12345678910* Q1. 利用递归函数计算 n 的阶乘* Q2. 书写一个斐波拉契数列，输入一个正整数 K （0 &lt; K &lt; 47），求对应斐波拉契数列的第K个数* Q3. 斐波拉契数列的比值 F(n) &#x2F; F(n+1) 的值会趋近于黄金分隔，给定正整数N，验">
+<meta property="og:type" content="article">
+<meta property="og:title" content="学习笔记——算法设计的学习笔记 One">
+<meta property="og:url" content="http://example.com/2021/09/26/%E7%AE%97%E6%B3%95%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-1/index.html">
+<meta property="og:site_name" content="神秘的世界">
+<meta property="og:description" content="屁话​    这是算法课上的弄到的题目，一共7个，加上 附加的 汉诺塔 和 背包问题，下面对他们进行解答（给上题目）。 12345678910* Q1. 利用递归函数计算 n 的阶乘* Q2. 书写一个斐波拉契数列，输入一个正整数 K （0 &lt; K &lt; 47），求对应斐波拉契数列的第K个数* Q3. 斐波拉契数列的比值 F(n) &#x2F; F(n+1) 的值会趋近于黄金分隔，给定正整数N，验">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/2021/09/26/%E7%AE%97%E6%B3%95%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-1/20180526185900422.png">
+<meta property="article:published_time" content="2021-09-26T08:57:53.444Z">
+<meta property="article:modified_time" content="2021-10-02T17:01:38.170Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2021/09/26/%E7%AE%97%E6%B3%95%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-1/20180526185900422.png">
+
+<link rel="canonical" href="http://example.com/2021/09/26/%E7%AE%97%E6%B3%95%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-1/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>学习笔记——算法设计的学习笔记 One | 神秘的世界</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">神秘的世界</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/09/26/%E7%AE%97%E6%B3%95%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="神秘的世界">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          学习笔记——算法设计的学习笔记 One
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-09-26 16:57:53" itemprop="dateCreated datePublished" datetime="2021-09-26T16:57:53+08:00">2021-09-26</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-10-03 01:01:38" itemprop="dateModified" datetime="2021-10-03T01:01:38+08:00">2021-10-03</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="屁话"><a href="#屁话" class="headerlink" title="屁话"></a>屁话</h2><p>​    这是算法课上的弄到的题目，一共7个，加上 附加的 汉诺塔 和 背包问题，下面对他们进行解答（给上题目）。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">* Q1. 利用递归函数计算 n 的阶乘</span><br><span class="line">* Q2. 书写一个斐波拉契数列，输入一个正整数 K （<span class="number">0</span> &lt; K &lt; <span class="number">47</span>），求对应斐波拉契数列的第K个数</span><br><span class="line">* Q3. 斐波拉契数列的比值 F(n) / F(n+<span class="number">1</span>) 的值会趋近于黄金分隔，给定正整数N，验证此项兴致</span><br><span class="line">* Q4. 小明爬楼梯，一次只能上一级 或者 两级台阶，一共有 N 级台阶，求小明有多少种爬台阶的方法</span><br><span class="line">* Q5. 小明爬楼梯，一次可以上一级，两级 或者 N级，求小明有多少种爬台阶的方法</span><br><span class="line">* Q6. 整数因子分解问题：计算正整数 N 有多少种因子大于<span class="number">1</span>的不同的分解式</span><br><span class="line">* Q7. 给定整数 N， 取若干个 <span class="number">1</span> 到 N 的整数可求和等于整数 M， 编程求出所有组合的个数</span><br><span class="line">*</span><br><span class="line">* Qs1. 汉诺塔问题</span><br><span class="line">* Qs2. 背包问题 https:<span class="comment">//zhuanlan.zhihu.com/p/93857890</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="题目-和-题解"><a href="#题目-和-题解" class="headerlink" title="题目 和 题解"></a>题目 和 题解</h2><h4 id="问题1"><a href="#问题1" class="headerlink" title="问题1"></a>问题1</h4><p>​    利用递归函数计算 n 的阶乘</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">Q1</span><span class="params">(<span class="keyword">int</span> N)</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (N == <span class="number">1</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        <span class="keyword">return</span> N * Q1(N -<span class="number">1</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>​    解析：</p>
+<p>​    这个没啥好说的，对于 N 的阶乘，设定当  N = 1 时，返回 1。否则就用 N 去乘以 Q1( N - 1 ) 的值。</p>
+<p>​    例如，当 N = 3 时，就有 3 * Q1( 2 ) 而 Q1( 2 )  = 2 * Q1( 1 )  而 Q1( 1 ) = 1，最终会形成算式 3 * 2 * 1并输出。</p>
+<h4 id="问题2"><a href="#问题2" class="headerlink" title="问题2"></a>问题2</h4><p>​    书写一个斐波拉契数列，输入一个正整数 K （0 &lt; K &lt; 47），求对应斐波拉契数列的第K个数</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">Q2</span><span class="params">(<span class="keyword">int</span> N)</span></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> A = <span class="number">0</span>, B = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">int</span> C = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">2</span>;i &lt;= N;i++)&#123;</span><br><span class="line">        C = A + B;</span><br><span class="line">        A = B;</span><br><span class="line">        B = C;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> C;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用递归书写 斐波拉契数列 的方法，不考虑时间和空间的占用</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">Q2_C</span><span class="params">(<span class="keyword">int</span> N)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (N == <span class="number">1</span> || N == <span class="number">2</span>)</span><br><span class="line">            <span class="keyword">return</span> N;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            <span class="keyword">return</span> Q2_C(N - <span class="number">1</span>) + Q2_C(N - <span class="number">2</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>​    解析：</p>
+<p>​    书写<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E6%96%90%E6%B3%A2%E9%82%A3%E5%A5%91%E6%95%B0%E5%88%97/99145?fr=aladdin"><strong>斐波拉契数列</strong></a>本身并不困难，参考上方代码的函数Q2_C。但是对于本题目，题干中划定了 正整数K 的取值范围，如果对于函数Q2_C而言，当 K 增加到30左右时，就可以明显的感受到计算结果所需要的时间增加。因此需要对Q2_C函数进行优化，提高其工作效率。    函数Q2 就是对Q2_C 的优化改良，相较于Q2_C ，函数Q2在计算所需的时间和空间的效率上均有明显的提升，其思想在于：</p>
+<p>​    已知斐波拉契数列的第一个数为0，第二个数为1，后面的数都是前面两个数的相加和，那么 定义变量 A 为数列的第一个数(A = 0)，变量 B 为数列的第二个数(B = 1)，变量 C 为 A 和 B 的相加和。</p>
+<p>​    书写循环，令循环从 2 开始(前面两个数已知为A 和 B)，到 N 截至。循环内，使得 C = A + B ( C是A 和 B的相加和 )，然后让 A 和 B 向前移动，令 A = B，B = C ( 相当于A 和 B都向前移动了一位数 )。</p>
+<p>​    例如，当N = 10时，第一次循环 C = A + B = 1 ，令A 和 B前移，A = B = 1，B = C = 1 ( 此时A就代表第二个数，B就代表第三个数 )，如此往复，直到当 N = 10时，输出 C 的值即可，C 的值就是对应斐波拉契数。</p>
+<h4 id="问题3"><a href="#问题3" class="headerlink" title="问题3"></a>问题3</h4><p>​    斐波拉契数列的比值 F(n) / F(n+1) 的值会趋近于黄金分隔，给定正整数N，验证此项性质</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">double</span> <span class="title">Q3</span><span class="params">(<span class="keyword">int</span> N)</span></span>&#123;</span><br><span class="line">    <span class="keyword">int</span>[] Num = <span class="keyword">new</span> <span class="keyword">int</span>[N];</span><br><span class="line">    <span class="keyword">int</span> A = <span class="number">0</span>,B = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">double</span> C = <span class="number">0</span>;</span><br><span class="line">    Num[<span class="number">0</span>] = <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 第一部分：计算斐波拉契数列</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>;i &lt; N;i++)&#123;</span><br><span class="line">        Num[i] = A + B;</span><br><span class="line">        A = B;</span><br><span class="line">        B = Num[i];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    System.out.println( Arrays.toString(Num) );</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 第二部分：验证斐波拉契数列 和 黄金分割 之间的关系</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>;i &lt; N;i++)</span><br><span class="line">        C = (<span class="keyword">double</span>) Num[i - <span class="number">1</span>] / Num[i];</span><br><span class="line"></span><br><span class="line">    System.out.println( String.format(<span class="string">&quot;%.8f&quot;</span>,C) );</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> C;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>​    解析：</p>
+<p>​    对于这个题目，要根据斐波拉契数列 和 黄金分割的关系解题。如题干所言，相邻两个斐波那契的比值是随序号的增加而逐渐趋于黄金分割比的，因此，如果要进行验证，就要对此下手。</p>
+<p>​    题解被分为了两部分，第一部分计算斐波拉契数列，第二部分验证斐波拉契数列 和 黄金分割 之间的关系。</p>
+<p>​    第一部分：这一部分要计算斐波拉契数列，因为要在第二部分验证 斐波拉契数列 和 黄金分隔 之间的关系时使用，因此使用一个数组Num 来存放斐波拉契数。计算斐波拉契数列的方式采用是 <strong>问题2</strong> 中的优化解法，只不过使用了数组来替代 C 的位置。</p>
+<p>​    第二部分：这一部分用来验证 斐波拉契数列 和 黄金分割 之间的关系，使用循环来输出 斐波拉契数列 相邻两项的比值即可。要注意的是，此处应该使用强制类型转换，将 整型 转换为 浮点型，否则会损失一部分值。</p>
+<p>​    关于如何控制输出的浮点位数:<a target="_blank" rel="noopener" href="https://www.cnblogs.com/laphome/p/10680436.html">Java保留N位小数</a></p>
+<p>​    </p>
+<h4 id="问题4"><a href="#问题4" class="headerlink" title="问题4"></a>问题4</h4><p>​    小明爬楼梯，一次只能上一级 或者 两级台阶，一共有 N 级台阶，求小明有多少种爬台阶的方法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">Q4</span><span class="params">(<span class="keyword">int</span> N)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (N == <span class="number">1</span> || N == <span class="number">0</span>)</span><br><span class="line">            <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            <span class="keyword">return</span> Q4(N - <span class="number">1</span>) + Q4(N - <span class="number">2</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>​    解析：</p>
+<p>​    基于本题的题干可知，小明(或者是青蛙之类的其他什么东西)在爬楼梯时，永远只有两种选择，即 <strong>爬一个阶梯</strong> 或者 <strong>爬两个阶梯</strong>。那么，就可以从这里入手分析题目。</p>
+<ol>
+<li><p>​    将阶梯的数量记为 N，<strong>爬一个阶梯</strong> 记为 N - 1，<strong>爬两个阶梯</strong> 记为 N - 2，每次爬阶梯时进行一次计算，当 N 只剩下一级阶梯 (N = 1) 或 爬完所有阶梯(N = 0) 时，返回 1。</p>
+</li>
+<li><p>​    当阶梯的数量为 1 时，爬阶梯的方法只有 <strong>爬一个阶梯</strong> 这一种。</p>
+</li>
+<li><p>​    当阶梯的数量为 2 时，爬阶梯的方法就有 <strong>爬一个阶梯</strong> 和 <strong>爬两个阶梯</strong> 这两种，这代表了两种不同的分支，即 <strong>每次只爬一个阶梯</strong> 和 <strong>每次只爬两个阶梯</strong> 。</p>
+</li>
+<li><p>​    当阶梯的数量大于 2 时，无论是爬一个阶梯还是爬两个阶梯都无法一次性爬完台阶，那么此时就要去计算 N 下两种分支的不同结果，即 N - 1 和 N - 2 是否可以<strong>一次性爬完台阶</strong>( 计算完后N的值为 0 或 1 )，否则就继续计算 N - 1 和 N - 2 的分支，直到两条分支上N的值都被减为零或一时，所有的情况统计完毕。</p>
+</li>
+<li><p>​    爬台阶的方法 = 所有分支上返回结果的总和。</p>
+<p>   例如：当 N = 5 时，爬阶梯的方法 = Q4( 5 )   = Q4( 4 ) + Q4( 3 ) </p>
+<p>​                                                                               = Q4( 3 ) + Q4( 2 ) + Q4( 2 ) + Q4( 1 ) </p>
+<p>​                                                                               = Q4( 2 ) + Q4( 1 ) + Q4( 1 ) + Q4( 0 )  + Q4( 1 ) + Q4( 0 ) + Q4( 1 )</p>
+<p>​                                                                               = Q4( 1 ) + Q4( 0 ) + Q4( 1 ) + Q4( 1 ) + Q4( 0 ) +  Q4( 1 ) + Q4( 0 ) + Q4( 1 )</p>
+<p>​                                                                               = 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 = 8</p>
+</li>
+</ol>
+<h4 id="问题5"><a href="#问题5" class="headerlink" title="问题5"></a>问题5</h4><p>​    小明爬楼梯，一次可以上一级，两级 或者 N级，求小明有多少种爬台阶的方法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">Q5</span><span class="params">(<span class="keyword">int</span> N)</span></span>&#123;</span><br><span class="line">        <span class="keyword">int</span> A = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (N == <span class="number">1</span> || N == <span class="number">0</span>)</span><br><span class="line">            <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= N; i++)</span><br><span class="line">            A = A + Q5( N - i );</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> A;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>​    解析：</p>
+<p>​    这题原本爬楼梯的生物是青蛙，被我变成了小明……..</p>
+<p>​    可以看出，这一题是对上面<strong>问题4</strong>的派生，那么首先就要考虑，是否可以套用原本题目的代码。查看题干，可以得知，与上一题相比，小明( 或者是青蛙？)这次爬台阶时，可以想爬多少级就爬多少级。</p>
+<p>​    那么，问题4中的第一条分析就是可以套用到这里的。</p>
+<ol>
+<li><p>​        将阶梯的数量记为 N，<strong>爬一个阶梯</strong> 记为 N - 1，<strong>爬两个阶梯</strong> 记为 N - 2，<strong>爬M个台阶</strong> 记为 N - M，每次爬阶梯时进行一次计算，当 N 只剩下一级阶梯 (N = 1) 或 爬完所有阶梯(N = 0) 时，返回 1。</p>
+</li>
+<li><p>​        当阶梯的数量为 1 时，爬阶梯的方法只有 <strong>爬一个阶梯</strong> 这一种。</p>
+</li>
+<li><p>​        当阶梯的数量为 2 时，爬阶梯的方法就有 <strong>爬一个阶梯</strong> 和 <strong>爬两个阶梯</strong> 这两种，这代表了两种不同的分支，即 <strong>每次只爬一个阶梯</strong> 和 <strong>每次只爬两个阶梯</strong> 。</p>
+</li>
+<li><p>​        当阶梯的数量大于2时，爬阶梯的方法出现了多分支即 <strong>爬一个阶梯</strong> 、 <strong>爬两个阶梯</strong>  、<strong>爬三个阶梯</strong> …. 直到 <strong>爬N个阶梯</strong>。那么可以得到一个结论，对于N级台阶，有N个可以进行计算的分支。和问题4中相同，直到每条分支上的N值减为零或一，返回结果，所有情况统计完毕。</p>
+</li>
+<li><p>​        对于如何实现计算多分支，可以通过循环处理，循环从 1 开始，直到N结束。( 代表选择爬几个台阶，例如 i = 1时，对应的就是爬一个台阶 )</p>
+</li>
+<li><p>​        爬台阶的方法 = 所有分支上返回结果的总和。</p>
+<p>​        例如：当 N = 5 时，爬阶梯的方法 = Q5( 3 )  = Q5( 2 ) + Q5( 1 ) +  Q5( 0 )</p>
+<p>​                                                                                   = Q5( 1 ) + Q5( 0 ) + Q5( 1 ) +  Q5( 0 )</p>
+<p>​                                                                                   = 1 + 1 + 1 + 1 = 4</p>
+</li>
+</ol>
+<h4 id="问题6"><a href="#问题6" class="headerlink" title="问题6"></a>问题6</h4><p>​    <a target="_blank" rel="noopener" href="https://blog.csdn.net/elma_tww/article/details/85051340">整数因子分解问题</a>：计算正整数 N 有多少种因子大于1的不同的分解式</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">Q6</span><span class="params">(<span class="keyword">int</span> N)</span></span>&#123;</span><br><span class="line">        <span class="keyword">int</span> Answer = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">2</span>; i &lt; N; i++)&#123;</span><br><span class="line">            <span class="keyword">if</span> (N % i == <span class="number">0</span>)</span><br><span class="line">                Answer = Answer + Q6(N / i);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> Answer + <span class="number">1</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//问题6 的 变种写法</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">Q6_C</span><span class="params">(<span class="keyword">int</span> N)</span></span>&#123;</span><br><span class="line">        <span class="keyword">int</span> Answer = <span class="number">1</span>,i;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (i = <span class="number">2</span>; i * i &lt; N; i++)&#123;</span><br><span class="line">            <span class="keyword">if</span> (N % i == <span class="number">0</span>)</span><br><span class="line">                Answer += Q6_C(i) + Q6_C(N / i);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (i * i == N)</span><br><span class="line">            Answer += Q6_C(i);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> Answer;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>​    解析：</p>
+<p>​    如果熟悉分支法，那么就可以看出本题是个经典的分支题目。但看上面的代码可知，我明显是个哈批，不会分支，因此在这里尝试其他的解法。</p>
+<p>​    分析题干可以得到多个重要的信息：</p>
+<ol>
+<li>​    既然是因式分解，那么答案中的数都是可以被 N 给整除的。</li>
+<li>​    对于 i 和 N / i 可以视为不同的两对答案，例如当N = 12时，2 * 6 和 6 * 2 视为两组不同的答案。</li>
+<li>​    对于 N 因式分解的答案，所有因子都是大于 2 的( 除了N本身 )，因此在我们使用循环来处理题目时，循环的范围为 2 到 N ( 不包括N本身，因为在本题中，N的本身也属于一个答案 )，由于 N 和 N / i 被视为不同的答案，因此可以只循环一遍，只对 N / i 或者 N / (N - i) 进行讨论。</li>
+</ol>
+<p>​    对本题进行分析后可以发现，这题其实和问题5中的情况其实并没有什么区别。对于本题而言，依旧要讨论其所有的分支情况，将分支情况的结果相加即可得到最终的答案。当然，本题的分支讨论比较特殊，答案需要满足被N整除的条件，另外，在返回结果时，需要在结果上加一。因为，我们在使用循环时，并没有讨论 N = N * 1 这种算作一种的特殊答案。</p>
+<p>​    那么还是和上题一样，最终的结果就是所有分支结果返回的总和。</p>
+<p>​    例如：Q6( 8 ) = Q6( 4 ) + Q6( 2 ) + 1</p>
+<p>​                            = Q6( 2 ) + 1 + 1 + 1</p>
+<p>​                            = 1 + 1 + 1 + 1 = 4</p>
+<p>​    最终 Q6( 8 ) 的结果就为4</p>
+<h4 id="问题7"><a href="#问题7" class="headerlink" title="问题7"></a>问题7</h4><p>​    <a target="_blank" rel="noopener" href="https://blog.csdn.net/Sam_yw/article/details/78050788">给定整数 N， 取若干个 1 到 N 的整数可求和等于整数 M， 编程求出所有组合的个数</a></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">Q7</span><span class="params">(<span class="keyword">int</span> N, <span class="keyword">int</span> M)</span></span>&#123;</span><br><span class="line">        <span class="keyword">int</span>[][] Dp = <span class="keyword">new</span> <span class="keyword">int</span>[N + <span class="number">2</span>][M + <span class="number">2</span>];</span><br><span class="line">        <span class="comment">// 此处 Dp 数组的含义是 i 个数（从 1 到 i）的和是 j 的组合数</span></span><br><span class="line"></span><br><span class="line">    	<span class="comment">// 初始化 Dp 数组</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt;= N; i++)</span><br><span class="line">            Dp[i][<span class="number">0</span>] = <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= N; i++)&#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">1</span>; j &lt;= M; j++)&#123;</span><br><span class="line">                <span class="keyword">if</span> (j &gt;= i)&#123;</span><br><span class="line">                    Dp[i][j] = Dp[i - <span class="number">1</span>][j - i] + Dp[i - <span class="number">1</span>][j];</span><br><span class="line">                &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                    Dp[i][j] = Dp[i - <span class="number">1</span>][j];</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>​    解析：</p>
+<p>​    本题看上去是和上面的问题6相似，那么当然的，是否能把问题6的代码修改后套用到问题7上，当当当当当当当当当当当当当当当当当当当当当当当然不可以!</p>
+<p>​    So，why？Why 不能把代码套用？对本题题干进行分析可知几个重要信息：</p>
+<ol>
+<li>​    答案中所包含的数所加和的值为整数 M。</li>
+<li>​    对于 1 到 N 中的数，在进行加法运算时，每个数只能使用一次。例如：当 N = 6，M = 8时，不能使用 2 + 2 + 2 + 2 作为答案，这也是为什么不能将问题6中的代码套用到问题7上。</li>
+</ol>
+<p>​    对题目有基本认识后，可以看出来，这是一个01背包问题的变种，以下，我们试图通过用背包问题的解法来解决这个问题：</p>
+<p>​    以 N = 6，M = 8 为例子，我们将 M 看作一个有 8 个容量的背包，将 1 ~ N 个数 看作 对应重量的为 1 ~ N 的物品( 例如 数字2 就代表 有一个 重量为2 的物品 )。 我们认为每件物品只有一件，不能重复使用，当背包中物品的重量 与 背包本身的容量 正好相等时，认为背包中的组合为一个正确答案( 例如 1 + 3 + 4 = 8，则 1，3，4为一组正确答案 )。</p>
+<p>​    那么，我们设定一个名为Dp的二维数组，对于 Dp [ i ] [ j ] , i 代表着 N 的值，j 代表着 M 的值，Dp [ i ] [ j ] 代表 对应的答案数量，进行计算后可以得到：</p>
+<table>
+<thead>
+<tr>
+<th align="center"></th>
+<th align="center"><strong>1</strong></th>
+<th align="center"><strong>2</strong></th>
+<th align="center"><strong>3</strong></th>
+<th align="center"><strong>4</strong></th>
+<th align="center"><strong>5</strong></th>
+<th align="center"><strong>6</strong></th>
+<th align="center"><strong>7</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">1</td>
+</tr>
+<tr>
+<td align="center">2</td>
+<td align="center">0</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">1</td>
+</tr>
+<tr>
+<td align="center">3</td>
+<td align="center">0</td>
+<td align="center">1</td>
+<td align="center">2</td>
+<td align="center">2</td>
+<td align="center">2</td>
+<td align="center">2</td>
+<td align="center">2</td>
+</tr>
+<tr>
+<td align="center">4</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">1</td>
+<td align="center">2</td>
+<td align="center">2</td>
+<td align="center">2</td>
+<td align="center">2</td>
+</tr>
+<tr>
+<td align="center">5</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">1</td>
+<td align="center">2</td>
+<td align="center">3</td>
+<td align="center">3</td>
+<td align="center">3</td>
+</tr>
+<tr>
+<td align="center">6</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">1</td>
+<td align="center">2</td>
+<td align="center">3</td>
+<td align="center">4</td>
+<td align="center">4</td>
+</tr>
+</tbody></table>
+<p>​    在表中，第一行的值，为N( i ) 的值 ； 第一列的值，为M( j ) 的值。</p>
+<p>​    结合表和我们在上方对题目的分析，我们可以得到如下的关系：</p>
+<ol>
+<li><p>​    当 N &gt; M 时 ( 即代表 有些物品的重量大于背包的容量 或者 背包的容量不足以装下其中部分的物品 )，可以得到一个递推公式：                                                                           Dp [ N ] [ M ] = Dp [ N - 1] [ M ] </p>
+<p>​    对上方的递推公式进行分析，Dp [ N ] [ M ] 代表着最后答案的数量( 同时意味着将重量为 N 的物品放入背包 M )，而Dp [ N - 1 ] [ M ]代表不将重量为 N 的物品放入背包M。</p>
+<p>​    当N &gt; M时，可以看作物品的重量大于当前背包的容量。因此，无论如何不能再将物品放入背包了,所对应最后答案的数量就是不将重量为 N 的物品放入背包时的值，所以 Dp [ N ] [ M ] 的值就等于Dp [ N - 1 ] [ M ] 。</p>
+</li>
+<li><p>​    当 N &lt;= M 时( 即代表 当前物品可以放入背包，小于背包的容量 )，可以的得到一个递推公式：<br>​                                                       Dp [ N ] [ M ] = Dp [ N - 1] [ M ]  + Dp [ N - 1] [ M - N ]</p>
+<p>​    对上方的递推公式进行分析，Dp [ N ] [ M ] 代表着最后答案的数量( 同时意味着将重量为 N 的物品放入背包 M )、 Dp [ N - 1 ] [ M ]代表不将重量为 N 的物品放入背包M，而 Dp [ N - 1] [ M - N ] 代表着将重量为 N 的物品放入背包 M( 其中N - 1代表将重量为 N 的物品放入背包所需要的空间，M - N 代表背包的容量减小N的值 )。</p>
+<p>​    当 M &gt;= N 时，可以看作当前背包的容量大于物品的重量。因此，只要保证背包中还剩余有放入重量为 N 的物品的空间，就可以将物品放进去。因此，最后所对应答案的数量就是 不将重量为 N 的物品放入背包时的值 加上 将重量为 N 的物品放入背包时的值。</p>
+<p>​    所以 Dp [ N ] [ M ] 的值等于 Dp [ N - 1] [ M ]  + Dp [ N - 1] [ M - N ]。</p>
+</li>
+</ol>
+<h4 id="附加1：汉诺塔"><a href="#附加1：汉诺塔" class="headerlink" title="附加1：汉诺塔"></a>附加1：<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_37873310/article/details/80461767">汉诺塔</a></h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">Qs_C</span><span class="params">(<span class="keyword">int</span> N,<span class="keyword">char</span> a, <span class="keyword">char</span> b, <span class="keyword">char</span> c)</span></span>&#123;</span><br><span class="line">        <span class="comment">// 基本的解题思路为，将原本多个盘子视作两个盘子（ 最顶部的盘子 和 除顶部盘子外所有的盘子 ）并对其进行移动</span></span><br><span class="line">        <span class="comment">// 而两个盘子从 A -&gt; C 的过程相对简单，只需要三步即可（A -&gt; B, A -&gt; C, B -&gt; C）</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">int</span> Answer = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (N == <span class="number">1</span>)&#123;</span><br><span class="line">            System.out.println( <span class="string">&quot;将盘子从&quot;</span> + a + <span class="string">&quot; -&gt; &quot;</span> + c ); <span class="comment">// 当只有一个盘子时，可以直接将盘子从 A 移动到 C</span></span><br><span class="line">            Answer++;</span><br><span class="line">            <span class="keyword">return</span> Answer;</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            <span class="comment">// 此时视作除顶上的盘子外，下方所有盘子是一个盘子，总共只有两个盘子</span></span><br><span class="line">            <span class="comment">// 则将最顶部的盘子从 A 移动到 B 因此，参数的中的顺序为 a，c，b</span></span><br><span class="line">            Answer = Answer + Qs_C(N - <span class="number">1</span>, a, c, b );</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 紧接上方，此时将之前视为一个盘子的部分从 A 移动到 C，这代表这进行了移动，因此Answer++</span></span><br><span class="line">            System.out.println(<span class="string">&quot;将盘子从&quot;</span> + a + <span class="string">&quot; -&gt; &quot;</span> + c );</span><br><span class="line">            Answer++;</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 最后将之前移动到 B 上的盘子移动到 C 上，因此 参数为 b，a，c</span></span><br><span class="line">            Answer = Answer + Qs_C(N - <span class="number">1</span>, b, a, c );</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> Answer;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>​    解析：</p>
+<p>​    这个问题起源于印度，具体怎么来的自己百度。总之，简述一下题目：有三个柱子A，B，C，在A柱上有N个圆盘，这N个圆盘从上到下越来越大。这时，需要将所有圆盘从A柱移动到C柱上，一次只能移动一个圆盘，并且小圆盘不能放在大圆盘的下方。如下图：</p>
+<p>​    <img src="/2021/09/26/%E7%AE%97%E6%B3%95%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-1/20180526185900422.png" alt="汉诺塔"></p>
+<p>​    我们要将A柱上的盘子都移动到C柱上,好吧，这是一个相当墨迹的过程。就拿上面的图而言，我们要移动整整64个盘子，这不是可以直接操作的。</p>
+<p>​    那么，我们对这个问题进行一个简化。如果，A柱上只有一个盘子呢？哦，这相当简单，是个哈批都可以做到，直接从A柱上拿到C柱就行了( 即 A -&gt; C 或者 A -&gt; B -&gt; C )。</p>
+<p>​    好了，让我们加大一点难度。此时A柱上有两个盘子，这看起来也不怎么难，同样也只需要简单几步。嗯，首先将第一个盘子从A柱上移动到B柱上，再将第二个盘子从A柱上移动到C柱上，最后将B柱上的盘子移动到C柱上( A -&gt; B, A -&gt; C, B -&gt; C )。好耶，我们成功了，只要3步，不怎么难嘛~~</p>
+<p>​    再让我们加大一点难度。现在有A柱上有64个圆盘，哦不，现在就有一些麻烦了。那么我们转换一下思路，我们将64个圆盘看作2个圆盘，将其中63个圆盘视作一个整体如何？现在我们认为只有两个圆盘，即 最上方的圆盘 和 除最上方圆盘外的其他63个圆盘视为一个整体的一个圆盘。</p>
+<p>​    那我们操作时，就按照和两个圆盘时的操作相同。但是其实不止2个盘子，所以我们需要使用递归来操作题目，每次只考虑两个盘子，不断重复两个盘子时的操作( 具体可以看代码中的注释 )，最终即可解出这个 <del>该死的</del> 古老的算数问题。</p>
+<p>​    好的，现在肯定有人看了代码要说了，你这每一步代码有点绕啊。我这只能说，不要在意这些问题。因为如果你要解释代码的每一步过程，那会非常乱，两层递归是相当麻烦的，最终自己也会被绕晕。那么为什么不把复杂的过程交给程序，我们只负责最简单的部分就好，我们按照最直接的理解就行了。</p>
+<h4 id="附加2：背包问题"><a href="#附加2：背包问题" class="headerlink" title="附加2：背包问题"></a>附加2：<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/93857890">背包问题</a></h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">Qs2</span><span class="params">(<span class="keyword">int</span> N,<span class="keyword">int</span> M)</span></span>&#123;</span><br><span class="line">        <span class="keyword">int</span>[][] Dp = <span class="keyword">new</span> <span class="keyword">int</span>[N + <span class="number">2</span>][M + <span class="number">2</span>];</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 初始化 Dp数组</span></span><br><span class="line">        <span class="comment">// 此处代表 当背包只能存放物品1时的值，此处假定值为1，不同问题的值不相同</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt;= N; i++)</span><br><span class="line">            Dp[i][<span class="number">0</span>] = <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= N; i++)&#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">1</span>; j &lt;= M; j++)&#123;</span><br><span class="line">                <span class="keyword">if</span> ( j &gt;= i)&#123;</span><br><span class="line">                    Dp[i][j] = Dp[i - <span class="number">1</span>][j - i] + Dp[i - <span class="number">1</span>][j];</span><br><span class="line">                &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                    Dp[i][j] = Dp[i - <span class="number">1</span>][j];</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>​    解析：</p>
+<p>​    对于本题，如果采用暴力穷举的方式，每件物品都存在装入和不装入两种情况。因此，总的时间复杂度，呵呵，操蛋的不敢相信，这是绝对不可接受的，除非你的电脑是天河二号。</p>
+<p>​    而使用动态规划可将复杂度骤降，我们的目标是书包的总价值，而变量是物品和书包的限重，所以我们可定义状态Dp：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dp[i][j]表示将前i件物品装进限重为j的背包可以获得的最大价值, <span class="number">0</span>&lt;=i&lt;=N, <span class="number">0</span>&lt;=j&lt;=W</span><br></pre></td></tr></table></figure>
+
+<p>​    那么我们可以将数组中Dp [ 0 ] [ j ] 初始化为0，表示前 0 个物品( 既没有物品 ) 装入书包的最大价值为0。那么当 i &gt; 0 时Dp [ i ] [ j ] 有两种情况：</p>
+<ol>
+<li>​    不装入第 i 间物品，即 Dp [ i - 1 ] [ j ]。</li>
+<li>​    装入第 i 件物品( 前提是能装下 )，即 Dp [ i - 1 ] [ j - w[ i ] ] + v[ i ]。( w[ i ] 代表 物品i的重量，v[ i ] 代表 物品i的价值 )</li>
+</ol>
+<p>​    这样我们就可以得到一个状态转移方程：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dp[i][j] = max(dp[i−<span class="number">1</span>][j], dp[i−<span class="number">1</span>][j−w[i]]+v[i]) <span class="comment">// j &gt;= w[i] 代表 书包容量j大于物品i的重量</span></span><br></pre></td></tr></table></figure>
+
+<p>​    由上述状态转移方程可知，<code>dp[i][j]</code>的值只与<code>dp[i-1][0,...,j-1]</code>有关，所以我们可以采用动态规划常用的方法（滚动数组）对空间进行优化（即去掉 Dp 的第一维，把Dp数组变化为一维数组）。需要注意的是，为了防止上一层循环的<code>dp[0,...,j-1]</code>被覆盖，循环的时候 j 只能<strong>逆向枚举</strong>（空间优化前没有这个限制）。当然，这是一个相当麻烦的办法，额，我是指思想方面。</p>
+<p>​    伪代码为：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 01背包问题伪代码(空间优化版)</span></span><br><span class="line">dp[<span class="number">0</span>,...,W] = <span class="number">0</span></span><br><span class="line"><span class="keyword">for</span> i = <span class="number">1</span>,...,N</span><br><span class="line">    <span class="keyword">for</span> j = W,...,w[i] <span class="comment">// 必须逆向枚举!!!</span></span><br><span class="line">        dp[j] = max(dp[j], dp[j−w[i]]+v[i])</span><br></pre></td></tr></table></figure>
+
+<p>​    从上面可以得知，动态规划的核心思想在于避免重复计算。这个思想在背包问题中体现的淋漓尽致，第 i 件物品装入或者不装入而获得的最大价值完全可以由前面 i - 1 件物品的最大价值决定，而暴力枚举忽略了这个事实。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/09/10/Java%E5%BA%93%E4%B8%AD%E7%9A%84LocalDate%E7%B1%BB/" rel="prev" title="Java库中的LocalDate类">
+      <i class="fa fa-chevron-left"></i> Java库中的LocalDate类
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/11/06/%E6%8E%92%E5%BA%8F/" rel="next" title="排序">
+      排序 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B1%81%E8%AF%9D"><span class="nav-number">1.</span> <span class="nav-text">屁话</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE-%E5%92%8C-%E9%A2%98%E8%A7%A3"><span class="nav-number">2.</span> <span class="nav-text">题目 和 题解</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%97%AE%E9%A2%981"><span class="nav-number">2.0.1.</span> <span class="nav-text">问题1</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%97%AE%E9%A2%982"><span class="nav-number">2.0.2.</span> <span class="nav-text">问题2</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%97%AE%E9%A2%983"><span class="nav-number">2.0.3.</span> <span class="nav-text">问题3</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%97%AE%E9%A2%984"><span class="nav-number">2.0.4.</span> <span class="nav-text">问题4</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%97%AE%E9%A2%985"><span class="nav-number">2.0.5.</span> <span class="nav-text">问题5</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%97%AE%E9%A2%986"><span class="nav-number">2.0.6.</span> <span class="nav-text">问题6</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%97%AE%E9%A2%987"><span class="nav-number">2.0.7.</span> <span class="nav-text">问题7</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%99%84%E5%8A%A01%EF%BC%9A%E6%B1%89%E8%AF%BA%E5%A1%94"><span class="nav-number">2.0.8.</span> <span class="nav-text">附加1：汉诺塔</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%99%84%E5%8A%A02%EF%BC%9A%E8%83%8C%E5%8C%85%E9%97%AE%E9%A2%98"><span class="nav-number">2.0.9.</span> <span class="nav-text">附加2：背包问题</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">John Doe</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">31</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">John Doe</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"live2d-widget-model-haruto"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":false},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>
+
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/love.js"></script>
+
+<!--动态线条背景-->
+<script type="text/javascript"
+color="220,220,220" opacity='0.7' zIndex="-2" count="200" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js">
+</script>
+
+<!--浏览器搞笑标题-->
+<script type="text/javascript" src="\js\FunnyTitle.js"></script>

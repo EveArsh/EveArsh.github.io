@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Kirang Haerang:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="这一篇的内容属于有感而发，起初是在实现 AOP 时出现了 after 和 before 的打印在一起，如下： 测试代码： 1234567891011121314@Testpublic void testOne()&amp;#123;    ApplicationContext context &#x3D; new ClassPathXmlApplicationContext(&quot;applicationCon">
+<meta property="og:type" content="article">
+<meta property="og:title" content="聊聊为什么AOP中执行环绕的方法会在打印前">
+<meta property="og:url" content="http://example.com/2022/07/17/%E8%81%8A%E8%81%8A%E4%B8%BA%E4%BB%80%E4%B9%88AOP%E4%B8%AD%E6%89%A7%E8%A1%8C%E7%8E%AF%E7%BB%95%E7%9A%84%E6%96%B9%E6%B3%95%E4%BC%9A%E5%9C%A8%E6%89%93%E5%8D%B0%E5%89%8D/index.html">
+<meta property="og:site_name" content="神秘的世界">
+<meta property="og:description" content="这一篇的内容属于有感而发，起初是在实现 AOP 时出现了 after 和 before 的打印在一起，如下： 测试代码： 1234567891011121314@Testpublic void testOne()&amp;#123;    ApplicationContext context &#x3D; new ClassPathXmlApplicationContext(&quot;applicationCon">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2022-07-17T07:13:29.657Z">
+<meta property="article:modified_time" content="2022-07-17T07:28:32.716Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://example.com/2022/07/17/%E8%81%8A%E8%81%8A%E4%B8%BA%E4%BB%80%E4%B9%88AOP%E4%B8%AD%E6%89%A7%E8%A1%8C%E7%8E%AF%E7%BB%95%E7%9A%84%E6%96%B9%E6%B3%95%E4%BC%9A%E5%9C%A8%E6%89%93%E5%8D%B0%E5%89%8D/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>聊聊为什么AOP中执行环绕的方法会在打印前 | 神秘的世界</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">神秘的世界</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/07/17/%E8%81%8A%E8%81%8A%E4%B8%BA%E4%BB%80%E4%B9%88AOP%E4%B8%AD%E6%89%A7%E8%A1%8C%E7%8E%AF%E7%BB%95%E7%9A%84%E6%96%B9%E6%B3%95%E4%BC%9A%E5%9C%A8%E6%89%93%E5%8D%B0%E5%89%8D/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="神秘的世界">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          聊聊为什么AOP中执行环绕的方法会在打印前
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2022-07-17 15:13:29 / Modified: 15:28:32" itemprop="dateCreated datePublished" datetime="2022-07-17T15:13:29+08:00">2022-07-17</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>这一篇的内容属于有感而发，起初是在实现 AOP 时出现了 after 和 before 的打印在一起，如下：</p>
+<p>测试代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testOne</span><span class="params">()</span></span>&#123;</span><br><span class="line">    ApplicationContext context = <span class="keyword">new</span> ClassPathXmlApplicationContext(<span class="string">&quot;applicationContext.xml&quot;</span>);</span><br><span class="line">    UserMapper userMapper = context.getBean(<span class="string">&quot;userMapper&quot;</span>, UserMapper.class);</span><br><span class="line"></span><br><span class="line">    ArrayList&lt;User&gt; userList = userMapper.getUserList();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> ( User user : userList )&#123;</span><br><span class="line">        System.out.println( user.toString() );</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    userMapper.deleteUser( <span class="number">10</span> );</span><br><span class="line">    userMapper.addUser( <span class="keyword">new</span> User( <span class="number">10</span>, <span class="string">&quot;测试员&quot;</span>, <span class="string">&quot;1234567&quot;</span> ) );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>输出结果：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">==================== 方法执行前 ====================</span><br><span class="line">==================== 方法执行后 ====================</span><br><span class="line">User(userId=1, userName=管理员, userPWD=1234567)</span><br><span class="line">User(userId=2, userName=李四, userPWD=ycy856249)</span><br><span class="line">User(userId=3, userName=张三, userPWD=1234567)</span><br><span class="line">User(userId=4, userName=李六, userPWD=1234567)</span><br><span class="line">User(userId=10, userName=测试员, userPWD=1234567)</span><br><span class="line">User(userId=16, userName=测试员, userPWD=1234567)</span><br><span class="line">==================== 方法执行前 ====================</span><br><span class="line">==================== 方法执行后 ====================</span><br><span class="line">==================== 方法执行前 ====================</span><br><span class="line">==================== 方法执行后 ====================</span><br></pre></td></tr></table></figure>
+
+
+
+<p>起初我认为，这是 applicationContext.xml 的配置问题，但在开启日志后我发现，这并没有问题，日志如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line">&quot;C:\Program Files\Java\jdk-14.0.1\bin\java.exe&quot; -ea -Didea.test.cyclic.buffer.size=1048576 &quot;-javaagent:D:\IntelliJ IDEA\lib\idea_rt.jar=64842:D:\IntelliJ IDEA\bin&quot; -Dfile.encoding=UTF-8 -classpath &quot;D:\IntelliJ IDEA\lib\idea_rt.jar;D:\IntelliJ IDEA\plugins\junit\lib\junit5-rt.jar;D:\IntelliJ IDEA\plugins\junit\lib\junit-rt.jar;C:\Users\Arsh\Desktop\WorkTest\Spring_AOP2\target\test-classes;C:\Users\Arsh\Desktop\WorkTest\Spring_AOP2\target\classes;D:\apache-maven-3.8.4\maven-repo\org\aspectj\aspectjweaver\1.9.9.1\aspectjweaver-1.9.9.1.jar;D:\apache-maven-3.8.4\maven-repo\org\springframework\spring-webmvc\5.3.21\spring-webmvc-5.3.21.jar;D:\apache-maven-3.8.4\maven-repo\org\springframework\spring-aop\5.3.21\spring-aop-5.3.21.jar;D:\apache-maven-3.8.4\maven-repo\org\springframework\spring-beans\5.3.21\spring-beans-5.3.21.jar;D:\apache-maven-3.8.4\maven-repo\org\springframework\spring-context\5.3.21\spring-context-5.3.21.jar;D:\apache-maven-3.8.4\maven-repo\org\springframework\spring-core\5.3.21\spring-core-5.3.21.jar;D:\apache-maven-3.8.4\maven-repo\org\springframework\spring-jcl\5.3.21\spring-jcl-5.3.21.jar;D:\apache-maven-3.8.4\maven-repo\org\springframework\spring-expression\5.3.21\spring-expression-5.3.21.jar;D:\apache-maven-3.8.4\maven-repo\org\springframework\spring-web\5.3.21\spring-web-5.3.21.jar;D:\apache-maven-3.8.4\maven-repo\org\springframework\spring-jdbc\5.3.21\spring-jdbc-5.3.21.jar;D:\apache-maven-3.8.4\maven-repo\org\springframework\spring-tx\5.3.21\spring-tx-5.3.21.jar;D:\apache-maven-3.8.4\maven-repo\org\mybatis\mybatis-spring\2.0.7\mybatis-spring-2.0.7.jar;D:\apache-maven-3.8.4\maven-repo\mysql\mysql-connector-java\8.0.28\mysql-connector-java-8.0.28.jar;D:\apache-maven-3.8.4\maven-repo\com\google\protobuf\protobuf-java\3.11.4\protobuf-java-3.11.4.jar;D:\apache-maven-3.8.4\maven-repo\org\mybatis\mybatis\3.5.6\mybatis-3.5.6.jar;D:\apache-maven-3.8.4\maven-repo\org\projectlombok\lombok\1.18.12\lombok-1.18.12.jar;D:\apache-maven-3.8.4\maven-repo\junit\junit\4.13.1\junit-4.13.1.jar;D:\apache-maven-3.8.4\maven-repo\org\hamcrest\hamcrest-core\1.3\hamcrest-core-1.3.jar&quot; com.intellij.rt.junit.JUnitStarter -ideVersion5 -junit4 MyTest,testOne</span><br><span class="line">Logging initialized using &#x27;class org.apache.ibatis.logging.stdout.StdOutImpl&#x27; adapter.</span><br><span class="line">==================== 方法执行前 ====================</span><br><span class="line">Creating a new SqlSession</span><br><span class="line">Registering transaction synchronization for SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@39ab59f8]</span><br><span class="line">JDBC Connection [com.mysql.cj.jdbc.ConnectionImpl@ca66933] will be managed by Spring</span><br><span class="line">==&gt;  Preparing: select * from mybatis.user;</span><br><span class="line">==&gt; Parameters: </span><br><span class="line">&lt;==    Columns: id, name, password</span><br><span class="line">&lt;==        Row: 1, 管理员, 1234567</span><br><span class="line">&lt;==        Row: 2, 李四, ycy856249</span><br><span class="line">&lt;==        Row: 3, 张三, 1234567</span><br><span class="line">&lt;==        Row: 4, 李六, 1234567</span><br><span class="line">&lt;==        Row: 10, 测试员, 1234567</span><br><span class="line">&lt;==        Row: 16, 测试员, 1234567</span><br><span class="line">&lt;==      Total: 6</span><br><span class="line">Releasing transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@39ab59f8]</span><br><span class="line">==================== 方法执行后 ====================</span><br><span class="line">Transaction synchronization committing SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@39ab59f8]</span><br><span class="line">Transaction synchronization deregistering SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@39ab59f8]</span><br><span class="line">Transaction synchronization closing SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@39ab59f8]</span><br><span class="line">User(userId=1, userName=管理员, userPWD=1234567)</span><br><span class="line">User(userId=2, userName=李四, userPWD=ycy856249)</span><br><span class="line">User(userId=3, userName=张三, userPWD=1234567)</span><br><span class="line">User(userId=4, userName=李六, userPWD=1234567)</span><br><span class="line">User(userId=10, userName=测试员, userPWD=1234567)</span><br><span class="line">User(userId=16, userName=测试员, userPWD=1234567)</span><br><span class="line">==================== 方法执行前 ====================</span><br><span class="line">Creating a new SqlSession</span><br><span class="line">Registering transaction synchronization for SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@ddf20fd]</span><br><span class="line">JDBC Connection [com.mysql.cj.jdbc.ConnectionImpl@695a69a1] will be managed by Spring</span><br><span class="line">==&gt;  Preparing: delete from mybatis.user where id = ?</span><br><span class="line">==&gt; Parameters: 10(Integer)</span><br><span class="line">&lt;==    Updates: 1</span><br><span class="line">Releasing transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@ddf20fd]</span><br><span class="line">==================== 方法执行后 ====================</span><br><span class="line">Transaction synchronization committing SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@ddf20fd]</span><br><span class="line">Transaction synchronization deregistering SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@ddf20fd]</span><br><span class="line">Transaction synchronization closing SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@ddf20fd]</span><br><span class="line">==================== 方法执行前 ====================</span><br><span class="line">Creating a new SqlSession</span><br><span class="line">Registering transaction synchronization for SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@69cac930]</span><br><span class="line">JDBC Connection [com.mysql.cj.jdbc.ConnectionImpl@5d39f2d8] will be managed by Spring</span><br><span class="line">==&gt;  Preparing: insert into mybatis.user(id, name, password) values (?, ?, ?)</span><br><span class="line">==&gt; Parameters: 10(Integer), 测试员(String), 1234567(String)</span><br><span class="line">&lt;==    Updates: 1</span><br><span class="line">Releasing transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@69cac930]</span><br><span class="line">==================== 方法执行后 ====================</span><br><span class="line">Transaction synchronization committing SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@69cac930]</span><br><span class="line">Transaction synchronization deregistering SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@69cac930]</span><br><span class="line">Transaction synchronization closing SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@69cac930]</span><br></pre></td></tr></table></figure>
+
+<p>可以看出，环绕的确实在方法前和方法后执行的，之所以会出现打印前是因为：<strong>打印代码并不在方法体内！</strong></p>
+<p>由于打印不在方法内部，自然不会被环绕包含。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/07/12/Spring%E5%AD%A6%E4%B9%A0/" rel="prev" title="Spring学习">
+      <i class="fa fa-chevron-left"></i> Spring学习
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/07/17/SpringMCV%E7%9A%84%E5%AD%A6%E4%B9%A0/" rel="next" title="springMCV的学习">
+      springMCV的学习 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">John Doe</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">31</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">John Doe</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"live2d-widget-model-haruto"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":false},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>
+
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/love.js"></script>
+
+<!--动态线条背景-->
+<script type="text/javascript"
+color="220,220,220" opacity='0.7' zIndex="-2" count="200" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js">
+</script>
+
+<!--浏览器搞笑标题-->
+<script type="text/javascript" src="\js\FunnyTitle.js"></script>

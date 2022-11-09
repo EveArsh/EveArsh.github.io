@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Kirang Haerang:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="屁话​        这是算法课上的弄到的题目，一共4个，下面对他们进行解答（给上题目）。 1234567891011121314151617181920212223242526272829303132* Q1. 背包问题（贪心算法）    假设一背包承重为10斤，怎样放入水果使得背包中的价值最大，水果信息如下：    水果		重量		价值     1		   2        6     2">
+<meta property="og:type" content="article">
+<meta property="og:title" content="学习笔记——算法设计的学习笔记 Two">
+<meta property="og:url" content="http://example.com/2021/11/08/%E7%AE%97%E6%B3%95%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-2/index.html">
+<meta property="og:site_name" content="神秘的世界">
+<meta property="og:description" content="屁话​        这是算法课上的弄到的题目，一共4个，下面对他们进行解答（给上题目）。 1234567891011121314151617181920212223242526272829303132* Q1. 背包问题（贪心算法）    假设一背包承重为10斤，怎样放入水果使得背包中的价值最大，水果信息如下：    水果		重量		价值     1		   2        6     2">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2021-11-08T15:01:30.628Z">
+<meta property="article:modified_time" content="2021-11-21T08:59:32.780Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://example.com/2021/11/08/%E7%AE%97%E6%B3%95%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-2/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>学习笔记——算法设计的学习笔记 Two | 神秘的世界</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">神秘的世界</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/11/08/%E7%AE%97%E6%B3%95%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="神秘的世界">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          学习笔记——算法设计的学习笔记 Two
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-11-08 23:01:30" itemprop="dateCreated datePublished" datetime="2021-11-08T23:01:30+08:00">2021-11-08</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-11-21 16:59:32" itemprop="dateModified" datetime="2021-11-21T16:59:32+08:00">2021-11-21</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="屁话"><a href="#屁话" class="headerlink" title="屁话"></a>屁话</h2><p>​        这是算法课上的弄到的题目，一共4个，下面对他们进行解答（给上题目）。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">* Q1. 背包问题（贪心算法）</span><br><span class="line">    假设一背包承重为<span class="number">10</span>斤，怎样放入水果使得背包中的价值最大，水果信息如下：</span><br><span class="line">    水果		重量		价值</span><br><span class="line">     <span class="number">1</span>		   <span class="number">2</span>        <span class="number">6</span></span><br><span class="line">     <span class="number">2</span>		   <span class="number">2</span>        <span class="number">3</span></span><br><span class="line">     <span class="number">3</span>		   <span class="number">6</span>        <span class="number">5</span></span><br><span class="line">     <span class="number">4</span>		   <span class="number">5</span>        <span class="number">4</span></span><br><span class="line">     <span class="number">5</span>		   <span class="number">4</span>        <span class="number">6</span></span><br><span class="line">    </span><br><span class="line">* Q2. 海盗喝酒问题</span><br><span class="line">    有一群海盗（不多于<span class="number">20</span>人），在船上比拼酒量。过程如下：</span><br><span class="line">    打开一瓶酒，所有在场的人平分喝下，有几个人倒下了。</span><br><span class="line">    再打开一瓶酒平分，又有倒下的，再次重复……</span><br><span class="line">    直到开了第<span class="number">4</span>瓶酒，坐着的已经所剩无几，海盗船长也在其中。</span><br><span class="line">	当第<span class="number">4</span>瓶酒平分喝下后，大家都倒下了。 </span><br><span class="line">    等船长醒来，发现海盗船搁浅了。</span><br><span class="line">	他在航海日志中写到：“……昨天，我正好喝了一瓶…….奉劝大家，开船不喝酒，喝酒别开船……”</span><br><span class="line">	请你根据这些信息，推断开始有多少人，每一轮喝下来还剩多少人。</span><br><span class="line">	如果有多个可能的答案，请列出所有答案，每个答案占一行。</span><br><span class="line">    </span><br><span class="line">* Q3. 给定整数 n 和 m，满足 n 能被 2m 整除。对于一串连续递增整数数列<span class="number">1</span>、<span class="number">2</span>、<span class="number">3</span>、<span class="number">4</span>，每隔 m 个符号反转一次，最初的符号为<span class="string">&#x27;-&#x27;</span></span><br><span class="line">    例如：</span><br><span class="line">    n = <span class="number">8</span>, m = <span class="number">2</span>, 数列就是：-<span class="number">1</span>, -<span class="number">2</span>, +<span class="number">3</span>, +<span class="number">4</span>, -<span class="number">5</span>, -<span class="number">6</span>, +<span class="number">7</span>, +<span class="number">8</span></span><br><span class="line">    n = <span class="number">4</span>, m = <span class="number">1</span>, 数列就是：-<span class="number">1</span>, +<span class="number">2</span>, -<span class="number">3</span>, +<span class="number">4</span></span><br><span class="line">    求前 n 项和。（<span class="number">2</span> &lt;= n &lt;= <span class="number">10</span>^<span class="number">9</span> ）（时间限制为 <span class="number">1</span> 秒，空间限制32768k）</span><br><span class="line">      </span><br><span class="line">    </span><br><span class="line">* Q4. 某市市长获得了若干批口罩，给定没批口罩的数量，每一批口罩的数目如下：</span><br><span class="line">    <span class="number">9090400</span>	<span class="number">8499400</span>	<span class="number">5926800</span>	<span class="number">8547000</span>	<span class="number">4958200</span>	<span class="number">4422600</span>	<span class="number">5751200</span>	<span class="number">4175600</span>	</span><br><span class="line">    <span class="number">6309600</span>	<span class="number">5865200</span>	<span class="number">6604400</span>	<span class="number">4635000</span>	<span class="number">10663400</span> <span class="number">8087200</span> <span class="number">4554000</span></span><br><span class="line">    市长要把口罩分配给室内的 <span class="number">2</span> 所医院，由于物流限制，每一批口罩只能全部分配给其中一家医院。</span><br><span class="line">    市长希望 <span class="number">2</span> 所医院所获得的口罩总数只差越小越好。请你计算这个最小差是多少？</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="题目-和-题解"><a href="#题目-和-题解" class="headerlink" title="题目 和 题解"></a>题目 和 题解</h2><h4 id="问题1"><a href="#问题1" class="headerlink" title="问题1"></a>问题1</h4><p>​    背包问题（贪心算法）<br>​    假设一背包承重为10斤，怎样放入水果使得背包中的价值最大，水果信息如下：<br>​    水果        重量         价值<br>​     1               2             6<br>​     2               2             3<br>​     3               6             5<br>​     4               5             4<br>​     5               4             6</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">questionOne</span><span class="params">(<span class="keyword">int</span> packageSize)</span></span>&#123;</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 内部类 Fruit 用来表示水果</span></span><br><span class="line">            <span class="class"><span class="keyword">class</span> <span class="title">Fruit</span></span>&#123;</span><br><span class="line">                <span class="keyword">int</span> id;</span><br><span class="line">                <span class="keyword">double</span> wight,value;</span><br><span class="line">                <span class="keyword">double</span> gain = <span class="number">0</span>; <span class="comment">// 是否获取 或者 获取多少</span></span><br><span class="line"></span><br><span class="line">                <span class="keyword">double</span> uniteValue = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">                <span class="function"><span class="keyword">public</span> <span class="title">Fruit</span><span class="params">(<span class="keyword">int</span> id, <span class="keyword">double</span> wight, <span class="keyword">double</span> value)</span></span>&#123;</span><br><span class="line">                    <span class="keyword">this</span>.id = id;</span><br><span class="line">                    <span class="keyword">this</span>.wight = wight;</span><br><span class="line">                    <span class="keyword">this</span>.value = value;</span><br><span class="line">    </span><br><span class="line">                    <span class="keyword">this</span>.uniteValue = value / wight;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 用来排序的内部类 : 排序的顺序为单位价值从大到小</span></span><br><span class="line">        <span class="class"><span class="keyword">class</span> <span class="title">Sort</span></span>&#123;</span><br><span class="line">            <span class="comment">// 对传入的 Fruit 数组进行排序, 以单位价值 uniteValue 为排序标准</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">quickSort</span><span class="params">(Fruit[] fruits, <span class="keyword">int</span> left, <span class="keyword">int</span> right)</span></span>&#123;</span><br><span class="line"></span><br><span class="line">                <span class="keyword">if</span> (left &lt; right)&#123;</span><br><span class="line">                    <span class="keyword">int</span> mid = getIndex(fruits, left, right);</span><br><span class="line"></span><br><span class="line">                    quickSort(fruits, left, mid - <span class="number">1</span>);</span><br><span class="line">                    quickSort(fruits, mid + <span class="number">1</span>, right);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getIndex</span><span class="params">(Fruit[] fruits, <span class="keyword">int</span> left, <span class="keyword">int</span> right)</span></span>&#123;</span><br><span class="line">                <span class="keyword">int</span> i = left, j = right, t = <span class="number">0</span>;</span><br><span class="line">                Fruit fruit = fruits[ left ];</span><br><span class="line"></span><br><span class="line">                <span class="keyword">double</span>[] fruitUniteValue = <span class="keyword">new</span> <span class="keyword">double</span>[ fruits.length ];</span><br><span class="line"></span><br><span class="line">                <span class="keyword">for</span> (Fruit fruitEach : fruits)&#123;</span><br><span class="line">                    fruitUniteValue[t] = fruitEach.uniteValue;</span><br><span class="line">                    t = t + <span class="number">1</span>;</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                <span class="keyword">while</span> (i &lt; j)&#123;</span><br><span class="line"></span><br><span class="line">                    <span class="keyword">while</span> ( fruit.uniteValue &gt;= fruitUniteValue[j] &amp;&amp; i &lt; j )&#123;</span><br><span class="line">                        j = j - <span class="number">1</span>;</span><br><span class="line">                    &#125;</span><br><span class="line">                    fruits[i] = fruits[j];</span><br><span class="line">                    fruitUniteValue[i] = fruitUniteValue[j];</span><br><span class="line"></span><br><span class="line">                    <span class="keyword">while</span> ( fruit.uniteValue &lt;= fruitUniteValue[i] &amp;&amp; i &lt; j )&#123;</span><br><span class="line">                        i = i + <span class="number">1</span>;</span><br><span class="line">                    &#125;</span><br><span class="line">                    fruits[j] = fruits[i];</span><br><span class="line">                    fruitUniteValue[j] = fruitUniteValue[i];</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                fruits[i] = fruit;</span><br><span class="line"></span><br><span class="line">                <span class="keyword">return</span> i;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        Fruit[] fruits = <span class="keyword">new</span> Fruit[<span class="number">5</span>];</span><br><span class="line">        Sort sort = <span class="keyword">new</span> Sort();</span><br><span class="line">        <span class="keyword">double</span> nowPackageSize = <span class="number">0</span>; <span class="comment">// 当前背包中的容量</span></span><br><span class="line">        <span class="keyword">int</span> packageInt = <span class="number">0</span>; <span class="comment">// 用来在计算背包容量时用的变量</span></span><br><span class="line"></span><br><span class="line">        fruits[<span class="number">0</span>] = <span class="keyword">new</span> Fruit(<span class="number">1</span>, <span class="number">2</span>,<span class="number">6</span>);</span><br><span class="line">        fruits[<span class="number">1</span>] = <span class="keyword">new</span> Fruit(<span class="number">2</span>, <span class="number">2</span>,<span class="number">3</span>);</span><br><span class="line">        fruits[<span class="number">2</span>] = <span class="keyword">new</span> Fruit(<span class="number">3</span>, <span class="number">6</span>,<span class="number">5</span>);</span><br><span class="line">        fruits[<span class="number">3</span>] = <span class="keyword">new</span> Fruit(<span class="number">4</span>, <span class="number">5</span>,<span class="number">4</span>);</span><br><span class="line">        fruits[<span class="number">4</span>] = <span class="keyword">new</span> Fruit(<span class="number">5</span>, <span class="number">4</span>,<span class="number">6</span>);</span><br><span class="line"></span><br><span class="line">        sort.quickSort(fruits, <span class="number">0</span>, fruits.length - <span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">        System.out.println( <span class="string">&quot;id&quot;</span>+ <span class="string">&quot; &quot;</span> + <span class="string">&quot;wight&quot;</span>  + <span class="string">&quot; &quot;</span> + <span class="string">&quot;value&quot;</span> + <span class="string">&quot; &quot;</span> + <span class="string">&quot;gain&quot;</span> + <span class="string">&quot; &quot;</span> + <span class="string">&quot;uniteValue&quot;</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (Fruit fruit : fruits)</span><br><span class="line">            System.out.println( fruit.id + <span class="string">&quot;\t&quot;</span> + fruit.wight + <span class="string">&quot;\t &quot;</span> + fruit.value + <span class="string">&quot;\t&quot;</span> +  fruit.gain + <span class="string">&quot;\t\t&quot;</span> + fruit.uniteValue);</span><br><span class="line"></span><br><span class="line">        System.out.println(<span class="string">&quot;*******************************************************&quot;</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">while</span> (nowPackageSize &lt; packageSize)&#123;</span><br><span class="line">            </span><br><span class="line">            <span class="keyword">if</span> ( nowPackageSize + fruits[ packageInt ].wight &lt; packageSize )&#123;</span><br><span class="line">                nowPackageSize = nowPackageSize + fruits[ packageInt ].wight;</span><br><span class="line">                fruits[ packageInt ].gain = <span class="number">1</span>; <span class="comment">// 表示获取一份完整的水果</span></span><br><span class="line"></span><br><span class="line">                packageInt = packageInt + <span class="number">1</span>;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 背包即将超过最高容量</span></span><br><span class="line">            <span class="keyword">if</span> (nowPackageSize + fruits[ packageInt ].wight &gt; packageSize)&#123;</span><br><span class="line">                <span class="comment">// 此时可能已经无法获得一份完整的水果</span></span><br><span class="line"></span><br><span class="line">                fruits[ packageInt ].gain = ( packageSize - nowPackageSize ) / fruits[ packageInt ].wight;</span><br><span class="line"></span><br><span class="line">                nowPackageSize = nowPackageSize + fruits[ packageInt ].wight;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = packageInt + <span class="number">1</span>; i &lt; fruits.length; i++)&#123;</span><br><span class="line">            fruits[ i ].gain = <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (Fruit fruit : fruits)</span><br><span class="line">            System.out.println( fruit.id + <span class="string">&quot;\t&quot;</span> + fruit.wight + <span class="string">&quot;\t &quot;</span> + fruit.value + <span class="string">&quot;\t&quot;</span> +  fruit.gain + <span class="string">&quot;\t\t&quot;</span> + fruit.uniteValue);</span><br><span class="line">    </span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>​        思路详解：</p>
+<p>​        从上面的代码可以看到，其中代码的实现大致分为了几个部分 ： 内部类Fruit用来代表水果， 内部类Sort用来排序， 用来实现核心贪心算法的代码。接下来，按照顺序来进行分解：</p>
+<p>​        内部类 Fruit ：用来代表水果的类，包含了某个水果对象的重量和价值，方便在后面进行排序时进行使用。</p>
+<p>​        内部类 Sort ： 用来对水果进行排序的类，主要包含了 快速排序 的算法，为后面实现贪心算法提供了基础。</p>
+<p>​        实现核心贪心算法的代码 ： 这是这个解出这个题目的核心部分，原理是利用贪心算法的原理来对本题进行求解。考虑到在这个题目中，水果是可以被分割。不再需要将整个水果完整的塞入背包中，因此在这个题目中，水果的单位价值( 价值 / 重量 ) 变成了这个题目考虑的第一指标。所以贪心算法被运用到了这个题目中。</p>
+<p>​        在这里稍微解释以下贪心算法，以后可能会专门写一篇文章来说说贪心算法。</p>
+<p>​        首先，求得每一个可选水果的单位价值，按照单位价值从高到低的顺序进行排序。完成了排序后，进入循环，循环的条件为当前背包中的重量小于背包的总重 并且 依旧存在可以被挑选的水果 。</p>
+<p>​        接下来解释循环中的内容：首先进行判断，如果当前价值最高的水果的整体重量小于背包的容量，则将水果整个放入背包中。若当前的背包容量不足以放入一整个水果，则将当前的水果进行拆分，将这个水果的一部分放入背包中。</p>
+<h4 id="问题2"><a href="#问题2" class="headerlink" title="问题2"></a>问题2</h4><p>​    海盗喝酒问题<br>​    有一群海盗（不多于20人），在船上比拼酒量。过程如下：<br>​    打开一瓶酒，所有在场的人平分喝下，有几个人倒下了。<br>​    再打开一瓶酒平分，又有倒下的，再次重复……<br>​    直到开了第4瓶酒，坐着的已经所剩无几，海盗船长也在其中。<br>​    当第4瓶酒平分喝下后，大家都倒下了。<br>​    等船长醒来，发现海盗船搁浅了。<br>​    他在航海日志中写到：“……昨天，我正好喝了一瓶…….奉劝大家，开船不喝酒，喝酒别开船……”<br>​    请你根据这些信息，推断开始有多少人，每一轮喝下来还剩多少人。<br>​    如果有多个可能的答案，请列出所有答案，每个答案占一行。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">questionTwo</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">double</span> a, b, c, d; <span class="comment">// 分别代表 第一轮 第二轮 第三轮 第四轮 剩下的人数</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (a = <span class="number">1</span>; a &lt;= <span class="number">20</span>; a++)&#123;</span><br><span class="line">        <span class="keyword">for</span> (b = <span class="number">1</span>; b &lt; a; b++)&#123;</span><br><span class="line">            <span class="keyword">for</span> (c = <span class="number">1</span>; c &lt; b; c++)&#123;</span><br><span class="line">                <span class="keyword">for</span> (d = <span class="number">1</span>; d &lt; c; d++)&#123;</span><br><span class="line">                    <span class="keyword">if</span> ( <span class="number">1</span> / a + <span class="number">1</span> / b + <span class="number">1</span> / c + <span class="number">1</span> / d == <span class="number">1</span> )</span><br><span class="line">                        System.out.println( a + <span class="string">&quot;  &quot;</span> + b + <span class="string">&quot;  &quot;</span> + c + <span class="string">&quot;  &quot;</span> + d );</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>​        思路详解：</p>
+<p>​        上面的代码中最突出的就是拥有着四个循环，这四个循环就是对应着题目中的喝酒轮数。对题目进行分析，可以得知几个比较重要的信息。</p>
+<p>​        1、 参与喝酒的人数不超越20人</p>
+<p>​        2、 喝酒的次数一共只有4轮，每一次结束之后就会减少一半的人</p>
+<p>​        3、 每轮喝酒时都是将一瓶酒平分给所有人</p>
+<p>​        4、 船长是最后一个倒下的，且在最后一轮结束后，船长一共喝满了一整瓶酒</p>
+<p>​        那么根据上面总结的信息，我们可以知道，程序应该拥有四轮循环。在每次循环中，进行循环的人数总是少于上一轮的人数。而在最后的一次循环时，进行一次判断，使每次进行循环的人数在平分后相加，如果相加之后的结果为一，那么这个结果便是一个符合题目要求的答案。</p>
+<h4 id="问题3"><a href="#问题3" class="headerlink" title="问题3"></a>问题3</h4><p>​    给定整数 n 和 m，满足 n 能被 2m 整除。对于一串连续递增整数数列1、2、3、4，每隔 m 个符号反转一次，最初的符号为’-‘<br>​    例如：<br>​    n = 8, m = 2, 数列就是：-1, -2, +3, +4, -5, -6, +7, +8<br>​    n = 4, m = 1, 数列就是：-1, +2, -3, +4<br>​    求前 n 项和。（2 &lt;= n &lt;= 10^9 ）（时间限制为 1 秒，空间限制32768k）</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">questionThree</span><span class="params">(<span class="keyword">int</span> n, <span class="keyword">int</span> m)</span></span>&#123;</span><br><span class="line">       <span class="keyword">int</span> Count = <span class="number">0</span>; <span class="comment">// 作为计算是否改修改符号的计数器</span></span><br><span class="line">       <span class="keyword">int</span>[] answerList = <span class="keyword">new</span> <span class="keyword">int</span>[ n ]; <span class="comment">// 作为答案输出的数列</span></span><br><span class="line"></span><br><span class="line">       <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; i++)&#123;</span><br><span class="line">           Count = Count + <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">           <span class="keyword">if</span> ( Count &lt; m + <span class="number">1</span> )</span><br><span class="line">               answerList[ i ] = - ( i + <span class="number">1</span> );</span><br><span class="line">           <span class="keyword">else</span></span><br><span class="line">               answerList[ i ] = i + <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">           <span class="keyword">if</span> ( Count == <span class="number">2</span> * m )</span><br><span class="line">               Count = <span class="number">0</span>;</span><br><span class="line">       &#125;</span><br><span class="line"></span><br><span class="line">       System.out.println( Arrays.toString( answerList ) );</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+
+<p>​        思路详解：</p>
+<p>​        首先对题目进行分析，最突出的就是就是按照顺序反转，那么解题思路之一就是使用 有限循环 和 计数器 的方式解题。</p>
+<p>​        从题干可知，数字的符号变化是可以通过计数器来控制的。在这个前提下，我们使用一个有限循环，循环次数为输入的 n 的值。由于数是顺序递增，因此在此之前可以先定义一个数组来存放数字，以便在后面对数字进行显示输出。</p>
+<p>​        话分两头，让我们回到上文中的循环。在循环中 i 将从 0 开始循环，由于数列的数是从负号开始的，那么每次循环时进行一次判断。设置一个计数器，每次向数列中输入一个数就将计数器加一。当计数器的数量与 m + 1 的值相等时，就将 i + 1 的值输入到数列中，否则就将 - ( i + 1 ) 输入到数列中。</p>
+<h4 id="问题4"><a href="#问题4" class="headerlink" title="问题4"></a>问题4</h4><p>​    某市市长获得了若干批口罩，给定没批口罩的数量，每一批口罩的数目如下：<br>​    9090400    8499400    5926800    8547000    4958200    4422600    5751200    4175600<br>​    6309600    5865200    6604400    4635000    10663400    8087200    4554000<br>​    市长要把口罩分配给室内的 2 所医院，由于物流限制，每一批口罩只能全部分配给其中一家医院。<br>​    市长希望 2 所医院所获得的口罩总数只差越小越好。请你计算这个最小差是多少？</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 这是解决此题的递归方法，但需要一个外置的静态参数</span></span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">int</span> gap = Integer.MAX_VALUE;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">questionFour_wayOne</span><span class="params">(<span class="keyword">int</span> hospitalOne, <span class="keyword">int</span> hospitalTwo, <span class="keyword">int</span> k)</span></span>&#123;</span><br><span class="line">        <span class="keyword">int</span>[] mask = &#123; <span class="number">9090400</span>, <span class="number">8499400</span>, <span class="number">5926800</span>, <span class="number">8547000</span>, <span class="number">4958200</span>, <span class="number">4422600</span>, <span class="number">5751200</span>, <span class="number">4175600</span>, <span class="number">6309600</span>, <span class="number">5865200</span>, <span class="number">6604400</span>, <span class="number">4635000</span>, <span class="number">10663400</span>, <span class="number">8087200</span>, <span class="number">4554000</span> &#125;;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> ( k == mask.length )&#123;</span><br><span class="line">            <span class="keyword">if</span> ( gap &gt; Math.abs( hospitalOne - hospitalTwo ) )&#123;</span><br><span class="line">                gap = Math.abs( hospitalOne - hospitalTwo );</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            System.out.println( gap );</span><br><span class="line"></span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        questionFour_wayOne( hospitalOne + mask[ k ], hospitalTwo, k + <span class="number">1</span> );</span><br><span class="line">        questionFour_wayOne( hospitalOne, hospitalTwo + mask[ k ], k + <span class="number">1</span> );</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 这是解决此题的动态规划方法</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">questionFour_wayTwo</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="comment">/*</span></span><br><span class="line"><span class="comment">            该方法的主体思想大致为，两家医院，总有一家所分配的口罩量 hospitalOne 大于 口罩总量的一半 （ Total / 2 ）， 另一家所分配的口罩总量 hospitalTwo 小于 口罩总量的一半</span></span><br><span class="line"><span class="comment">            那么题目所求的最小差值就为 = （ hospitalOne - （ Total / 2 ））* 2 = （ （ Total / 2 ） - hospitalTwo ）* 2</span></span><br><span class="line"><span class="comment">            此时题目所求就变为，已知一个背包的容量为 Total / 2 ，求最多可以放入多少的口罩</span></span><br><span class="line"><span class="comment">        */</span></span><br><span class="line">        <span class="keyword">int</span>[] mask = &#123; <span class="number">9090400</span>, <span class="number">8499400</span>, <span class="number">5926800</span>, <span class="number">8547000</span>, <span class="number">4958200</span>, <span class="number">4422600</span>, <span class="number">5751200</span>, <span class="number">4175600</span>, <span class="number">6309600</span>, <span class="number">5865200</span>, <span class="number">6604400</span>, <span class="number">4635000</span>, <span class="number">10663400</span>, <span class="number">8087200</span>, <span class="number">4554000</span> &#125;;</span><br><span class="line"><span class="comment">//        int[] mask = &#123;1, 2, 3, 4, 5, 6, 7&#125;;</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">// 初始化背包容量</span></span><br><span class="line">        <span class="keyword">double</span> maskTotal = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> ( <span class="keyword">int</span> value : mask )</span><br><span class="line">            maskTotal = maskTotal + value;</span><br><span class="line">        maskTotal = maskTotal / <span class="number">2</span>;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 设置 Dp 数组， Dp[ j ] 代表 当医院可以接收的口罩上限为 j 时，医院最多可以接收的口罩数量</span></span><br><span class="line">        <span class="keyword">int</span>[] Dp = <span class="keyword">new</span> <span class="keyword">int</span>[ (<span class="keyword">int</span>)maskTotal + <span class="number">2</span> ];</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Dp 主体 : 当 可接受的口罩上限j的值 大于 这一批的口罩数量时，判断为可以接收。</span></span><br><span class="line">        <span class="comment">// 此时 Dp[j] 做一次判断：当前的数量 和 不接收这批口罩时的最大值加上这批口罩的数量， 选择其中 更大的一方</span></span><br><span class="line">        <span class="comment">// 在循环时，是存在 当前的数量 大于 不接收这批口罩时的最大值加上这批口罩的数量 的情况，因此需要做一次比较判断</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> ( <span class="keyword">int</span> value : mask ) &#123;</span><br><span class="line">            <span class="keyword">for</span> ( <span class="keyword">int</span> j = (<span class="keyword">int</span>)maskTotal; j &gt;= value; j-- )&#123;</span><br><span class="line">                Dp[ j ] = Math.max( Dp[ j ], Dp[ j - value ] + value );</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        System.out.println( Dp[ (<span class="keyword">int</span>)maskTotal ] );</span><br><span class="line">        System.out.println( <span class="number">2</span> * ( maskTotal - Dp[ (<span class="keyword">int</span>)maskTotal ] ) ); <span class="comment">// 2400</span></span><br><span class="line">        </span><br><span class="line"></span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>​        思路详解：</p>
+<p>​        本题可以通过 递归方式 和 动态规划 的方式求解，下面分别讲述两种思路。</p>
+<p>​        递归方法：</p>
+<p>​        本题的递归方法需要用到一个外置的静态变量 gap ，这个变量用来计算最终的答案。由于我们需要一个使这个值在多次递归中保持不变，因此使用了函数外置静态变量。</p>
+<p>​        接下来分解递归参数，首先是两家医院所分到的口罩总数，分别用 hospitalOne 和 hospitalTwo 来表示。其次要明确当前的递归次数，由于题目有mask.length 批口罩，因此当当前的递归次数 k 等于口罩批次时，就应该退出递归。</p>
+<p>​        在退出递归时，进行一次判断。如果之前的外置变量 gap 大于当前 hospitalOne和hospitalTwo的差值，那么就将hospitalOne和hospitalTwo的差值的绝对值赋给 gap 。</p>
+<p>​        在分析完参数后，接下来对递归内部代码进行分析。首先在进入函数后就应该进行判断，判断条件为当前的递归次数 k 和 口罩批次总数 mask.length。观察是否满足退出递归的条件，来避免无限递归。 若不满足退出递归的条件，那么就对开始递归。由题干可以得知，口罩只能整批整批的分配给某个医院，那么每次分配时就有了两种不同的情况：</p>
+<p>​        1、 将这批口罩分配给 hospitalOne</p>
+<p>​        2、 将这批口罩分配给 hospitalTwo</p>
+<p>​        那么每次进行递归时，就需要分情况递归即：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">questionFour_wayOne( hospitalOne + <span class="comment">/* 这批口罩的数量 */</span>, hospitalTwo, k + <span class="number">1</span> );</span><br><span class="line">     questionFour_wayOne( hospitalOne, hospitalTwo + <span class="comment">/* 这批口罩的数量 */</span>, k + <span class="number">1</span> );</span><br></pre></td></tr></table></figure>
+
+<p>​        当然，无论进行哪种情况的递归，都需要将递归次数 k 加 1。</p>
+<p>​        当最后一次递归完成后，输出静态变量 gap 的值，此时 gap 的值就是所有分配情况中 hospitalOne 和 hospitalTwo 差值最小的情况。也就是本题所追求的答案。</p>
+<p>​        </p>
+<p>​        动态规划：</p>
+<p>​        对题目分析后，可以将题目拆解为以下的形式。由于口罩的总数是固定的，那么如果某一家医院所分配到的口罩的数量大于总数的一半，那么另一家医院所分配到的口罩总数就必定少于口罩总数的一半。并且，两家医院所得到的口罩数量与口罩总数的一半的差值是相同的。而两家医院口罩的差值就变为了 口罩总数的一半与某一家所得到的口罩数量的差值 乘以 2。</p>
+<p>​        由上面的分析，我们可以得到以下的关系式：<br>$$<br>设口罩的总数为 Sum ，则口罩总数的一半就为 Sum / 2，题目所求值为 gap，在此处设定 hospitalOne 大于 hospitalTwo<br>$$</p>
+<p>$$<br>gap = hospitalOne - hospitalTwo = 2 * ( hospitalOne - Sum / 2 ) = 2 * ( Sum / 2 - hospitalTwo - Sum / 2 )<br>$$</p>
+<p>​        此时这个题目就转化为了一个背包问题：假设一个背包上限为 Sum / 2 的背包，每次装入一批口罩，最多可以装入多少口罩。</p>
+<p>​        既然已经明白这个题目已经转化为一个背包问题，那么便可以按照背包问题的方式求解。首先，在这个题目中，每一批口罩都是独一份的不可以重复放入，那么这个题目便是一个 01背包 。</p>
+<p>​        那么按照01背包的优化解法，我们先定义一个Dp数组</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span>[] Dp = <span class="keyword">new</span> <span class="keyword">int</span>[ Sum + <span class="number">2</span> ]; </span><br><span class="line"><span class="comment">// Dp[ j ] ：当 背包的上限为 j 时， 背包中最多可以装入 Dp[ j ] 数量的口罩</span></span><br></pre></td></tr></table></figure>
+
+<p>​        然后对存放口罩的数组进行强化循环，遍历每一批口罩。对于某一批口罩而言，只存在两种情况，即可以放入这批口罩 以及 不能放入这批口罩。若可以放入这批口罩，那么就要进行一次判断，即比较 当前已经放入的口罩的数量 和 背包上限减去这一批口罩后的数量加上这批口罩的数量 两者的数量谁更多。保留数量更大一方，并将其值赋给Dp数组的对应数。</p>
+<p>​        最终在遍历结束后，使用 口罩总数的一半 减去 Dp[ 口罩总数的一半 ] 的值乘以 2 便是题目所求的值。</p>
+<p>​        日后会专门在写一篇文章来阐述背包问题的相关解法。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/11/06/%E6%8E%92%E5%BA%8F/" rel="prev" title="排序">
+      <i class="fa fa-chevron-left"></i> 排序
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/11/10/Java%E5%AD%A6%E4%B9%A0%E4%B8%AD%E5%87%BA%E7%8E%B0%E8%BF%87%E7%9A%84%E5%BC%82%E5%B8%B8/" rel="next" title="Java学习中出现过的异常">
+      Java学习中出现过的异常 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B1%81%E8%AF%9D"><span class="nav-number">1.</span> <span class="nav-text">屁话</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE-%E5%92%8C-%E9%A2%98%E8%A7%A3"><span class="nav-number">2.</span> <span class="nav-text">题目 和 题解</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%97%AE%E9%A2%981"><span class="nav-number">2.0.1.</span> <span class="nav-text">问题1</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%97%AE%E9%A2%982"><span class="nav-number">2.0.2.</span> <span class="nav-text">问题2</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%97%AE%E9%A2%983"><span class="nav-number">2.0.3.</span> <span class="nav-text">问题3</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%97%AE%E9%A2%984"><span class="nav-number">2.0.4.</span> <span class="nav-text">问题4</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">John Doe</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">31</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">John Doe</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"live2d-widget-model-haruto"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":false},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>
+
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/love.js"></script>
+
+<!--动态线条背景-->
+<script type="text/javascript"
+color="220,220,220" opacity='0.7' zIndex="-2" count="200" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js">
+</script>
+
+<!--浏览器搞笑标题-->
+<script type="text/javascript" src="\js\FunnyTitle.js"></script>

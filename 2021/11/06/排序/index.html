@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Kirang Haerang:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="概述​        这篇文章来讨论排序相关的内容，每种排序将会分为 算法原理， 代码实现 和 参考 三个板块来描述。 快速排序​        如标题所言，这个板块来讨论快速排序（ QuickSort ）。 ​        首先，快速排序 QuickSort 可以视作冒泡排序的优化版。这次对于快速排序的解释将从 算法原理  和 代码实现 两个部分来解释。 ​        快速排序,说白了就是">
+<meta property="og:type" content="article">
+<meta property="og:title" content="排序">
+<meta property="og:url" content="http://example.com/2021/11/06/%E6%8E%92%E5%BA%8F/index.html">
+<meta property="og:site_name" content="神秘的世界">
+<meta property="og:description" content="概述​        这篇文章来讨论排序相关的内容，每种排序将会分为 算法原理， 代码实现 和 参考 三个板块来描述。 快速排序​        如标题所言，这个板块来讨论快速排序（ QuickSort ）。 ​        首先，快速排序 QuickSort 可以视作冒泡排序的优化版。这次对于快速排序的解释将从 算法原理  和 代码实现 两个部分来解释。 ​        快速排序,说白了就是">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2021-11-06T13:30:36.193Z">
+<meta property="article:modified_time" content="2021-11-20T04:52:41.238Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://example.com/2021/11/06/%E6%8E%92%E5%BA%8F/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>排序 | 神秘的世界</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">神秘的世界</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/11/06/%E6%8E%92%E5%BA%8F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="神秘的世界">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          排序
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-11-06 21:30:36" itemprop="dateCreated datePublished" datetime="2021-11-06T21:30:36+08:00">2021-11-06</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-11-20 12:52:41" itemprop="dateModified" datetime="2021-11-20T12:52:41+08:00">2021-11-20</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h4 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h4><p>​        这篇文章来讨论排序相关的内容，每种排序将会分为 算法原理， 代码实现 和 参考 三个板块来描述。</p>
+<h4 id="快速排序"><a href="#快速排序" class="headerlink" title="快速排序"></a>快速排序</h4><p>​        如标题所言，这个板块来讨论快速排序（ QuickSort ）。</p>
+<p>​        首先，快速排序 QuickSort 可以视作冒泡排序的优化版。这次对于快速排序的解释将从 <strong>算法原理</strong>  和 <strong>代码实现</strong> 两个部分来解释。</p>
+<p>​        快速排序,说白了就是给基准数据找其正确索引位置的过程。</p>
+<p>​        好了，下面的这一部分不用看，采自 <a target="_blank" rel="noopener" href="https://www.runoob.com/w3cnote/quick-sort-2.html">菜鸟教程</a> 。</p>
+<p>​        快速排序是由东尼·霍尔所发展的一种排序算法。在平均状况下，排序 n 个项目要 Ο(nlogn) 次比较。在最坏状况下则需要 Ο(n2) 次比较，但这种状况并不常见。事实上，快速排序通常明显比其他 Ο(nlogn) 算法更快，因为它的内部循环（inner loop）可以在大部分的架构上很有效率地被实现出来。</p>
+<h6 id="算法原理"><a href="#算法原理" class="headerlink" title="算法原理"></a>算法原理</h6><p>​        快速排序 使用的是核心思想之一便是 分治算法 。</p>
+<p>​        每次设定一个目标数组内的元素为基准值，以这个值为对象，将其他的元素与这个值一一比较。最终使得这个基准值左侧的元素都小于这个基准值，基准值右侧的元素都大于这个基准值。</p>
+<p>​        接下来以一个具体的 int 数组为例子来逐步说明算法的运行原理。</p>
+<p>​        输入数组：</p>
+<table>
+<thead>
+<tr>
+<th align="center">15</th>
+<th align="center">68</th>
+<th align="center">47</th>
+<th align="center">24</th>
+<th align="center">11</th>
+<th align="center">3</th>
+<th align="center">98</th>
+<th align="center">67</th>
+</tr>
+</thead>
+</table>
+<p>​        第一步：确认一个元素作为这次比较的基准值，此处以数组左侧第一个元素 <em>15</em> 作为基准。使用一个临时变量 temp 来储存这个基准值，并设置两个位置指针，左指 left 以及 右指 right 。左指最开始指向数组的第一个元素，右指最开始指向数组的最后一个元素。</p>
+<p>​        第二步：从右指所对应的元素开始，将对应元素和基准值进行比较。若比基准值大，则右指 right 向左移动一位，继续比较 ； 若比基准值小，则执行下一步。</p>
+<p>​        第三步：现在，目前的右指所对应的元素为 3 ，小于作为基准值的 temp 。则将目前右指所对应的元素赋给当前左指所对应的元素。那么，进行赋值操作后的数组就变为了下面的样子：</p>
+<table>
+<thead>
+<tr>
+<th align="center">3</th>
+<th align="center">68</th>
+<th align="center">47</th>
+<th align="center">24</th>
+<th align="center">11</th>
+<th align="center">3</th>
+<th align="center">98</th>
+<th align="center">67</th>
+</tr>
+</thead>
+</table>
+<p>​        从上方的数组变化可以看出，第三步将 右指所对应的元素 3 赋给了 左指所对应的元素 15。</p>
+<p>​        在赋值完成后，如果 左指left 小于 右指right 便继续比较。但需要更变方向，从数组的左值所对应的元素开始和基准值进行比较，若比基准值小，则左指向右移动移动一位，继续比较； 若比基准值大，则执行下一步。</p>
+<p>​        第四步：现在，目前的左值所对应的元素为 68 ，大于作为基准值的 temp。则将目前左指所对应的元素赋给当前右指所对应的元素。那么，进行赋值操作后的数组就变为了下面的样子：</p>
+<table>
+<thead>
+<tr>
+<th align="center">3</th>
+<th align="center">68</th>
+<th align="center">47</th>
+<th align="center">24</th>
+<th align="center">11</th>
+<th align="center">68</th>
+<th align="center">98</th>
+<th align="center">67</th>
+</tr>
+</thead>
+</table>
+<p>​        从上方的数组变化可以看出，第四步将 左指所对应的元素 68 赋给了 右指所对应的元素 3。</p>
+<p>​        在赋值完成后，如果 左指left 小于 右指right便回到第二步，继续比较。不断循环，直到左指left 大于 右指right 时结束循环。对上方的数组进行操作后，数组变为下面的样子：</p>
+<table>
+<thead>
+<tr>
+<th align="center">3</th>
+<th align="center">11</th>
+<th align="center">47</th>
+<th align="center">24</th>
+<th align="center">47</th>
+<th align="center">68</th>
+<th align="center">98</th>
+<th align="center">67</th>
+</tr>
+</thead>
+</table>
+<p>​        此时的 左指 与 右指 都指向数组的第三个元素 47，此时 左指 不再大于 右指 循环已经结束，进入最后一步。</p>
+<p>​        第五步：对于这个结束循环的数组，我们可以发现之前的基准值并不在这个数组当中，因此需要使基准值重新回到数组当中。</p>
+<p>为了使得完成这次排序的目的( 使得基准值左侧的元素都小于基准值，基准值右侧的元素都大于基准值 )，需要将储存在临时变量temp中的基准值赋给当前 左指left ( 当然，右指right 也可以，此时左右指所对应的位置相同 )。</p>
+<p>​        即：Num[i] = temp;</p>
+<p>​        </p>
+<p>​        在完成上方的所有步骤后，一次快速排序就完成了，但若想将一个数组完全顺序排列，就需要进行多次的快速排序。为此就需要用到分治的思想，每次排序算法都可以确定数组中一个元素的具体位置，那么以这个位置为基准，将其左侧和右侧的元素视为一个数组传入排序函数，进行排序。</p>
+<p>​        采用递归的方式分别对前半部分和后半部分排序，当前半部分和后半部分均有序时该数组就自然有序了。</p>
+<p>​        </p>
+<h6 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h6><p>​        按照上方算法原理的推论，借此来书写示例代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.Arrays;</span><br><span class="line"><span class="keyword">import</span> java.util.Random;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">QuickSort</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">int</span>[] quickSort(<span class="keyword">int</span>[] Num, <span class="keyword">int</span> left, <span class="keyword">int</span> right)&#123;</span><br><span class="line">       <span class="keyword">if</span> (left &lt; right)&#123;</span><br><span class="line">           <span class="comment">// 通过getIndex函数获取mid的值，作为后续排序的基准</span></span><br><span class="line">           <span class="keyword">int</span> mid = getIndex(Num, left, right);</span><br><span class="line"></span><br><span class="line">           <span class="comment">// 因为mid对应位置的元素已经完成排序，所以传入函数时不传入mid本身</span></span><br><span class="line"></span><br><span class="line">           <span class="comment">// 对mid左侧的元素进行排序</span></span><br><span class="line">           quickSort(Num, left, mid - <span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">           <span class="comment">// 对mid右侧的元素进行排序</span></span><br><span class="line">           quickSort(Num, mid + <span class="number">1</span>, right);</span><br><span class="line">       &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> Num;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * int getIndex(int[] Num, int left, int right) 用于确定数组中一个确定位置</span></span><br><span class="line"><span class="comment">     * 传入一个整形数组Num，左指left，右指right 传出一个int型的数字</span></span><br><span class="line"><span class="comment">     * 传出的数字是一个完成排序的元素在数组Num中所对应的位置，返回的这个位置将作为后续排序的基准</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getIndex</span><span class="params">(<span class="keyword">int</span>[] Num, <span class="keyword">int</span> left, <span class="keyword">int</span> right)</span></span>&#123;</span><br><span class="line">        <span class="keyword">int</span> temp = Num[left]; <span class="comment">// 每轮中用来比较的元素</span></span><br><span class="line">        <span class="keyword">int</span> i = left, j = right; <span class="comment">// i 代表数组的左指， j 代表数组的右指</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">// 在这里对第 24 到 36 行的代码进行解释</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">while</span> (i &lt; j)&#123; <span class="comment">// 循环条件： 传入的左指小于右指</span></span><br><span class="line"></span><br><span class="line">            <span class="comment">// 在比较时从数组的右侧开始比较</span></span><br><span class="line">            <span class="comment">// 数组中第 j 个值 大于等于 temp 这个用于比较的值</span></span><br><span class="line">            <span class="keyword">while</span> (Num[j] &gt;= temp &amp;&amp; i &lt; j)&#123;</span><br><span class="line">                j = j - <span class="number">1</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">// 此处说明 数组中的第 j 个值 小于 temp 这个用于比较值 或者 左指不再小于右指</span></span><br><span class="line">            Num[i] = Num[j]; <span class="comment">// 将数组中的第 j 个值(这个值小于temp这个比较值) 赋给数组左指所对应的位置</span></span><br><span class="line"></span><br><span class="line">            <span class="comment">// 在下面的第 33 到 36 行的原理和上方相同，只不过将比较条件从大于temp变作小于temp</span></span><br><span class="line">            <span class="keyword">while</span> (Num[i] &lt;= temp &amp;&amp; i &lt; j)&#123;</span><br><span class="line">                i = i + <span class="number">1</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            Num[j] = Num[i];</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 此处需要将temp的值赋给数组当前左值所对应的位置，此时对于temp这个比较值而言，左侧的数皆小于temp，右侧的值皆大于temp</span></span><br><span class="line">        Num[i] = temp;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// System.out.println(temp + &quot;\t&quot; + Arrays.toString(Num) );</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> i;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> N = <span class="number">10</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Random random = <span class="keyword">new</span> Random();</span><br><span class="line">        <span class="keyword">int</span>[] Num = <span class="keyword">new</span> <span class="keyword">int</span>[N];</span><br><span class="line">        QuickSort quickSort = <span class="keyword">new</span> QuickSort();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; N; i++)&#123;</span><br><span class="line">            Num[i] = random.nextInt(<span class="number">100</span>); <span class="comment">// 生成 0 - 100 范围内的随机数</span></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        System.out.println( Arrays.toString(Num) );</span><br><span class="line"></span><br><span class="line">        Num = quickSort.quickSort(Num, <span class="number">0</span>, Num.length - <span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">        System.out.println( <span class="string">&quot;排序后&quot;</span> + <span class="string">&quot;\n&quot;</span> + Arrays.toString( Num ) );</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h6 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h6><p>​        <a target="_blank" rel="noopener" href="https://blog.csdn.net/nrsc272420199/article/details/82587933">CSDN ：快速排序—(面试碰到过好几次)</a></p>
+<p>​        <a target="_blank" rel="noopener" href="https://www.runoob.com/w3cnote/quick-sort-2.html">菜鸟教程——快速排序</a></p>
+<p>​        <a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/369842?fromtitle=%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F&fromid=2084344&fr=aladdin">百度百科——快速排序</a></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/09/26/%E7%AE%97%E6%B3%95%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-1/" rel="prev" title="学习笔记——算法设计的学习笔记 One">
+      <i class="fa fa-chevron-left"></i> 学习笔记——算法设计的学习笔记 One
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/11/08/%E7%AE%97%E6%B3%95%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-2/" rel="next" title="学习笔记——算法设计的学习笔记 Two">
+      学习笔记——算法设计的学习笔记 Two <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%A6%82%E8%BF%B0"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F"><span class="nav-number">2.</span> <span class="nav-text">快速排序</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#%E7%AE%97%E6%B3%95%E5%8E%9F%E7%90%86"><span class="nav-number">2.0.1.</span> <span class="nav-text">算法原理</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0"><span class="nav-number">2.0.2.</span> <span class="nav-text">代码实现</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number">2.0.3.</span> <span class="nav-text">参考</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">John Doe</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">31</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">John Doe</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"live2d-widget-model-haruto"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":false},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>
+
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/love.js"></script>
+
+<!--动态线条背景-->
+<script type="text/javascript"
+color="220,220,220" opacity='0.7' zIndex="-2" count="200" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js">
+</script>
+
+<!--浏览器搞笑标题-->
+<script type="text/javascript" src="\js\FunnyTitle.js"></script>

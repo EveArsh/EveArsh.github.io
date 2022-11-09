@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Kirang Haerang:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="​    基础大致有 概述，用户自定义类，静态字段 和 静态方法，对象的构造，包，注释 7个部分 ​    参考 Java核心技术卷一  第四章 屁话​        将Java核心技术卷一第四章关于面向对象的内容重读后总结的一些想法。 概述​        面向对象的程序都是由对象组成的，每个对象包含对用户公开的特定功能和隐藏的实现功能 类​        类 是构造对象的模板或蓝图，由类构造对">
+<meta property="og:type" content="article">
+<meta property="og:title" content="学习笔记——面向对象">
+<meta property="og:url" content="http://example.com/2021/07/12/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%20-%20%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/index.html">
+<meta property="og:site_name" content="神秘的世界">
+<meta property="og:description" content="​    基础大致有 概述，用户自定义类，静态字段 和 静态方法，对象的构造，包，注释 7个部分 ​    参考 Java核心技术卷一  第四章 屁话​        将Java核心技术卷一第四章关于面向对象的内容重读后总结的一些想法。 概述​        面向对象的程序都是由对象组成的，每个对象包含对用户公开的特定功能和隐藏的实现功能 类​        类 是构造对象的模板或蓝图，由类构造对">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2021-07-12T11:26:54.931Z">
+<meta property="article:modified_time" content="2021-12-05T11:53:00.405Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://example.com/2021/07/12/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%20-%20%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>学习笔记——面向对象 | 神秘的世界</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">神秘的世界</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/07/12/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%20-%20%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="神秘的世界">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          学习笔记——面向对象
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-07-12 19:26:54" itemprop="dateCreated datePublished" datetime="2021-07-12T19:26:54+08:00">2021-07-12</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-12-05 19:53:00" itemprop="dateModified" datetime="2021-12-05T19:53:00+08:00">2021-12-05</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>​    基础大致有 概述，用户自定义类，静态字段 和 静态方法，对象的构造，包，注释 7个部分</p>
+<p>​    参考 Java核心技术卷一  第四章</p>
+<h2 id="屁话"><a href="#屁话" class="headerlink" title="屁话"></a>屁话</h2><p>​        将Java核心技术卷一第四章关于面向对象的内容重读后总结的一些想法。</p>
+<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>​        面向对象的程序都是由对象组成的，每个对象包含对用户公开的特定功能和隐藏的实现功能</p>
+<h4 id="类"><a href="#类" class="headerlink" title="类"></a>类</h4><p>​        类 是构造对象的模板或蓝图，由类构造对象的过程称为创建类的实例</p>
+<p>​        封装（有时也称呼为 数据隐藏）是处理对象的一个重要概念。从形式上看，封装就是将数据和行为组合到一个包中，并对对象的使用者隐藏具体的实现方式</p>
+<p>​        实现封装的关键在于 绝对不能让类中的方法直接访问其他类的实例字段</p>
+<h4 id="对象"><a href="#对象" class="headerlink" title="对象"></a>对象</h4><p>​        我们可以考虑到对象的三个主要特性：行为，状态和标识</p>
+<p>​            行为：对象可以完成的操作 或者 对象可以执行的方法</p>
+<p>​            状态：调用了方法时，对象做出的响应</p>
+<p>​            标识： 区分具有相同行为与状态的不同对象</p>
+<h4 id="类之间的关系"><a href="#类之间的关系" class="headerlink" title="类之间的关系"></a>类之间的关系</h4><p>​        最常见的关系为 依赖，聚合 和 继承</p>
+<p>​            依赖：是一种最常见，明显的关系。两个类的耦合程度高，缺一不可</p>
+<p>​            聚合：A类的对象 包含 B类的对象</p>
+<p>​            继承：表示一个更特殊的类 与 一个更一般的类之间的关系，以后再说</p>
+<h4 id="对象与对象变量"><a href="#对象与对象变量" class="headerlink" title="对象与对象变量"></a>对象与对象变量</h4><p>​        要想使用对象，必须先构造对象，指定其初始状态</p>
+<p>​        比如构造一个Date类的对象，如：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Date aDate = <span class="keyword">new</span> Date();</span><br></pre></td></tr></table></figure>
+
+<p>​        但在Java中，任何对象变量的值都是存储在另一个地方的某个对象的引用</p>
+<p>​        在上方的表达中 new Date() 构造了一个Date类型的对象，他的值式对新创建对象的一个引用，而这个变量储存在 aDate 中，当然，在创建对象时，也可以直接将这个对象变量设置为 null，即</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Date aDate = <span class="keyword">null</span>;</span><br></pre></td></tr></table></figure>
+
+<p>​         指示这个对象变量aDate目前没有引用任何对象</p>
+<h4 id="更改器方法与访问器方法"><a href="#更改器方法与访问器方法" class="headerlink" title="更改器方法与访问器方法"></a>更改器方法与访问器方法</h4><p>​         首先引入一段方法调用</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">LocalDate aTest = newYearsEve.plusDays(<span class="number">1000</span>);</span><br></pre></td></tr></table></figure>
+
+<p>​         在这个调用中newYearsEve.plusDays(int A); 会将aTest的时间改为 A 的数值</p>
+<p>​         事实上，plusDay方法并没有将aTest的值直接修改为1000，而是先生成一个LocalDate对象（和aTest同类的对象），值为1000，再把这个新对象赋给aTest，原本aTest指向的对象并没有改动</p>
+<p>​         因此，对于这种没有改变原本对象的方法就是访问器方法</p>
+<p>​         相对的，对原本对象进行改变的就是更改器方法</p>
+<h2 id="用户自定义类"><a href="#用户自定义类" class="headerlink" title="用户自定义类"></a>用户自定义类</h2><h4 id="最简单的定义类"><a href="#最简单的定义类" class="headerlink" title="最简单的定义类"></a>最简单的定义类</h4><p>​         先从一个简单的构造类开始说起</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> Exercise.Test;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.time.LocalDate;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">EmployeeTest</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">    	Employee employee = <span class="keyword">new</span> Employee(); <span class="comment">// 创建一个Employee类的对象</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Employee</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> String name; <span class="comment">// Employee类的String类型属性</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">double</span> salary; <span class="comment">// Employee类的double类型属性</span></span><br><span class="line">    <span class="keyword">private</span> LocalDate hireDay; <span class="comment">// Employee类的LocalDate类型</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// Employee的构造函数，调用此函数来构造一个Employee的对象，并对其进行初始化</span></span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Employee</span><span class="params">(String n, <span class="keyword">double</span> s, <span class="keyword">int</span> year, <span class="keyword">int</span> month, <span class="keyword">int</span> day)</span></span>&#123;</span><br><span class="line">        name = n;</span><br><span class="line">        salary = s;</span><br><span class="line">        hireDay = LocalDate.of(year,month,day);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Employee的三个用来获取Employee对象属性值的函数</span></span><br><span class="line">    <span class="comment">// 因为Employee的属性值因为信息隐藏原则皆设定为private，所以需要外部函数获取</span></span><br><span class="line">    <span class="comment">// getSalary(),getHireDay(),getName()分别获取salary,hireDay,name 的值</span></span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">double</span> <span class="title">getSalary</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> salary;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> LocalDate <span class="title">getHireDay</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> hireDay;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getName</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Employee类用来对对象的salary值进行修改的函数（ 增加参数的值 ）</span></span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">raiseSalary</span><span class="params">(<span class="keyword">double</span> byPercent)</span></span>&#123;</span><br><span class="line">        <span class="keyword">double</span> raise = salary * byPercent / <span class="number">100</span>;</span><br><span class="line">        salary = salary + raise;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>​        上方的代码就是一个十分简单的自定义类，接下来，对Employee类进行剖析</p>
+<h4 id="剖析自定义类"><a href="#剖析自定义类" class="headerlink" title="剖析自定义类"></a>剖析自定义类</h4><p>​        通过代码可知，这个类包含一个 构造器 和 4个方法 </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 构造器方法</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">Employee</span><span class="params">(String n, <span class="keyword">double</span> s, <span class="keyword">int</span> year, <span class="keyword">int</span> month, <span class="keyword">int</span> day)</span></span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="comment">// 方法</span></span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">double</span> <span class="title">getSalary</span><span class="params">()</span></span></span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">getName</span><span class="params">()</span></span></span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">getName</span><span class="params">()</span></span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">raiseSalary</span><span class="params">(<span class="keyword">double</span> byPercent)</span></span></span><br></pre></td></tr></table></figure>
+
+<p>​        可以看出，这个类的所有方法都被标记为public，关键字public意味着任何方法都可以随意调用这些方法</p>
+<p>​        另外，在这个类的实例中有三个实例字段用来存放将要操作的数据</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> String name; <span class="comment">// Employee类的String类型属性</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">double</span> salary; <span class="comment">// Employee类的double类型属性</span></span><br><span class="line"><span class="keyword">private</span> LocalDate hireDay; <span class="comment">// Employee类的LocalDate类型</span></span><br></pre></td></tr></table></figure>
+
+<p>​        关键字private确保只有Employee类自身的方法能够访问这些实例字段，而其他类的方法不能读写这些字段</p>
+<h4 id="刨析构造器"><a href="#刨析构造器" class="headerlink" title="刨析构造器"></a>刨析构造器</h4><p>​        先来看看这个类的构造器方法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">Employee</span><span class="params">(String n, <span class="keyword">double</span> s, <span class="keyword">int</span> year, <span class="keyword">int</span> month, <span class="keyword">int</span> day)</span></span>&#123;</span><br><span class="line">       name = n;</span><br><span class="line">       salary = s;</span><br><span class="line">       hireDay = LocalDate.of(year,month,day);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>​        可以看到，构造器和类同名，在构造某个类的对象时，构造器便会运行，从而将实例字段初始化为希望的初始状态</p>
+<p>​        例如，现在构造一个Employee类的实例对象：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Employee test = <span class="keyword">new</span> Employee(<span class="string">&quot;James Bond&quot;</span>,<span class="number">10000</span>,<span class="number">1950</span>,<span class="number">1</span>,<span class="number">1</span>);</span><br></pre></td></tr></table></figure>
+
+<p>​        便会调用构造器方法并生成一个Employee类的对象，其中的实例字段会被设置为：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">name = <span class="string">&quot;James Bond&quot;</span>;</span><br><span class="line">salary = <span class="number">10000</span>;</span><br><span class="line">hireDay = LocalDate.of(<span class="number">1950.1</span><span class="number">.1</span>);</span><br></pre></td></tr></table></figure>
+
+<p>​        另外，构造器方法总是和new运算符一起使用，不能对一个几经存在的对象调用构造器来达到重新设置实例字段的目的</p>
+<p>​    </p>
+<p>​        现在可以总结构造器的特定：</p>
+<ol>
+<li>构造器与类同名</li>
+<li>每个类可以有多个构造器</li>
+<li>构造器可以有多个参数 当然也可以没有参数</li>
+<li>构造器没有返回值</li>
+<li>构造器总是配合new运算符一起调用的</li>
+</ol>
+<h4 id="使用-var-声明局部变量"><a href="#使用-var-声明局部变量" class="headerlink" title="使用 var 声明局部变量"></a>使用 var 声明局部变量</h4><p>​        在Java10以后，如果可以从变量的初始值推断出它们的类型，那么便可以使用var关键字进行声明局部变量，而无需指定类型。还是以上方的Employee类为例，原本声明一个Employee类的对象需要下列语句：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Employee test = <span class="keyword">new</span> Employee(<span class="string">&quot;Harry Hacker&quot;</span>,<span class="number">50000</span>,<span class="number">1989</span>,<span class="number">10</span>,<span class="number">1</span>);</span><br></pre></td></tr></table></figure>
+
+<p>​        现在可以利用var关键字经行如下声明：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">var test = new Employee(&quot;Harry Hacker&quot;,50000,1989,10,1);</span><br></pre></td></tr></table></figure>
+
+<p>​        这是一个有效避免重复书写类名的方法，但需要注意的是，**var关键字只能用于方法中的局部变量 **，参数和字段的类型必须声明</p>
+<h4 id="使用-null-引用"><a href="#使用-null-引用" class="headerlink" title="使用 null 引用"></a>使用 null 引用</h4><p>​        在前面我们了解到，一个对象变量包含一个对象的引用，或者包含一个特殊值null，后者表示没有引用任何对象</p>
+<p>​        null值不可应用于方法，如果对null值应用于一个方法，那么将产生一个 NullPointerException 异常，例如：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">LocalDate birthday = <span class="keyword">null</span>;</span><br><span class="line">String s = birthday.toString(); <span class="comment">// 此处编译时，编译器会抛出一个NullPointerException 异常</span></span><br></pre></td></tr></table></figure>
+
+<p>​        对于Java而言，这是一个相当严重的错误，类似于 “索引越界” 异常。如果你的程序没有捕获这个异常，那么程序将直接终止</p>
+<p>​        正常情况下，程序并不会去主动捕获这些异常，而是依赖于程序员从一开始就不要这么做。因此，在定义一个类时，程序员需要知道这个类中有哪些部分可以使用null，哪些不能使用null</p>
+<p>​        说实话，在构造类时，应该询问自己：是否真的希望某个值为null值，如果不是，就应该严令这个参数拒绝null值</p>
+<p>​        在Java9以后，Object类提供一种可以在构造函数时就拒绝null值的方法，例如：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">Employee</span><span class="params">(String n, <span class="keyword">double</span> s, <span class="keyword">int</span> year, <span class="keyword">int</span> month, <span class="keyword">int</span> day)</span></span>&#123;</span><br><span class="line">	Object.requireNonNull(n,<span class="string">&quot;The name cannot be null&quot;</span>);</span><br><span class="line">	name = n;</span><br><span class="line">	........</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>​        在上方的例子中，如果有人在调用Employee类构造函数时传入一个null值，就会产生一个NullPointerException 异常。</p>
+<h4 id="显示参数-和-隐式参数"><a href="#显示参数-和-隐式参数" class="headerlink" title="显示参数 和 隐式参数"></a>显示参数 和 隐式参数</h4><p>​        参数是方法用于操作对象以及存取它们的实例字段。例如下面一个方法：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">raiseSalary</span><span class="params">(<span class="keyword">double</span> byPercent)</span></span>&#123;</span><br><span class="line">	<span class="keyword">double</span> raise = salary * byPercent / <span class="number">100</span>;</span><br><span class="line">	salary = salary + raise;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>​        对于这个方法，其中有两个参数。第一个参数称为隐式( implicit )参数，是出现在方法名前的Employee类型的对象。第二个参数是位于方法名后面括号中的数值，这是一个显示( explicit )参数。</p>
+<p>​        可以看到，显示参数明显的列在方法声明中，例如上例方法中的 double byPercent 。隐式参数没有出现在方法声明中</p>
+<p>​        在每一个方法中，关键字 this 指示隐式函数。如果喜欢的话，可以将上方的例子函数改写为下面的样子：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">raiseSalary</span><span class="params">(<span class="keyword">double</span> byPercent)</span></span>&#123;</span><br><span class="line">	<span class="keyword">double</span> raise = <span class="keyword">this</span>.salary * byPercent / <span class="number">100</span>;</span><br><span class="line">	<span class="keyword">this</span>.salary = <span class="keyword">this</span>.salary + raise;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>​        有不少的人偏爱于这种书写风格，因为这样可以将实例字段和局部变量分隔开</p>
+<h4 id="封装的优点"><a href="#封装的优点" class="headerlink" title="封装的优点"></a>封装的优点</h4><p>​        在讲述封装的优点之前，先给出几个函数：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">getName</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="keyword">return</span> name;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">double</span> <span class="title">getSalary</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="keyword">return</span> salary;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> LocalDate <span class="title">getHireDay</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="keyword">return</span> hireDay;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>​        这些都是典型的访问器方法，由于这些方法只可以返回实例字段值，因此又被称呼为 <strong>字段访问器</strong></p>
+<p>​        当然，如果从便捷的方向考虑，将这些实例字段设置为公开的。但此时就有了一个问题，如果将这些实例字段设置为公开的，那么这些字段就会无时无刻面临着被破坏的风险，而且这些发现来自于任何地方，这非常不利于对程序的调试</p>
+<p>​        那么封装的好处就显而易见了，封装可以有效避免字段被破坏，一般而言，封装会使很多实例字段在第一次赋值后就不再改变，除非程序员额外提供用于修改这个实例字段的方法</p>
+<p>​        既然了解了封装的必要，那么有的时候，我们需要得到或修改，设置某个实例字段的值，程序设计者就需要提供以下三项内容：</p>
+<ol>
+<li>​    一个私有的数据字段</li>
+<li>​    一个公共的字段访问器方法</li>
+<li>​    一个公共的字段修改器方法</li>
+</ol>
+<p>​        这样会为我们带来不少好处，首先，可以在改变内部实现时不影响其他的代码，其次，更改器方法可以完成错误检查，而对直接对字段赋值就无法做到</p>
+<h4 id="基于类的访问权限"><a href="#基于类的访问权限" class="headerlink" title="基于类的访问权限"></a>基于类的访问权限</h4><p>​        从前面我们已经知道，方法可以调用这个类中的私有数据。一个方法可以方法问所属类的所有对象的私有数据，这不奇怪吗！例如，下面的代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Employee</span></span>&#123;</span><br><span class="line">	............ <span class="comment">// 这里省略了Employee类的构造函数和一些实例字段的设定</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">equals</span><span class="params">(Employee other)</span></span>&#123;</span><br><span class="line">		<span class="keyword">return</span> name.equals(other.name);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>​        典型的调用方法是： if ( harry.equals(boos) )… </p>
+<p>​        这个方法访问了harry了这个对象的私有字段，这点并不奇怪，但同时，这个还方法还访问了boos的私有字段。当然，这是合法的，其原因是harry和boos都是Employee类对象，而Employee类的方法可以访问任何Employee类对象的私有字段</p>
+<h4 id="私有方法"><a href="#私有方法" class="headerlink" title="私有方法"></a>私有方法</h4><p>​        在实现一个类时，由于公共数据十分危险，所以应该将所有的数据字段都设置为私有。然而，方法又该如何设计呢？</p>
+<p>​        尽管在大多时候，方法都是公开的。但在有些时候，将一个方法设置为私有的可能会很有用。有时，你可能希望将一个计算机代码分解为若干个独立的辅助方法。通常，这些辅助方法不应该成为公共接口的一部分，因为他们与当前代码的关系十分紧密，或者这些辅助方法需要一个特殊协议，或者需要特别的调用次序。若这些方法公开，将会造成不小的麻烦，因此建议将其设置为私有方法</p>
+<p>​        在Java中，要实现私有方法，只需要将关键字从public改为private即可</p>
+<p>​        通过将方法设置为私有，如果你改变了方法的实现方式，将没有义务保证这个方法依然可用。如果数据的表示发生了变化，这个方法肯会变得难以实现，或者变得不再被需要；这并不重要，重点在于，只要方法是私有的，类的设计者就可以确认这个方法在这个类以外的地方不会被使用，所以在需要时可以将其删去。如果一个方法时公开的，那么就不能轻易的将其删除，毕竟有可能有其他的方法依赖于这个方法。</p>
+<h4 id="final实例字段"><a href="#final实例字段" class="headerlink" title="final实例字段"></a>final实例字段</h4><p>​        可以将实例字段定义为final，这样的字段必须在构造时就初始化。也就是说，必须确保在每一个构造器执行之后，这个字段的值已经设置，并且以后不能再修改这个字段。</p>
+<p>​        final修饰符对于类型为 基本类型 或者 不可变类 的字段尤其有用。（ 如果类中的所有方法都不会改变其对象，这样的类就是不可变的类。例如，String类就是不可变的类 ）</p>
+<p>​        那么，对于大部分可变的类，随意使用final就有可能会造成混乱。</p>
+<h2 id="静态字段-和-静态方法"><a href="#静态字段-和-静态方法" class="headerlink" title="静态字段 和 静态方法"></a>静态字段 和 静态方法</h2><p>​        在前面给出的实例程序中，有许多位置使用了static修饰符（main方法），下面来讨论这个修饰符的含义。</p>
+<h4 id="静态字段"><a href="#静态字段" class="headerlink" title="静态字段"></a>静态字段</h4><p>​        如果将一个字段定义为static，每个类只有一个这样的字段。而对于非静态的实例字段，每个对象都有一个自己的副本。下面用一个简单的例子来说明：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Employee</span></span>&#123;</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> nextId = <span class="number">1</span>;</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">int</span> id;</span><br><span class="line">	........</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>​        在上面的Employee类中，我们定义了两个属性，id 和 静态字段nextId。现在构造许多个Employee类的对象，每个对象都有一个属于自己的属性id，且互相不干涉，但是所有Employee类的对象都共用一个静态字段nextId。由此可以得出结论：静态字段只属于类，而不属于对象。</p>
+<p>​        基于这个特点，在静态字段在被定义时，就已经被构造，存在于内存中。</p>
+<h4 id="静态常量"><a href="#静态常量" class="headerlink" title="静态常量"></a>静态常量</h4><p>​        在Java中，静态变量使用的比较少，更多的时候会使用静态常量。例如，在类中定义一个静态常量：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Test</span></span>&#123;</span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">double</span> PI = <span class="number">3.1415926</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>​        在上面的实例中，我们在Test类中定义了一个静态常量PI，在以后调用时，调用PI就等于使用3.1415926的值。当然静态常量和静态字段都有着相同的属性，她们只属于类而不属于对象，在被定义时就已经被构造。</p>
+<p>​        在此之外，静态常量是可以被定义为public的，因为静态常量在定义是使用了final，无法被修改。</p>
+<h4 id="静态方法"><a href="#静态方法" class="headerlink" title="静态方法"></a>静态方法</h4><p>​        静态方法是不再对象上执行的方法，例如，在Math类中的pow方法就是一个静态方法。使用方法也十分直接，以pow方法为例：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Math.pow(x,a)</span><br></pre></td></tr></table></figure>
+
+<p>​        在上面的例子中，函数会计算x的a次幂。在完成幂运算时，这个函数并没有使用任何Math对象，换句话说，静态方法在运行的过程中并没有调用任何函数。</p>
+<p>​        对于静态方法还有一些其他的特殊点，对于静态方法而言，静态方法只能调用类的静态常量，无法访问对象的实例字段，毕竟她在运行过程中不会借用任何对象。</p>
+<p>​        在下面两种情况下，可以使用静态方法：</p>
+<pre><code> 1.    方法不需要访问对象状态，因为她需要的所有参数都通过显示参数提供（例如: Math.pow）。
+ 2.    方法只需要访问类的静态字段（ 例如: Employee.getNextId ）。
+</code></pre>
+<h4 id="工厂方法"><a href="#工厂方法" class="headerlink" title="工厂方法"></a>工厂方法</h4><p>​        在Java中的静态方法还有一种常用的用途，使用类似 LocalDate 和 NumberFormat 的类使用静态工厂方法来量产不同的实例对象。以NumberFormat 类举例就有：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 获取 NumberFormat 类的不同对象</span></span><br><span class="line">NumberFormat currencyFormat = NumberFormat.getCurrencyInstance();</span><br><span class="line">NUmberFormat percentFormat = NumberFormat.getPercentInstance();</span><br><span class="line"></span><br><span class="line"><span class="keyword">double</span> x = <span class="number">0.1</span>;</span><br><span class="line"></span><br><span class="line">System.out.println( currencyFormat.format(x) ); <span class="comment">// 打印结果 ：$0.10</span></span><br><span class="line">System.out.println( percentFormat.format(x) ); <span class="comment">// 打印结果 ：10%</span></span><br></pre></td></tr></table></figure>
+
+<p>​        当然，首当其冲有一个问题，为什么不使用new关键字来构造对象？ 这主要是两个原因：</p>
+<p>​        1.    无法命名构造器。构造器的名字必须和类名相同，而就如上方的例子中所表现的。但是，这里希望获取两种不同表示方法的数字输出方法，分别得到货币实例和百分比实例。</p>
+<p>​        2.    使用构造器时，无法改变所构造对象的类型，而实际上，工厂方法返回的对象是 NumberFormat 的一个子类。</p>
+<h4 id="main方法"><a href="#main方法" class="headerlink" title="main方法"></a>main方法</h4><p>​        需要注意的是，可以调用静态方法而不需要任何对象，例如，不需要构造Math类的任何对象就可以调用Math.pow函数。</p>
+<p>​        同理，main方法也是一个静态方法。main方法不对任何对象进行操作，事实上，在启动程序时还没有任何对象。静态的main方法将执行并构造程序所需要的对象。</p>
+<h2 id="方法参数"><a href="#方法参数" class="headerlink" title="方法参数"></a>方法参数</h2><p>​        那么既然讲方法参数，就需要先把Java对于传入方法参数的流程拉出来讲一讲。首先，就需要搞几个专业术语来说说。</p>
+<h4 id="专业术语"><a href="#专业术语" class="headerlink" title="专业术语"></a>专业术语</h4><p>​        <strong>按值调用</strong> ：表示方法接受的是调用者提供的值。</p>
+<p>​        <strong>引用调用</strong> ：表示方法接受的是调用者提供的变量地址。</p>
+<p>​        对于上面两种方法，方法可以修改 <strong>引用调用</strong> 的变量的值而不能修改 <strong>按值调用</strong> 传递的变量的值。</p>
+<h4 id="Java传递方法参数的一般机制"><a href="#Java传递方法参数的一般机制" class="headerlink" title="Java传递方法参数的一般机制"></a>Java传递方法参数的一般机制</h4><p>​        对于Java，Java程序设计语言总是 <strong>按值调用</strong> ，也就是说，方法得到的是所有参数值的一个副本，具体来讲，方法不能修改传递给她的任何参数变量的内容。下面，举一个例子：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">double</span> percent = <span class="number">10</span>;</span><br><span class="line">harry.raiseSalary( percent );</span><br></pre></td></tr></table></figure>
+
+<p>​        无论这个叫 raiseSalary 的方法如何具体实现，我们知道，在这个方法调用之后，percent 这个变量的值依然是 10。</p>
+<p>​        那么，为了使得 <strong>Java的方法无法修改所传入的变量的值</strong> 这个特性变得更加具体，好理解，那么我们举一个更具体的例子：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">raiseSalary</span><span class="params">( <span class="keyword">double</span> x )</span></span>&#123;</span><br><span class="line">	x = x * <span class="number">3</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">double</span> percent = <span class="number">10</span>;</span><br><span class="line">raiseSalary( percent );</span><br></pre></td></tr></table></figure>
+
+<p>​        在上面的例子里面，我们将 raiseSalary 方法进行了实现，这个方法希望将传入的参数增加三倍。好吧，在运行结束以后，这个方法失败了，传入的变量 percent 的值依旧是 10 。说到底，方法可以改变的是从传入的变量那里获取的副本，这自然无法影响到其本身。</p>
+<p>​        为了在直观一点，我们来拆解一下她的运行顺序：</p>
+<p>​        1.    x 值初始化为 percent 值的一个副本</p>
+<p>​        2.    x 乘以 3 后等于 30，但是 percent 的值依旧是 10</p>
+<p>​        3.    这个方法运行结束之后，参数变量 x 便不再被使用</p>
+<p>​        然而，有两种类型的方法参数： 基本数据类型（int、double等基本类型） 和 对象引用（实例化自定义类的对象）。</p>
+<p>​        我们已经看到了，方法无法修改基本类型的参数的值，而当传入方法参数是对象引用时，情况就将发生变化了。下面举一个例子：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">public static void tripleSalary(Employee x)&#123;</span><br><span class="line">	x.raiseSalary( 200 );</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">harry = new Employee(...); // 此处省略Employee类的定义</span><br><span class="line">tripleSaraly( harry );</span><br></pre></td></tr></table></figure>
+
+<p>​        当我们执行了上方的代码后，harry 对应的对象的值成功的翻了三倍，Oh，真是不可思议。理由也很简单，因为在函数中改变对象时，实际改变的是传入参数的值的副本。但对于 对象引用 时，参数的值的副本 和 参数本身 都只是指向对象的一个引用。改变参数值的副本，也就是改变了参数本身。因此，实现一个改变对象参数状态的方法是完全可行的。</p>
+<p>​        那么，我们总结一下Java中对方法参数能做什么 和 不能做什么：</p>
+<p>​        1. 方法不能修改基本数据类型的参数（即数值型 或者 布尔型）。</p>
+<p>​        2. 方法可以改变对象参数的状态。</p>
+<p>​        3. 方法不能让一个对象参数引用一个新的对象。</p>
+<h2 id="对象的构造"><a href="#对象的构造" class="headerlink" title="对象的构造"></a>对象的构造</h2><h4 id="重载"><a href="#重载" class="headerlink" title="重载"></a>重载</h4><p>​        有些类拥有多个构造器。例如，你可以构造一个空的 StringBuilder 对象：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> messages = <span class="keyword">new</span> StringBuilder();</span><br></pre></td></tr></table></figure>
+
+<p>​        也可以指定构造一个初始字符串：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> messages = <span class="keyword">new</span> StringBuilder( <span class="string">&quot;To do&quot;</span> );</span><br></pre></td></tr></table></figure>
+
+<p>​        这种功能就是重载( Overloading )。如果多个方法有相同的名字、不同的参数，便出现了重载。编译器必须挑选出具体调用哪个方法。在使用重载时，编译器会通过传入的参数来进行匹配，来选择调用正确的构造方法。</p>
+<p>​        如果编译器找不到相匹配的参数，那么就会产生编译错误，因为根本不存在匹配，或者没有一个比其他的更好( 这个查找匹配的过程被称之为 <strong>重载解析</strong> )。</p>
+<p>​        另外，Java 允许重载任何方法，而不只是构造方法。因此，在使用一个函数时，需要完整的描述指定的 方法名 以及 参数类型 ，这叫做方法的 <strong>签名</strong> 。例如，String 类有 4 个名为 indexOf 的公共方法，她们的签名是：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">indexOf( <span class="keyword">int</span> );</span><br><span class="line">indexOf( <span class="keyword">int</span>, <span class="keyword">int</span> );</span><br><span class="line">indexOf( String );</span><br><span class="line">indexOf( String, <span class="keyword">int</span> );</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="默认字段初始化"><a href="#默认字段初始化" class="headerlink" title="默认字段初始化"></a>默认字段初始化</h4><p>​        如果在构造器中并没有显示的为字段设置初值，那么就会被自动的被赋予默认值： 数值为 0、布尔值为 false、 对象引用为 null。有些人认为依赖默认值是一种不好的行为，的确，如果不明确的对字段进行初始化，就会影响程序代码的可读性。</p>
+<p>​        在这里，要指出一个 字段 和 局部变量 的一个重要区别。方法中的局部变量必须要明确的初始化，但是在类中，如果没有初始化类中的字段，将会自动初始化为默认值( 0 、 false、 null )。</p>
+<p>​        举个例子，以上方讨论过的 Employee 类为例子。假定没有在构造器中指定如何初始化某些字段，默认状态下，就会将 salary 字段初始化为 0 , 将 name 和 hireDay 字段初始化为 null 。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Employee</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> String name; <span class="comment">// Employee类的String类型属性</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">double</span> salary; <span class="comment">// Employee类的double类型属性</span></span><br><span class="line">    <span class="keyword">private</span> LocalDate hireDay; <span class="comment">// Employee类的LocalDate类型</span></span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">double</span> <span class="title">getSalary</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> salary;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> LocalDate <span class="title">getHireDay</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> hireDay;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getName</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> name;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>​        但是，这显然不是一个好主意。因为此时如果我们调用 getName 方法 或者 getHireday 方法，就会得到一个 null 引用，这应该不是我们所希望的结果。</p>
+<p>​        如果此时我们调用方法，就会发生下面的事情：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Employee harry = <span class="keyword">new</span> Employee();</span><br><span class="line">LocalDate h = harry.getHireDay();</span><br><span class="line"><span class="keyword">int</span> year = h.getYear(); <span class="comment">// throws exception if h is null</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="无参构造"><a href="#无参构造" class="headerlink" title="无参构造"></a>无参构造</h4><p>​        很多类都包含一个无参数的构造器，由无参数构造器创建对象时，对象的状态会设置为适当的默认值。</p>
+<p>​        例如，以下是 Employee 类的无参数构造器：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">Employee</span><span class="params">()</span></span>&#123;</span><br><span class="line">	name = <span class="string">&quot;&quot;</span>;</span><br><span class="line">	salary = <span class="number">0</span>;</span><br><span class="line">	hireDay = LocalDate.now();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>​        如果在定义一个类时并没有书写构造器，编译器会自动提供一个构造器。这个构造器将 <strong>所有的</strong> 实例字段设置为默认值。于是，就和在方法参数部分中写道的相同，实例字段中的数值型数据设置为 0，布尔型数据设置为 false， 所有对象变量将设置为 null。</p>
+<p>​        如果类中提供了至少一个构造器，但是没有提供无参的构造函数，那么在构造对象时如果不提供参数就是不合法的。</p>
+<p>​        要记住的是，仅仅只有当类中没有任何构造器时，编译器才会提供一个默认的无参构造器。</p>
+<h4 id="显示字段初始化"><a href="#显示字段初始化" class="headerlink" title="显示字段初始化"></a>显示字段初始化</h4><p>​        通过重载类的构造器方法，可以采用多种形式设置类的实例字段的初始状态。不管如何调用构造器，每个实例字段都要设置一个<strong>有意义的初始值</strong>，确保这一点总是一个不错的好主意。</p>
+<p>​        在执行构造器之前完成这个赋值操作，如果一个类的所有构造器都希望把某个特定的实例字段都设定为一个值，那么这个语法就特别有用。当然，初始值并不一定是常量值，比如下面的例子，就是利用方法调用初始化一个字段。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Employee</span></span>&#123;</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> nextInd;</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">int</span> id = assignId();</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> assignId&#123;</span><br><span class="line">		<span class="keyword">int</span> r = nextId;</span><br><span class="line">		nextId = nextId + <span class="number">1</span>;</span><br><span class="line">		<span class="keyword">return</span> r;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="参数名"><a href="#参数名" class="headerlink" title="参数名"></a>参数名</h4><p>​        在编写一些规模较小的构造器时，常常在参数命名时感到困惑，毕竟起名字是一个比较困难的问题。</p>
+<p>​        通常喜欢使用单个字母来作为参数名，例如：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">Employee</span><span class="params">( String n, <span class="keyword">double</span> s )</span></span>&#123;</span><br><span class="line">	<span class="keyword">this</span>.name = n;</span><br><span class="line">	<span class="keyword">this</span>.salary = s;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>​        这样做的好处就是十分清晰，后来的维护者可以一眼就看懂参数的含义。另外还有一种常用的技巧，这种技巧基于一个Java的机制：<strong>参数变量会遮蔽同名的实例字段</strong>。例如，如果将参数名命名为salary，salary将指示这个参数，而不是实例字段。但是还是可以使用this关键字来访问实例字段。例如：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">Employee</span><span class="params">( String name, <span class="keyword">double</span> salary )</span></span>&#123;</span><br><span class="line">	<span class="keyword">this</span>.name = name;</span><br><span class="line">	<span class="keyword">this</span>.salary = salary;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="调用其他的构造器"><a href="#调用其他的构造器" class="headerlink" title="调用其他的构造器"></a>调用其他的构造器</h4><p>​        关键字this指示一个方法的隐式参数。不过，这个关键字还有另外一个含义。</p>
+<p>​        如果构造器的第一个语句形如this( … )，这个构造器将调用同一个类的另一个构造器。下面提供一个典型的例子：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">Employee</span><span class="params">( <span class="keyword">double</span> s )</span></span>&#123;</span><br><span class="line">	<span class="keyword">this</span>( <span class="string">&quot; Employee # &quot;</span> + nextId, s );</span><br><span class="line">	nextId = nextId + <span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>​        当调用 new Employee( 6000 ) 时， Employee( double ) 构造器将调用 Employee( String, double ) 构造器。当采用这种方式时，this关键字就变得十分有用，这样</p>
+<h4 id="初始化块"><a href="#初始化块" class="headerlink" title="初始化块"></a>初始化块</h4><p>​        前面已经讲过两种初始化数据字段的方法：在构造器中设置值 和 在声明中赋值</p>
+<p>​        实际上，Java还有第三种机制，称之为初始化块( initialization block )。在一个类中的声明中，可以包含多任意多个代码块。只要构造这个类，这些块就会被执行。例如：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Employee</span></span>&#123;</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> nextId;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">int</span> id;</span><br><span class="line">	<span class="keyword">private</span> String name;</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">double</span> salary;</span><br><span class="line">	</span><br><span class="line">	&#123;</span><br><span class="line">		id = nextId;</span><br><span class="line">		nextId = nextId + <span class="number">1</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">Employee</span><span class="params">( String n, <span class="keyword">double</span> s )</span></span>&#123;</span><br><span class="line">		name = n;</span><br><span class="line">		salary = s;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">Employee</span><span class="params">(  )</span></span>&#123;</span><br><span class="line">		name = <span class="string">&quot;&quot;</span>;</span><br><span class="line">		salary = <span class="number">0</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>​        在上面的示例中，无论使用哪种构造器进行构造对象，id 字段都会在对象初始化块中初始化。首先运行初始化块，然后才运行构造器的主体部分。</p>
+<p>​        当然，这种不是必须的，同时这种程序也不常见。通常会直接将初始化代码放在构造器中。要注意的是，虽然可以在初始化块中设置字段，即使这些字段在类后面才定义，这是合法的行为。但是一般为了避免重复定义，不允许读取在后面初始化的字段。</p>
+<p>​        由于Java拥有多种初始化数据字段的途径，所以列出构造过程的所有路径可能让人十分困惑。下面是调用构造器的具体处理步骤：</p>
+<p>​        1、 如果构造器的第一行调用了另一个构造器，则基于所提供的参数执行第二个构造器。</p>
+<p>​        2、 否则，</p>
+<p>​                a) 所有数据字段初始化为其默认值( 0、false 或者 null )。</p>
+<p>​                b) 按照在类声明中出现的顺序，执行所有字段初始化方法和初始化块。</p>
+<p>​        3、 执行构造器主体代码。</p>
+<p>​        当然，应该精心组织好初始代码块，可以使用静态的初始化块。</p>
+<p>​        将代码放入一个块中，并且在上方标记为 static 。下面提供一个例子：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">var</span> genertor = <span class="keyword">new</span> Random();</span><br><span class="line">	nextId = genertor.nextInt( <span class="number">1000000</span> );</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 上方代码的功能：为员工Id随机生成一个小于 1000000 的随机数。</span></span><br></pre></td></tr></table></figure>
+
+<p>​        在类第一次加载的时候，将会进行静态字段的初始化。和实例字段一样，除非将静态字段显示地设置成其他值，否则默认的初始值都是0、false 或 null。所有的静态字段初始化方法以及静态初始化块都将依照类声明中出现的顺序执行。</p>
+<h4 id="对象析构-和-finalize方法"><a href="#对象析构-和-finalize方法" class="headerlink" title="对象析构 和 finalize方法"></a>对象析构 和 finalize方法</h4><p>​        有些面向对象的程序设计语言，特别是 C++ ，有显示的析构器方法，其中放置一些当对象不再使用时需要执行的清理代码。在析构器中，最常见的操作是回收分配给对象的储存空间。</p>
+<p>​        而由于 Java 存在自我回收垃圾的机制，不需要人工回收内存，所以 Java 不支持析构器。</p>
+<p>​        当然，某些对象使用了内存之外的资源时情况就会发生一些变化。比如，文件可能使用了系统资源的另一个对象的句柄。在这种情况下，当资源不再需要时，将其回收和再利用显得十分重要</p>
+<p>​        如果一个资源一旦使用完后就需要立刻关闭，那么应该提供一个 close 方法来完成必要的清理工作。可以在对象使用完成时调用这个方法。在往后 <em>异常、断言和日志</em> 中会介绍如何确保自动调用这个方法。</p>
+<p>​        如果可以等到Java虚拟机自动退出，那么可以用方法 <strong>Runtime.addShutdownHook</strong> 增加一个 ”关闭钩“ 。在 Java9 中，可以使用 Cleaner 类注册一个动作，当对象不再可达时( 除了清洁器还可以访问，其他对象都无法访问这个对象 )，就会完成这个动作。在世界中这些情况十分少见。</p>
+<h2 id="包"><a href="#包" class="headerlink" title="包"></a>包</h2><p>​        Java允许使用包 package 将类组织在一个集合中。借助包可以方便的组织自己的代码，并将自己的代码与别人提供的代码库分开管理。下面将介绍如何使用和创建包。</p>
+<h4 id="包名"><a href="#包名" class="headerlink" title="包名"></a>包名</h4><p>​        使用包的主要原因是确保类名的唯一性，在同一包内绝不能出现两个相同名字的类。假如两个程序员不约而同的创建了Employee类，只要将这些类放在不同的包中，就不会产生冲突。</p>
+<p>​        事实上，为了保证包名的绝对唯一性，要用一个因特网域名 ( 这显然是唯一的 ) 以逆序的形式来作为包名，然后对于不同的工程使用不同的子包。</p>
+<p>​        例如，考虑域名 horstann.com。如果以逆序来写，就得到了包名 com.horstann 。</p>
+<p>​        然后为了更进一步的确保唯一性，可以在后面追加工程名，如 com.horstann.coreJava 。如果再把 Employee 类放在这个包里，那么这个类的 “ 完全限定 ” 名就是 com.horstann.coreJava.Employee 。</p>
+<h4 id="类的导入"><a href="#类的导入" class="headerlink" title="类的导入"></a>类的导入</h4><p>​        一个类可以使用所属包中的所有类，以及其他包中的公共类( public class )。我们可以采用两种方式访问另一个包中的公共类。</p>
+<p>​        第一种方法就是使用 <strong>完全限定名( fully qualified name )</strong> ，也就是包名后面跟着类名。例如：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">java.time.LocalDate today = java.time.LocalDate.now();</span><br></pre></td></tr></table></figure>
+
+<p>​        这显然十分繁琐。更简单也更常见的方法是使用 <strong>import</strong> 语句。<strong>import</strong> 语句是一种引用包中个类的简洁方式。一旦使用 <strong>import</strong> 语句，在使用类时，就不必再使用全名了。</p>
+<p>​        可以使用 import 语句导入一个特定的类或者整个包，import 语句应该位于源文件的顶部( 但位于 package 语句的后面 )。例如，可以使用下面的这条语句来导入 java.util 包中的所有类。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.time.*</span><br></pre></td></tr></table></figure>
+
+<p>​        然后就可以使用相关的类：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">LocalDate today = <span class="keyword">new</span> LocalDate.now();</span><br></pre></td></tr></table></figure>
+
+<p>​        而无需再和之前一样加上完整的包前缀，还可以导入包中的一个特殊类：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.time.LocalDate;</span><br></pre></td></tr></table></figure>
+
+<p>​        这同样可以达到与之前一样的效果。java.time.* 的用法较为简单，对代码的规模也没有任何的负面影响。但是说实话，更加推荐明确的指出导入的类。这样的化，代码的阅读者也能更加的明确代码撰写者使用了哪些类。</p>
+<p>​        但是，需要注意的是，只能使用信号( * )导入一个包，而不能使用 import java.* 或 import java.*.*  导入以java为前缀的包。</p>
+<p>​        在大多数的情况下，可以只导入你需要的包，并不必过多的考虑她们。但在发生了命名冲突的时候，就要注意包了。例如， java.util 和 java.sql 包都存在 Date 类。如果在程序中导入了这两个包，那么在编译时就会出现一个编译错误。</p>
+<p>​        此时，编译器无法确认你希望使用哪个包中的 Date 类。可以增加一个特定的 import 语句来解决这个问题。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.*;</span><br><span class="line"><span class="keyword">import</span> java.sql.*;</span><br><span class="line"><span class="keyword">import</span> java.util.Date;</span><br></pre></td></tr></table></figure>
+
+<p>​        如果这两个 Date 类都需要使用，那么就要采用其他的方法来完成调用。即，在每个类名的前面加上完整的包名。例如：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> deadLine = <span class="keyword">new</span> java.util.Date();</span><br><span class="line"><span class="keyword">var</span> taday = <span class="keyword">new</span> java.sql.Date(...);</span><br></pre></td></tr></table></figure>
+
+<p>​        在包中定位类是编译器的工作。类文件中的字节码总是使用完整的包名来引用其他类。</p>
+<p>​    </p>
+<h4 id="静态导入"><a href="#静态导入" class="headerlink" title="静态导入"></a>静态导入</h4><p>​        有一种 import 语句允许导入静态方法和静态字段，而不只是类。</p>
+<p>​        例如，在如果在源文件顶部，加入一条指令：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="keyword">static</span> java.lang.System.*;</span><br></pre></td></tr></table></figure>
+
+<p>​        就可以使用 System 类中的 静态方法 和 静态字段，而不必使用类名前缀，比如：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">out.println( <span class="string">&quot;Test&quot;</span> ); <span class="comment">// 等价于 System.out.println( &quot;Test&quot; );</span></span><br></pre></td></tr></table></figure>
+
+<p>​        另外，静态导入也可以导入特定的方法或者字段：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="keyword">static</span> java.lang.System.out</span><br></pre></td></tr></table></figure>
+
+<p>​        使用这种方法就可以直接导入特定的 方法 或者 字段。</p>
+<h4 id="在包中增加类"><a href="#在包中增加类" class="headerlink" title="在包中增加类"></a>在包中增加类</h4><p>​        要希望将类放入包中，就必须将包的名字放在源文件的开头。即放在定义这个包中各个类的代码之前。例如：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.horstmann.corejava;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Employee</span></span>&#123;</span><br><span class="line">	......</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>​        如果没有在源文件中放置 package 语句，这个源文件中的类就属于 <strong>无名包( unnamed package )</strong> 。无名包没有包名。 到目前为止，我们定义的所有类都在这个无名包中。</p>
+<p>​        将源文件放到与完整包名匹配的子目录中。例如，com.horstmann.corejava 包中的所有源文件应该防止在子目录 com \ horstmann \ corejava 中。同理，编译器将类文件也放在相同的目录结构中。</p>
+<h4 id="包访问"><a href="#包访问" class="headerlink" title="包访问"></a>包访问</h4><p>​        前面已经接触访问修饰符 public 和 private。 标记为 public 的部分可以由任意类使用； 而标记为 private 的部分只能由定义她的类使用。</p>
+<p>​        如果没有指定 public 或者 private ，那么这个部分默认为 public ，可以被所有的包和类访问。</p>
+<p>​        在默认的情况下，包不是封闭的实体。也就是说，任何人都可以向包中添加更多的类。</p>
+<h4 id="类路径"><a href="#类路径" class="headerlink" title="类路径"></a>类路径</h4><p>​        通过前面的知识，类储存在文件系统的子目录中，类的路径必须与包名匹配。</p>
+<p>​        另外，类文件也可以储存在 JAR( Java归档 ) 文件中。在一个 JAR 文件中，可以包含多个压缩形式的类文件和子目录，这样既可以节省空间又可以改善性能。</p>
+<p>​        </p>
+<p>​        为了使类可以被多个程序共享，需要做到以下几点：</p>
+<ul>
+<li>把类文件放入到一个目录中</li>
+<li>将 JAR 文件放在一个目录中</li>
+<li>设置类路径，类路径时所有包含类文件的路径的集合</li>
+</ul>
+<p>​        由于总是会搜索 Java API 的类，所以不必显示地包含在类路径中。另外，类的路径所列出的目录和归档文件时搜寻类的 起始点 。</p>
+<p>​        编译器查找文件的步骤要比虚拟机复杂不少。如果引用一个类，但没有指定其所在的包。</p>
+<p>​        那么编译器就会将代码上方法所导入( import )的所有的包都检查一遍，提一嘴，这个查找过程并不会中途停止，编译器检查 import 指令，来确认是否有包含目标导入类的包。并且，如果编译器在这个检查过程中检查到两个或两个以上的目标导入类( 同名 ),编译器就会立刻报错。</p>
+<p>​        另外，由于完全限定类名必须是唯一的，因此 import 指令的次序并不重要。</p>
+<p>​    </p>
+<h2 id="JAR文件"><a href="#JAR文件" class="headerlink" title="JAR文件"></a>JAR文件</h2><p>​        在将应用程序打包时，最好只想用户提供一个单独的文件，而不是一个臃肿的包 或者 一个包含大量类文件的目录结构。因此 JAR 文件就此诞生。由于 JAR 文件不止可以类文件，也可也包含图片，声音文件，因此 JAR 文件是压缩文件，采用的是我们熟悉的 Zip 压缩格式。</p>
+<h4 id="创建-JAR-文件"><a href="#创建-JAR-文件" class="headerlink" title="创建 JAR 文件"></a>创建 JAR 文件</h4><p>​        可以使用 JDK 自己自带的工具来创建 JAR 文件，一般而言，默认在 JDK 的 bin 目录下。创建一个新的 JAR 文件最常用的命令可以使用下面的语法：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">jar cvf jarFileName file1 file2 .....</span><br></pre></td></tr></table></figure>
+
+<p>​        可以将应用程序和代码库打包在 JAR 文件中。</p>
+<h4 id="清单文件"><a href="#清单文件" class="headerlink" title="清单文件"></a>清单文件</h4><p>​        除了类文件、图像和其他资源外，每个 JAR 文件还包括一个 清单文件 ，用于描述归档文件的特殊性质。</p>
+<p>​        清单文件命名为 MANIFEST.MF ， 她位于 JAR 文件的一个特殊的 META.INF 子目录中。</p>
+<p>​        符合标准的最小 清单文件 极其简单： <em>Manifest-Version : 1.0</em></p>
+<p>​        复杂的清单文件可以包含更多条目。这些 清单条目 被条目分成多个 <strong>节</strong> 。第一节被称之为 <strong>主节</strong> 。她作用于整个 JAR 文件，随后的条目用来指定命名实体的属性。他们都必须以一个 Name 条目开始。节和节之间用空行分开。例如：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Manifet-Version:<span class="number">1.0</span></span><br><span class="line">lines describing <span class="keyword">this</span> archive</span><br><span class="line"></span><br><span class="line">Name : Woozle.class</span><br><span class="line">lines describing <span class="keyword">this</span> file</span><br><span class="line">Name : com/mycompany/mypkg/</span><br><span class="line">lines describing <span class="keyword">this</span> <span class="keyword">package</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="可执行-JAR-文件"><a href="#可执行-JAR-文件" class="headerlink" title="可执行 JAR 文件"></a>可执行 JAR 文件</h4><p>​        可以使用 jar 命令中的 e 选项指定程序的 入口 点，即通常需要在调用 Java 程序启动时指定的类。</p>
+<p>​        不论使用哪一种方法，用户可以简单的通过下面的命令来启动程序：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">java -jar MyProgarm.jar</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="注释"><a href="#注释" class="headerlink" title="注释"></a>注释</h2><p>​        JDK 包含了一个相当有用的工具  <em>Javadoc</em> ，她可以用源文件为基底生成一个 HTML 文档。实际上，Java 所用的 API 文档就是使用    <em>Javadoc</em>  这个工具生成的。</p>
+<p>​        如果在源代码中添加 /** 开始的注释，可以十分容易的生成一个看起来十分专业的文档。这是一个很好的方法，因为这样可将代码和注释放在一个地方。</p>
+<p>​        使用了上面方法后，由于文档注释和源代码在同一个地方，如在以后修改源代码，重新运行  <em>Javadoc</em>  就可以轻而易举的保持两者的一致性。</p>
+<h4 id="注释插入"><a href="#注释插入" class="headerlink" title="注释插入"></a>注释插入</h4><p>​        Javadoc 实用工具从下面几项中抽取信息：</p>
+<ul>
+<li>模块</li>
+<li>包</li>
+<li>公共类与接口</li>
+<li>公共的和受保护的构造器以及方法</li>
+</ul>
+<p>​        可以 ( 而言应该 ) 为每个特性编写注释，注释位置位于所描述特性的最上方，以 /** 开始，以 <em>/ 结束。 每个 /</em>* <em>/ 文档注释包含标记以及之后紧跟的  <strong>自由格式文本</strong></em>  。标记以 @ 开始，如 @since 或 @param 。</p>
+<p>​        ![ 注释插入 ](./学习笔记 - 面向对象/注释抽取.JPG)</p>
+<p>​        <em><strong>自由格式文本</strong></em> 的第一句应该是一句 <strong>概要性</strong> 的句子， <em>Javadoc</em> 工具会自动地将这些句子抽取出来生成概要页。</p>
+<p>​        另外， 在 <em><strong>自由格式文本</strong></em>  中是可以使用 HTML 修饰符的，比如用于强调的 &lt; em &gt;…&lt; /em &gt; 而且不需要字符转义。</p>
+<h4 id="类注释"><a href="#类注释" class="headerlink" title="类注释"></a>类注释</h4><p>​        类注释必须放在 import 语句之前，类的具体定义之后，就上上方的图，就是一个典型的类注释。</p>
+<p>​        另外，在类注释中，就算不是用 * 号也是合法的，比如：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> The &#123;<span class="doctag">@code</span> System&#125; class contains several useful class fields</span></span><br><span class="line"><span class="comment"> and methods. It cannot be instantiated</span></span><br><span class="line"><span class="comment"> </span></span><br><span class="line"><span class="comment"> Among the facilites provided by the &#123;<span class="doctag">@code</span> System&#125; class</span></span><br><span class="line"><span class="comment"> .........</span></span><br><span class="line"><span class="comment"> </span></span><br><span class="line"><span class="comment"> <span class="doctag">@since</span> 1.0</span></span><br><span class="line"><span class="comment"> */</span></span><br></pre></td></tr></table></figure>
+
+<p>​        以上的类注释方法就是合法的，不过大多数自动生成的 JDK 都会自带 * 号，而且大多 IDE 中书写类注释时会自动带上 * 号。</p>
+<h4 id="方法注释"><a href="#方法注释" class="headerlink" title="方法注释"></a>方法注释</h4><p>​        每一个方法必须放在所描述的方法之前，除了通用的标记外，还可以使用下面的标记：</p>
+<ul>
+<li><p>@param <em>variable description</em></p>
+<p>​        这个标记将给当前方法的 “ paraments ” ( 参数 ) 部分添加一个条目。这个描述可以占据多行，并且这个标记可以使用 HTML 标记。一个方法中的所有 @param 标记全部放在一起。</p>
+</li>
+<li><p>@return description</p>
+<p>​        这个标记将给当前方法添加 “ returns ” ( 返回 ) 部分。这个描述可以跨越多行，并且可以使用 HTML 标记。</p>
+</li>
+</ul>
+<ul>
+<li><p>@throws class description</p>
+<p>​        这个标记将添加一个注释，表示这个方法可能会抛出异常。有关异常的详细内容将在后面描述。</p>
+</li>
+</ul>
+<p>​        下面给一个方法注释的例子：</p>
+<p>![ 方法注释 ](./学习笔记 - 面向对象/方法注释.JPG)</p>
+<h4 id="字段注释"><a href="#字段注释" class="headerlink" title="字段注释"></a>字段注释</h4><p>​        只需要对公共字段 ( 通常指的时静态常量 ) 建立文档。例如：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">*	The &quot;Hearts&quot; card suit</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> Hearts = <span class="number">1</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="通用注释"><a href="#通用注释" class="headerlink" title="通用注释"></a>通用注释</h4><p>​        标记 <em>@since text</em> 会建立一个 “ since ” ( 始于 ) 条目。text 可以是引入这个特性的版本的任何描述。例如，@since 1.7.1 ，另外下面的标记可以用在类文档的注释中。</p>
+<ul>
+<li><p>@author <em>name</em></p>
+<p>​    这个标记将产生一个 “ author ” ( 作者 ) 条目，可以使用多个 @author 标记，每个 @author 标记对应一个作者。并不是非得使用这个标记，不过使用这个标记可以更好的作者。</p>
+</li>
+</ul>
+<ul>
+<li><p>@version <em>text</em></p>
+<p>​    这个标记将产生一个 “ version ” ( 版本 ) 条目。这里的文本是可以对当前版本的任何描述。</p>
+</li>
+</ul>
+<ul>
+<li><p>@see &lt;  &gt;</p>
+<p>​    这个标记可以生产一个链接到 &lt; &gt; 中的地址的超链接。可以为一个特性添加多个 @see 标记，但必须将她们放在一起，就如同 方法注释 的 @param 标记相同。</p>
+</li>
+</ul>
+<h4 id="包注释"><a href="#包注释" class="headerlink" title="包注释"></a>包注释</h4><p>​        可以直接将 类、方法和变量 的注释放置在 Java 源文件中，只要用 /** … */ 文档注释就可以了。但是，想要生成 包注释 就需要每一个包目录中添加一个单独的文件。可以有如下两个方法：</p>
+<ol>
+<li>提供一个名为 package-info.java 的 Java 文件，这个文件必须包含一个初始的以 /** 和 */ 界定的 <em>Javadoc</em> 注释，后面是一个 package 语句。她不能包含更多的代码或注释。</li>
+<li>提供一个名为 package.html 的 HTML 文件。会抽取标记 &lt; body &gt; … &lt; / body &gt; 之间的所有文本。</li>
+</ol>
+<h4 id="注释抽取"><a href="#注释抽取" class="headerlink" title="注释抽取"></a>注释抽取</h4><p>​        在这里，假设你希望 HTML 文件将放在名在 docDirectory 的目录下，需要执行下面的步骤：</p>
+<ol>
+<li><p>切换到包含想生成文档的源文件的目录。如果有嵌套的包要生成文件，就必须切换到包含子目录 com 的目录。</p>
+</li>
+<li><p>如果是一个包，需要运行命令：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">javadoc -d docDirectory nameOfPackage</span><br></pre></td></tr></table></figure>
+
+
+
+<p>​    最后，可以使用很多命名行选项对 <em>Javadoc</em> 程序进行优化。</p>
+<p>​    比如可以使用 -author 和 -version 之类的命令来在文档中包含 @author 和 @version 标记。</p>
+</li>
+</ol>
+<h2 id="类设计技巧"><a href="#类设计技巧" class="headerlink" title="类设计技巧"></a>类设计技巧</h2><ul>
+<li>一定要保证数据的私有性<ul>
+<li>这是最重要的一点，绝对不要破坏程序的封装性。当数据保持私有时，表示形式的变化不会对类的使用者产生影响，而且也更容易检测 Bug 。</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li>一定要对数据进行初始化<ul>
+<li>Java 不会为你进行 局部变量 的初始化，但是会对对象的 实例字段 和 引用对象 进行初始化。最好不要依赖于系统的默认值，这样相当容易出现 Bug 。因此，我们应该为她们显示的提供初始值，尽量让这些问题掌握在书写者的手中。</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><p>不要再类中使用过多的基本类型</p>
+<ul>
+<li><p>这个想法是要用其他的类来替换多个相关的基本类型，这样会使得类更加容易理解，也更容易修改。例如，用一个名为 Address 的新类来替换一个 Customer 类中以下的实例字段：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> String street;</span><br><span class="line"><span class="keyword">private</span> String city;</span><br><span class="line"><span class="keyword">private</span> String state;</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">int</span> zip;</span><br></pre></td></tr></table></figure>
+
+<p>这样一来，可以很容易地处理地址的变化。</p>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li>不是所有的字段都需要单独的字段访问器和字段更改器<ul>
+<li>这个很好理解，在你的类中并不是所有的 字段 都需要被外部访问，或者被外部修改。比如类中的一些的 private 私密的字段。</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li>分解有过多职责的类<ul>
+<li>如果一个复杂的类可以被分为两个简单的类，那么就应该把她们分解为两个简单的类。当一个类过于复杂时，其担任的功能就可能过多，导致代码的维护和检测难以进行。</li>
+<li>原则上，设计类时应该和设计方法相同，尽可能的达到一个类只完成一个指定的任务。</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li>类名和方法名要能够体现她们的作用和职责<ul>
+<li>与变量的设计相同，类应该和变量一样有一个反应自己功能的名字，这样也便于维护和检查代码。( 在标准库类中，也有一些模糊不清的类，比如 Date 类其实是一个用来处理时间的类 ) 。</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li>优先使用不可变的类<ul>
+<li>LocalDate 类以及 java.time 包中的其他类就是不可变的 — 没有方法可以修改对象的状态。更改对象的问题在于，如果多个线程试图同时处理更新一个对象，此时就可能发生一些 <strong>神奇而不可预料</strong> 的问题。如果类是不可变的，那么就可以安全的使得多个线程共享这个对象。</li>
+</ul>
+</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/07/09/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%20-%20%E5%9F%BA%E7%A1%80%E8%AF%AD%E6%B3%95/" rel="prev" title="学习笔记——基础语法">
+      <i class="fa fa-chevron-left"></i> 学习笔记——基础语法
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/07/14/SWing%E2%80%94%E2%80%94Java%E5%A6%82%E4%BD%95%E7%94%BB%E5%87%BA%E6%96%B9%E6%A0%BC%E7%BA%B8/" rel="next" title="Swing - 如何画出方格纸">
+      Swing - 如何画出方格纸 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B1%81%E8%AF%9D"><span class="nav-number">1.</span> <span class="nav-text">屁话</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A6%82%E8%BF%B0"><span class="nav-number">2.</span> <span class="nav-text">概述</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%B1%BB"><span class="nav-number">2.0.1.</span> <span class="nav-text">类</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AF%B9%E8%B1%A1"><span class="nav-number">2.0.2.</span> <span class="nav-text">对象</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%B1%BB%E4%B9%8B%E9%97%B4%E7%9A%84%E5%85%B3%E7%B3%BB"><span class="nav-number">2.0.3.</span> <span class="nav-text">类之间的关系</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AF%B9%E8%B1%A1%E4%B8%8E%E5%AF%B9%E8%B1%A1%E5%8F%98%E9%87%8F"><span class="nav-number">2.0.4.</span> <span class="nav-text">对象与对象变量</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9B%B4%E6%94%B9%E5%99%A8%E6%96%B9%E6%B3%95%E4%B8%8E%E8%AE%BF%E9%97%AE%E5%99%A8%E6%96%B9%E6%B3%95"><span class="nav-number">2.0.5.</span> <span class="nav-text">更改器方法与访问器方法</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%94%A8%E6%88%B7%E8%87%AA%E5%AE%9A%E4%B9%89%E7%B1%BB"><span class="nav-number">3.</span> <span class="nav-text">用户自定义类</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9C%80%E7%AE%80%E5%8D%95%E7%9A%84%E5%AE%9A%E4%B9%89%E7%B1%BB"><span class="nav-number">3.0.1.</span> <span class="nav-text">最简单的定义类</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%89%96%E6%9E%90%E8%87%AA%E5%AE%9A%E4%B9%89%E7%B1%BB"><span class="nav-number">3.0.2.</span> <span class="nav-text">剖析自定义类</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%88%A8%E6%9E%90%E6%9E%84%E9%80%A0%E5%99%A8"><span class="nav-number">3.0.3.</span> <span class="nav-text">刨析构造器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-var-%E5%A3%B0%E6%98%8E%E5%B1%80%E9%83%A8%E5%8F%98%E9%87%8F"><span class="nav-number">3.0.4.</span> <span class="nav-text">使用 var 声明局部变量</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-null-%E5%BC%95%E7%94%A8"><span class="nav-number">3.0.5.</span> <span class="nav-text">使用 null 引用</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%98%BE%E7%A4%BA%E5%8F%82%E6%95%B0-%E5%92%8C-%E9%9A%90%E5%BC%8F%E5%8F%82%E6%95%B0"><span class="nav-number">3.0.6.</span> <span class="nav-text">显示参数 和 隐式参数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%B0%81%E8%A3%85%E7%9A%84%E4%BC%98%E7%82%B9"><span class="nav-number">3.0.7.</span> <span class="nav-text">封装的优点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%9F%BA%E4%BA%8E%E7%B1%BB%E7%9A%84%E8%AE%BF%E9%97%AE%E6%9D%83%E9%99%90"><span class="nav-number">3.0.8.</span> <span class="nav-text">基于类的访问权限</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%A7%81%E6%9C%89%E6%96%B9%E6%B3%95"><span class="nav-number">3.0.9.</span> <span class="nav-text">私有方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#final%E5%AE%9E%E4%BE%8B%E5%AD%97%E6%AE%B5"><span class="nav-number">3.0.10.</span> <span class="nav-text">final实例字段</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9D%99%E6%80%81%E5%AD%97%E6%AE%B5-%E5%92%8C-%E9%9D%99%E6%80%81%E6%96%B9%E6%B3%95"><span class="nav-number">4.</span> <span class="nav-text">静态字段 和 静态方法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%9D%99%E6%80%81%E5%AD%97%E6%AE%B5"><span class="nav-number">4.0.1.</span> <span class="nav-text">静态字段</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%9D%99%E6%80%81%E5%B8%B8%E9%87%8F"><span class="nav-number">4.0.2.</span> <span class="nav-text">静态常量</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%9D%99%E6%80%81%E6%96%B9%E6%B3%95"><span class="nav-number">4.0.3.</span> <span class="nav-text">静态方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95"><span class="nav-number">4.0.4.</span> <span class="nav-text">工厂方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#main%E6%96%B9%E6%B3%95"><span class="nav-number">4.0.5.</span> <span class="nav-text">main方法</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%B9%E6%B3%95%E5%8F%82%E6%95%B0"><span class="nav-number">5.</span> <span class="nav-text">方法参数</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%93%E4%B8%9A%E6%9C%AF%E8%AF%AD"><span class="nav-number">5.0.1.</span> <span class="nav-text">专业术语</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Java%E4%BC%A0%E9%80%92%E6%96%B9%E6%B3%95%E5%8F%82%E6%95%B0%E7%9A%84%E4%B8%80%E8%88%AC%E6%9C%BA%E5%88%B6"><span class="nav-number">5.0.2.</span> <span class="nav-text">Java传递方法参数的一般机制</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AF%B9%E8%B1%A1%E7%9A%84%E6%9E%84%E9%80%A0"><span class="nav-number">6.</span> <span class="nav-text">对象的构造</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%87%8D%E8%BD%BD"><span class="nav-number">6.0.1.</span> <span class="nav-text">重载</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%BB%98%E8%AE%A4%E5%AD%97%E6%AE%B5%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="nav-number">6.0.2.</span> <span class="nav-text">默认字段初始化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%97%A0%E5%8F%82%E6%9E%84%E9%80%A0"><span class="nav-number">6.0.3.</span> <span class="nav-text">无参构造</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%98%BE%E7%A4%BA%E5%AD%97%E6%AE%B5%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="nav-number">6.0.4.</span> <span class="nav-text">显示字段初始化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8F%82%E6%95%B0%E5%90%8D"><span class="nav-number">6.0.5.</span> <span class="nav-text">参数名</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%B0%83%E7%94%A8%E5%85%B6%E4%BB%96%E7%9A%84%E6%9E%84%E9%80%A0%E5%99%A8"><span class="nav-number">6.0.6.</span> <span class="nav-text">调用其他的构造器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%88%9D%E5%A7%8B%E5%8C%96%E5%9D%97"><span class="nav-number">6.0.7.</span> <span class="nav-text">初始化块</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AF%B9%E8%B1%A1%E6%9E%90%E6%9E%84-%E5%92%8C-finalize%E6%96%B9%E6%B3%95"><span class="nav-number">6.0.8.</span> <span class="nav-text">对象析构 和 finalize方法</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8C%85"><span class="nav-number">7.</span> <span class="nav-text">包</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8C%85%E5%90%8D"><span class="nav-number">7.0.1.</span> <span class="nav-text">包名</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%B1%BB%E7%9A%84%E5%AF%BC%E5%85%A5"><span class="nav-number">7.0.2.</span> <span class="nav-text">类的导入</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%9D%99%E6%80%81%E5%AF%BC%E5%85%A5"><span class="nav-number">7.0.3.</span> <span class="nav-text">静态导入</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%9C%A8%E5%8C%85%E4%B8%AD%E5%A2%9E%E5%8A%A0%E7%B1%BB"><span class="nav-number">7.0.4.</span> <span class="nav-text">在包中增加类</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8C%85%E8%AE%BF%E9%97%AE"><span class="nav-number">7.0.5.</span> <span class="nav-text">包访问</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%B1%BB%E8%B7%AF%E5%BE%84"><span class="nav-number">7.0.6.</span> <span class="nav-text">类路径</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JAR%E6%96%87%E4%BB%B6"><span class="nav-number">8.</span> <span class="nav-text">JAR文件</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA-JAR-%E6%96%87%E4%BB%B6"><span class="nav-number">8.0.1.</span> <span class="nav-text">创建 JAR 文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%B8%85%E5%8D%95%E6%96%87%E4%BB%B6"><span class="nav-number">8.0.2.</span> <span class="nav-text">清单文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8F%AF%E6%89%A7%E8%A1%8C-JAR-%E6%96%87%E4%BB%B6"><span class="nav-number">8.0.3.</span> <span class="nav-text">可执行 JAR 文件</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B3%A8%E9%87%8A"><span class="nav-number">9.</span> <span class="nav-text">注释</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%B3%A8%E9%87%8A%E6%8F%92%E5%85%A5"><span class="nav-number">9.0.1.</span> <span class="nav-text">注释插入</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%B1%BB%E6%B3%A8%E9%87%8A"><span class="nav-number">9.0.2.</span> <span class="nav-text">类注释</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%96%B9%E6%B3%95%E6%B3%A8%E9%87%8A"><span class="nav-number">9.0.3.</span> <span class="nav-text">方法注释</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AD%97%E6%AE%B5%E6%B3%A8%E9%87%8A"><span class="nav-number">9.0.4.</span> <span class="nav-text">字段注释</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%80%9A%E7%94%A8%E6%B3%A8%E9%87%8A"><span class="nav-number">9.0.5.</span> <span class="nav-text">通用注释</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8C%85%E6%B3%A8%E9%87%8A"><span class="nav-number">9.0.6.</span> <span class="nav-text">包注释</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%B3%A8%E9%87%8A%E6%8A%BD%E5%8F%96"><span class="nav-number">9.0.7.</span> <span class="nav-text">注释抽取</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B1%BB%E8%AE%BE%E8%AE%A1%E6%8A%80%E5%B7%A7"><span class="nav-number">10.</span> <span class="nav-text">类设计技巧</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">John Doe</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">31</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">John Doe</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"live2d-widget-model-haruto"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":false},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>
+
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/love.js"></script>
+
+<!--动态线条背景-->
+<script type="text/javascript"
+color="220,220,220" opacity='0.7' zIndex="-2" count="200" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js">
+</script>
+
+<!--浏览器搞笑标题-->
+<script type="text/javascript" src="\js\FunnyTitle.js"></script>

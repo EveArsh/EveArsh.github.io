@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Kirang Haerang:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="基础大致有 数据类型 运算符 字符串 输入和输出 控制流程 大数 数组 7个部分 参考 Java核心技术卷一的第三章 数据类型​    和其他的语言体系相似，整型int，浮点型float 和 double，字符型 char，布尔型 boolean 整形​    Java支持四种整型 int , short , long , byte  在这中 int 型最常用 ​    其中长整型long在使用时">
+<meta property="og:type" content="article">
+<meta property="og:title" content="学习笔记——基础语法">
+<meta property="og:url" content="http://example.com/2021/07/09/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%20-%20%E5%9F%BA%E7%A1%80%E8%AF%AD%E6%B3%95/index.html">
+<meta property="og:site_name" content="神秘的世界">
+<meta property="og:description" content="基础大致有 数据类型 运算符 字符串 输入和输出 控制流程 大数 数组 7个部分 参考 Java核心技术卷一的第三章 数据类型​    和其他的语言体系相似，整型int，浮点型float 和 double，字符型 char，布尔型 boolean 整形​    Java支持四种整型 int , short , long , byte  在这中 int 型最常用 ​    其中长整型long在使用时">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/2021/07/09/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%20-%20%E5%9F%BA%E7%A1%80%E8%AF%AD%E6%B3%95/腾讯QQ/QQ文件/MobileFile/1625973220150.jpg">
+<meta property="article:published_time" content="2021-07-09T13:35:30.084Z">
+<meta property="article:modified_time" content="2021-09-10T15:30:26.929Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2021/07/09/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%20-%20%E5%9F%BA%E7%A1%80%E8%AF%AD%E6%B3%95/腾讯QQ/QQ文件/MobileFile/1625973220150.jpg">
+
+<link rel="canonical" href="http://example.com/2021/07/09/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%20-%20%E5%9F%BA%E7%A1%80%E8%AF%AD%E6%B3%95/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>学习笔记——基础语法 | 神秘的世界</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">神秘的世界</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/07/09/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%20-%20%E5%9F%BA%E7%A1%80%E8%AF%AD%E6%B3%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="神秘的世界">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          学习笔记——基础语法
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-07-09 21:35:30" itemprop="dateCreated datePublished" datetime="2021-07-09T21:35:30+08:00">2021-07-09</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-09-10 23:30:26" itemprop="dateModified" datetime="2021-09-10T23:30:26+08:00">2021-09-10</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>基础大致有 数据类型 运算符 字符串 输入和输出 控制流程 大数 数组 7个部分</p>
+<p>参考 Java核心技术卷一的第三章</p>
+<h2 id="数据类型"><a href="#数据类型" class="headerlink" title="数据类型"></a>数据类型</h2><p>​    和其他的语言体系相似，整型int，浮点型float 和 double，字符型 char，布尔型 boolean</p>
+<h4 id="整形"><a href="#整形" class="headerlink" title="整形"></a>整形</h4><p>​    Java支持四种整型 int , short , long , byte  在这中 int 型最常用</p>
+<p>​    其中长整型long在使用时需要一个后缀 L 或 l （ 如400000l ）</p>
+<p>​    自从Java7开始，整形允许加上下划线 如 1_000_000 表示 1000000 编译器会自动去除其中的下划线，这么做方便阅读</p>
+<h4 id="浮点型"><a href="#浮点型" class="headerlink" title="浮点型"></a>浮点型</h4><p>​    Java支持两种浮点型 float 和 double 其中一般默认的都是double ，其中使用float时，会在数据的末尾加上后缀 F 或 f，实际上，很少需要单精度float的数据</p>
+<p>​    浮点数中存在三个特殊浮点数值，遵顼IEEE 754 标准，具体而言为：</p>
+<ol>
+<li>正无穷大</li>
+<li>负无穷大</li>
+<li>NaN（这不是一个数字）</li>
+</ol>
+<p>​    例如，一个正整数除以0的结果就为无穷大 ； 计算0 / 0 或者负数的平方根结果为 NaN</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Double.POSITIVE_INFINTY <span class="comment">//正无穷大</span></span><br><span class="line">Double.NEGATIVE_INFINTY <span class="comment">//负无穷大</span></span><br><span class="line">Double.NaN <span class="comment">//NaN</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="字符型"><a href="#字符型" class="headerlink" title="字符型"></a>字符型</h4><p>​        Java中的字符型指char型，char型变量与Unicode编码机制有关，在Java中，char类型描述了UTF-16编码的一个代码单元</p>
+<p>​        更多时候，会使用字符串String类型 而不是 char型 ，并且也并不推荐在程序中使用 char型</p>
+<p>​        另外，String类型并不是基本类型</p>
+<h2 id="变量和常量"><a href="#变量和常量" class="headerlink" title="变量和常量"></a>变量和常量</h2><p>​    和其他语言体系相同，Java也使用变量来储存值</p>
+<h4 id="变量声明"><a href="#变量声明" class="headerlink" title="变量声明"></a>变量声明</h4><p>​    声明是一条完整的Java语句，需要用分号 进行结束，在Java中，直接声明变量时，可以使用特殊字符，如 Π  但是 ‘ + ’  之类的符号不可以出现在变量名中，空格也不行</p>
+<p>​    Java变量名大小写敏感且长度基本不受限制，前提是不嫌麻烦</p>
+<p>​    另外，不能使用Java保留字作为变量名</p>
+<h4 id="变量初始化"><a href="#变量初始化" class="headerlink" title="变量初始化"></a>变量初始化</h4><p>​    在声明变量后，必须使用赋值语句对变量进行<strong>显示初始化</strong>，千万不要使用未初始化的变量，Java编译器认为这种语句是错误的</p>
+<p>​    在Java中，变量的初始化尽可能的靠近第一次使用的地方，这是一种良好的习惯</p>
+<p>​    自从Java10开始，对于局部变量，如果可以从变量的初始值推断出它的类型，就不再需要声明变量，只需使用var关键字，如</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> vacationDays = <span class="number">12</span>; <span class="comment">//vacationDays is an int</span></span><br><span class="line"><span class="keyword">var</span> greeting = <span class="string">&quot;Hello&quot;</span>; <span class="comment">//greeting is a String</span></span><br></pre></td></tr></table></figure>
+
+<p>​    另外，在Java中，并不区分变量的声明和定义</p>
+<h4 id="常量"><a href="#常量" class="headerlink" title="常量"></a>常量</h4><p>​    在Java中，利用关键字final指示常量，例如</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">final</span> <span class="keyword">int</span> A = <span class="number">10</span>;</span><br></pre></td></tr></table></figure>
+
+<p>​    加上了关键字final的变量视为常量，常量只能被赋值一次，一旦赋值就不能再赋值了，习惯上，常量名使用全大写</p>
+<h5 id="类常量"><a href="#类常量" class="headerlink" title="类常量"></a>类常量</h5><p>​    在Java中，经常希望某个常量可以被多个类使用，这种就是类常量，类常量需要使用static关键字，如</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">double</span> CW = <span class="number">2.54</span></span><br></pre></td></tr></table></figure>
+
+<p>​    类常量的定义一般位于main方法的外部</p>
+<h2 id="运算符"><a href="#运算符" class="headerlink" title="运算符"></a>运算符</h2><p>​    运算符用于连接值。Java提供了一组丰富的算术和逻辑运算符以及数学函数</p>
+<h4 id="算术运算符"><a href="#算术运算符" class="headerlink" title="算术运算符"></a>算术运算符</h4><p>​    在Java中，使用 + - * / 表示 加 减 乘 除 四种运算，用 % 表示整数的取模操作</p>
+<p>​    需要注意，整数被 0 除 会产生一个异常，而浮点数被0除则会得到无穷大 或 NaN 结果</p>
+<h4 id="数学函数和常量"><a href="#数学函数和常量" class="headerlink" title="数学函数和常量"></a>数学函数和常量</h4><p>​    在Math类中，包含各种各样的数学函数，比如sqrt方法 和 pow方法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Math.sqrt(<span class="number">4</span>) <span class="comment">// 解4的平方根</span></span><br><span class="line">Math.pow(<span class="number">2</span>,<span class="number">2</span>) <span class="comment">// 求 2 的 2</span></span><br></pre></td></tr></table></figure>
+
+<p>​    Java的Math方法还是提供一些常用的三角函数，指数函数以及它的反函数，以及两个用于表示 pai 和 e 常量的近似值</p>
+<table>
+<thead>
+<tr>
+<th>Math.sin</th>
+<th>Math.cos</th>
+<th>Math.tan</th>
+<th>Math.atan</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Math.atan2</td>
+<td>Math.exp</td>
+<td>Math.log</td>
+<td>Math.log10</td>
+</tr>
+<tr>
+<td>Math.PI</td>
+<td>Math.E</td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<h4 id="数值类型之间的转换"><a href="#数值类型之间的转换" class="headerlink" title="数值类型之间的转换"></a>数值类型之间的转换</h4><p>​    我们经常需要将一种数值转化为另一种数值类型，下图是合法的类型转换</p>
+<p>![1625969569811](C:\Users\Arsh\Blog\source_posts\学习笔记 - 基础语法\1625969569811.jpg)</p>
+<h4 id="强制类型转换"><a href="#强制类型转换" class="headerlink" title="强制类型转换"></a>强制类型转换</h4><p>​    在必要的时候，我们需要将double转换为int，代价是丢失一些信息，如</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">double</span> x = <span class="number">9.997</span>;</span><br><span class="line"><span class="keyword">int</span> nx = (<span class="keyword">int</span>)x; <span class="comment">//nx的值为9</span></span><br></pre></td></tr></table></figure>
+
+<p>​    强制类型转换通过截断小数部分来将其转换为整形</p>
+<h4 id="结合赋值和运算符"><a href="#结合赋值和运算符" class="headerlink" title="结合赋值和运算符"></a>结合赋值和运算符</h4><p>​    可在赋值中使用二元运算符，例如</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">x += <span class="number">4</span>;</span><br></pre></td></tr></table></figure>
+
+<p>​    这等价于</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">x = x + <span class="number">4</span>;</span><br></pre></td></tr></table></figure>
+
+<p>​    如果运算符得到一个值，其类型与左侧操作数的类型不同，就会发生强制转换</p>
+<h4 id="自增和自减运算符"><a href="#自增和自减运算符" class="headerlink" title="自增和自减运算符"></a>自增和自减运算符</h4><p>​    Java中借鉴了C++和C的做法，提供了自减和自增运算符，这些运算符应该搭配变量使用</p>
+<p>​    在操作上，自增和自减运算符可以添加在前缀或者后缀上，前缀和后缀形式都会使得变量值变化，但在用在表达式中时，二者有区别</p>
+<p>​    前缀形式会先完成加1 或 后1操作，后缀会先使用变量原来的值</p>
+<p>​    建议不要再表达式中使用++ 或 – 会导致难以阅读 并且 会出现烦人的bug</p>
+<h4 id="关系和boolean运算符"><a href="#关系和boolean运算符" class="headerlink" title="关系和boolean运算符"></a>关系和boolean运算符</h4><p>​    Java包含丰富的关系运算符，比如 == 和 ！=</p>
+<p>​    Java延续了C++的做法，使用&amp;&amp;，||表示 与和或</p>
+<p>​    最后Java支持 三元运算符 ？以下方的表达式为例</p>
+<p>​    condition ? expression1 : expression2 如果condition的值为true 则执行expression1 ，否则执行expression2</p>
+<h4 id="位运算符"><a href="#位运算符" class="headerlink" title="位运算符"></a>位运算符</h4><p>​    处理整形类型时，可以直接对组成整数的各个位完成操作，位运算符包括 &amp;(and) |(or)  ^(xor)  ~(not)</p>
+<h4 id="括号和运算符级别"><a href="#括号和运算符级别" class="headerlink" title="括号和运算符级别"></a>括号和运算符级别</h4><p>​    对于表达式，如果不使用圆括号，就按照给出的运算符优先级次序进行计算，同一级别从左往右进行计算</p>
+<p><img src="/2021/07/09/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%20-%20%E5%9F%BA%E7%A1%80%E8%AF%AD%E6%B3%95/腾讯QQ\QQ文件\MobileFile\1625973220150.jpg" alt="1625973220150"></p>
+<h2 id="字符串"><a href="#字符串" class="headerlink" title="字符串"></a>字符串</h2><p>​    Java没有内置的字符串类型，而是在标准Java库中提供了一个预定义类，很自然的叫做String，每个双括号括起来的字符串都是String类的一个实例</p>
+<h4 id="子串"><a href="#子串" class="headerlink" title="子串"></a>子串</h4><p>​    String类的substring方法可以从一个较大的字符串提取出一个子串</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">String greeting = <span class="string">&quot;Hello&quot;</span>;</span><br><span class="line">String s = greeting.substring(<span class="number">0</span>,<span class="number">3</span>);</span><br></pre></td></tr></table></figure>
+
+<p>​    对于substring函数而言，第一个参数为子串的第一个字符的位置，第二个参数为不想复制的第一个位置</p>
+<p>​    在上方的例子中，子串的长度为3</p>
+<h4 id="拼接"><a href="#拼接" class="headerlink" title="拼接"></a>拼接</h4><p>​    与绝大多数的设计语言一样，Java允许使用 + 号进行连接（拼接）两个字符串</p>
+<p>​    当一个字符串和一个非字符串的值进行拼接时，后者会被转化为字符串</p>
+<p>​    在Java11中，还提供了一个repeat方法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">String repeated = <span class="string">&quot;Java&quot;</span>.repeat(<span class="number">3</span>); <span class="comment">// repeated -&gt; &quot;JavaJavaJava&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="不可变字符串"><a href="#不可变字符串" class="headerlink" title="不可变字符串"></a>不可变字符串</h4><p>​    String类没有提供修改字符串中某个字符的方法！</p>
+<p>​    你不能修改String类字符串中的某个或多个字符，在Java文档中String类对象称为不可变的</p>
+<p>​    相对的，Java的字符串允许共享 即 编译器可以让字符串共享</p>
+<p>​    另外，如果复制一个字符串变量，原始字符串和复制的字符串共享相同的字符，同生共死</p>
+<h4 id="检测字符串是否相等"><a href="#检测字符串是否相等" class="headerlink" title="检测字符串是否相等"></a>检测字符串是否相等</h4><p>​    可以使用equals方法检测两个字符串是否相等，例如</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">s.equals(t)</span><br></pre></td></tr></table></figure>
+
+<p>​    对于上方的例子，若s和t相等 则返回true 否则返回 false</p>
+<p>​    一定不要使用 == 来检测两个字符串是否相等，这只能确认两个字符串是否在同一个位置上，这还会产生一些讨厌的Bug</p>
+<h4 id="空串和Null串"><a href="#空串和Null串" class="headerlink" title="空串和Null串"></a>空串和Null串</h4><p>​    空串“”是长度为0的字符串，可以调用以下代码检测一个字符串是否为空</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">if(str.length() == 0)</span><br></pre></td></tr></table></figure>
+
+<p>​    当str是空串时会返回true 否则 返回false</p>
+<p>​    Null串 和 空串 是不同的，这以后再说</p>
+<h2 id="输入和输出"><a href="#输入和输出" class="headerlink" title="输入和输出"></a>输入和输出</h2><h4 id="读取输入"><a href="#读取输入" class="headerlink" title="读取输入"></a>读取输入</h4><p>​    Java中的读取输入可以使用Scanner来实现    </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Scanner in = <span class="keyword">new</span> Scanner(System.in);</span><br></pre></td></tr></table></figure>
+
+<p>​    构造完成后，可以通过Scanner的各种函数获得对应的输入，比如nextInt，nextDouble</p>
+<h4 id="格式化输出"><a href="#格式化输出" class="headerlink" title="格式化输出"></a>格式化输出</h4><p>​    除了使用System.out.print（）来输出到控制台外，Java还提供了Format类</p>
+<h5 id="Format类概述"><a href="#Format类概述" class="headerlink" title="Format类概述"></a>Format类概述</h5><p>​    <em>Format</em> 是一个用于格式化语言环境敏感的信息（如日期、消息和数字）的抽象基类。</p>
+<p>​    <em>Java</em> 平台为格式化日期、消息和数字分别提供了三个特殊的<em>Format</em> 的子类：<em>DateFormat</em>、<em>MessageFormat</em> 和 <em>NumberFormat</em>。</p>
+<h5 id="DateFormat类"><a href="#DateFormat类" class="headerlink" title="DateFormat类"></a>DateFormat类</h5><p>​    <em>DateFormat</em> 是<em>Format</em>类的抽象子类*,* 有一些<em>static</em>的*getXxxxInstance()*方法来获得实例。通过设置结果的长度和地区，来获得日期，时间等的格式。</p>
+<p>​    <em>DateFormat</em>不太常用。一般会使用<em>SimpleDateFormat</em>子类，*newSimpleDateFormat(“yyyy-MM-dd”)<em>或</em>newSimpleDateFormat(“yyyy-MM-dd HH:mm:ss”)*等，来获得常用的时间格式。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line">Date d = <span class="keyword">new</span> Date();</span><br><span class="line"></span><br><span class="line">String s;</span><br><span class="line"></span><br><span class="line"><span class="comment">/** Date类的格式: Sat Aug 30 13:05:56 CST 2014 */</span></span><br><span class="line"></span><br><span class="line">System.out.println(d);</span><br><span class="line"></span><br><span class="line">System.out.println(<span class="string">&quot;******************************************&quot;</span>);</span><br><span class="line"><span class="comment">/** 输出格式: 2014-8-30 */</span></span><br><span class="line"></span><br><span class="line">s = DateFormat.getDateInstance().format(d);</span><br><span class="line"></span><br><span class="line">System.out.println(s);</span><br><span class="line"> </span><br><span class="line"><span class="comment">/** 输出格式: 2014-8-30 */</span></span><br><span class="line"></span><br><span class="line">s = DateFormat.getDateInstance(DateFormat.DEFAULT).format(d);</span><br><span class="line"></span><br><span class="line">System.out.println(s);</span><br><span class="line"></span><br><span class="line"><span class="comment">/** 输出格式: 2014年8月30日 星期六 */</span></span><br><span class="line"></span><br><span class="line">s = DateFormat.getDateInstance(DateFormat.FULL).format(d);</span><br><span class="line"></span><br><span class="line">System.out.println(s);</span><br><span class="line"></span><br><span class="line"><span class="comment">/** 输出格式: 2014-8-30 */</span></span><br><span class="line"></span><br><span class="line">s = DateFormat.getDateInstance(DateFormat.MEDIUM).format(d);</span><br><span class="line"></span><br><span class="line">System.out.println(s);</span><br><span class="line"></span><br><span class="line"><span class="comment">/** 输出格式: 14-8-30 */</span></span><br><span class="line"></span><br><span class="line">s = DateFormat.getDateInstance(DateFormat.SHORT).format(d);</span><br><span class="line"></span><br><span class="line">System.out.println(s);</span><br><span class="line"></span><br><span class="line"><span class="comment">/** 输出格式: 2014-08-30 01:02:02 */</span></span><br><span class="line"></span><br><span class="line">DateFormat format1 = <span class="keyword">new</span> SimpleDateFormat(</span><br><span class="line"></span><br><span class="line">        <span class="string">&quot;yyyy-MM-dd hh:mm:ss&quot;</span>);</span><br><span class="line"></span><br><span class="line">s = format1.format(<span class="keyword">new</span> Date());</span><br><span class="line"></span><br><span class="line">System.out.println(s);  </span><br></pre></td></tr></table></figure>
+
+<h5 id="NumberFormat类"><a href="#NumberFormat类" class="headerlink" title="NumberFormat类"></a>NumberFormat类</h5><ul>
+<li>NumberFormat* 是所有数值格式的抽象基类。此类提供格式化和解析数值的接口。</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line">double num=868326.81472676;</span><br><span class="line"></span><br><span class="line"> double test=3.1415926;</span><br><span class="line"></span><br><span class="line"> //返回当前缺省语言环境的缺省数值格式。/*输出结果：868,326.815*/</span><br><span class="line"></span><br><span class="line"> String myString = NumberFormat.getInstance().format(num);</span><br><span class="line"></span><br><span class="line"> System.out.println(myString);</span><br><span class="line"></span><br><span class="line"> //getCurrencyInstance()返回当前缺省语言环境的通用货币格式/*输出结果：￥868,326.81*/</span><br><span class="line"></span><br><span class="line"> myString = NumberFormat.getCurrencyInstance().format(num);</span><br><span class="line"></span><br><span class="line"> System.out.println(myString);</span><br><span class="line"></span><br><span class="line"> //getNumberInstance() 返回当前缺省语言环境的通用数值格式/*输出结果：868,326.815*/。</span><br><span class="line"></span><br><span class="line"> myString = NumberFormat.getNumberInstance().format(num);</span><br><span class="line"></span><br><span class="line"> System.out.println(myString);</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line"> //getPercentInstance()  返回当前缺省语言环境的百分比格式。/*输出结果：314%*/</span><br><span class="line"></span><br><span class="line">  myString = NumberFormat.getPercentInstance().format(test);</span><br><span class="line"></span><br><span class="line">  System.out.println(myString);  </span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">  NumberFormat format = NumberFormat.getInstance();</span><br><span class="line"></span><br><span class="line">  // 设置数值的小数部分允许的最大位数。 /*输出结果：868,326.815 */</span><br><span class="line"></span><br><span class="line">  format.setMaximumFractionDigits( 3 );</span><br><span class="line"></span><br><span class="line">  System.out.println(format.format(num));</span><br><span class="line"></span><br><span class="line">  // 设置数值的整数部分允许的最大位数。 /*输出结果：26.815 */</span><br><span class="line"></span><br><span class="line">  format.setMaximumIntegerDigits(2);</span><br><span class="line"></span><br><span class="line">  System.out.println(format.format(num));</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">  // 设置数值的小数部分允许的最小位数。 /*输出结果：26.815 */</span><br><span class="line"></span><br><span class="line">  format.setMinimumFractionDigits(2);</span><br><span class="line"></span><br><span class="line">  System.out.println(format.format(num));</span><br><span class="line"></span><br><span class="line">  // 设置数值的整数部分允许的最小位数。 /*输出结果：26.815 */</span><br><span class="line"></span><br><span class="line">  format.setMinimumIntegerDigits(2);</span><br><span class="line"></span><br><span class="line">  System.out.println(format.format(num));</span><br></pre></td></tr></table></figure>
+
+<h2 id="控制流程"><a href="#控制流程" class="headerlink" title="控制流程"></a>控制流程</h2><h4 id="块作用域"><a href="#块作用域" class="headerlink" title="块作用域"></a>块作用域</h4><p>​    块 是指若干条Java语句组成的语句，并用一对大括号括起来，一个块可以嵌套在另一个块中，但是不能在嵌套的两个块的声明同名的变量</p>
+<h2 id="大数"><a href="#大数" class="headerlink" title="大数"></a>大数</h2><p>​    当基本的整数和浮点数满足不了要求时，可以使用 java.math 包中的两个很有用的类 BigInteger 和 BigDecimal 这两个类可以处理任何任意长度数字序列的数值。BigInteger  对应 整形 ，BigDecimal 对应 浮点型</p>
+<p>另外还有一些常量 BigInteger.ZERO , BigInteger.ONE 和 BigInteger.TEN</p>
+<h2 id="数组"><a href="#数组" class="headerlink" title="数组"></a>数组</h2><p>​    数组存储相同类型值的序列</p>
+<h4 id="声明数组"><a href="#声明数组" class="headerlink" title="声明数组"></a>声明数组</h4><p>​    数组时一种数据结果，用来存储同一类型值的集合，通过一个整形下标可以访问数组中的每一个值</p>
+<p>​    声明数组变量时，需要指出数组类型和数组变量的名字，例如</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span>[] AssHoo = <span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">10</span>];</span><br></pre></td></tr></table></figure>
+
+<p>​    一旦创建了数组，就不能在更改大小，如若需要实现动态大小，可以使用其他的数据结构 数组列表arrayList</p>
+<h4 id="for-each循环"><a href="#for-each循环" class="headerlink" title="for each循环"></a>for each循环</h4><p>​    强化for循环，for-each循环是Java相比C语言中的for循环拓展而来的一种新的遍历数组的循环方式，其相对于一般的for循环更方便，而且更易查找数组内的变量</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> ( 变量类型  变量名 : 数组名 ) &#123;</span><br><span class="line">    需要执行的循环语句;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/07/07/hello-world/" rel="prev" title="Hello World">
+      <i class="fa fa-chevron-left"></i> Hello World
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/07/12/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%20-%20%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/" rel="next" title="学习笔记——面向对象">
+      学习笔记——面向对象 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B"><span class="nav-number">1.</span> <span class="nav-text">数据类型</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%95%B4%E5%BD%A2"><span class="nav-number">1.0.1.</span> <span class="nav-text">整形</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%B5%AE%E7%82%B9%E5%9E%8B"><span class="nav-number">1.0.2.</span> <span class="nav-text">浮点型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AD%97%E7%AC%A6%E5%9E%8B"><span class="nav-number">1.0.3.</span> <span class="nav-text">字符型</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%98%E9%87%8F%E5%92%8C%E5%B8%B8%E9%87%8F"><span class="nav-number">2.</span> <span class="nav-text">变量和常量</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8F%98%E9%87%8F%E5%A3%B0%E6%98%8E"><span class="nav-number">2.0.1.</span> <span class="nav-text">变量声明</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8F%98%E9%87%8F%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="nav-number">2.0.2.</span> <span class="nav-text">变量初始化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%B8%B8%E9%87%8F"><span class="nav-number">2.0.3.</span> <span class="nav-text">常量</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%B1%BB%E5%B8%B8%E9%87%8F"><span class="nav-number">2.0.3.1.</span> <span class="nav-text">类常量</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="nav-number">3.</span> <span class="nav-text">运算符</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%AE%97%E6%9C%AF%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="nav-number">3.0.1.</span> <span class="nav-text">算术运算符</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%95%B0%E5%AD%A6%E5%87%BD%E6%95%B0%E5%92%8C%E5%B8%B8%E9%87%8F"><span class="nav-number">3.0.2.</span> <span class="nav-text">数学函数和常量</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%95%B0%E5%80%BC%E7%B1%BB%E5%9E%8B%E4%B9%8B%E9%97%B4%E7%9A%84%E8%BD%AC%E6%8D%A2"><span class="nav-number">3.0.3.</span> <span class="nav-text">数值类型之间的转换</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%BC%BA%E5%88%B6%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2"><span class="nav-number">3.0.4.</span> <span class="nav-text">强制类型转换</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BB%93%E5%90%88%E8%B5%8B%E5%80%BC%E5%92%8C%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="nav-number">3.0.5.</span> <span class="nav-text">结合赋值和运算符</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%87%AA%E5%A2%9E%E5%92%8C%E8%87%AA%E5%87%8F%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="nav-number">3.0.6.</span> <span class="nav-text">自增和自减运算符</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%85%B3%E7%B3%BB%E5%92%8Cboolean%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="nav-number">3.0.7.</span> <span class="nav-text">关系和boolean运算符</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BD%8D%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="nav-number">3.0.8.</span> <span class="nav-text">位运算符</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%8B%AC%E5%8F%B7%E5%92%8C%E8%BF%90%E7%AE%97%E7%AC%A6%E7%BA%A7%E5%88%AB"><span class="nav-number">3.0.9.</span> <span class="nav-text">括号和运算符级别</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="nav-number">4.</span> <span class="nav-text">字符串</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AD%90%E4%B8%B2"><span class="nav-number">4.0.1.</span> <span class="nav-text">子串</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%8B%BC%E6%8E%A5"><span class="nav-number">4.0.2.</span> <span class="nav-text">拼接</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%8D%E5%8F%AF%E5%8F%98%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="nav-number">4.0.3.</span> <span class="nav-text">不可变字符串</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%A3%80%E6%B5%8B%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%98%AF%E5%90%A6%E7%9B%B8%E7%AD%89"><span class="nav-number">4.0.4.</span> <span class="nav-text">检测字符串是否相等</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%A9%BA%E4%B8%B2%E5%92%8CNull%E4%B8%B2"><span class="nav-number">4.0.5.</span> <span class="nav-text">空串和Null串</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BE%93%E5%85%A5%E5%92%8C%E8%BE%93%E5%87%BA"><span class="nav-number">5.</span> <span class="nav-text">输入和输出</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%AF%BB%E5%8F%96%E8%BE%93%E5%85%A5"><span class="nav-number">5.0.1.</span> <span class="nav-text">读取输入</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%A0%BC%E5%BC%8F%E5%8C%96%E8%BE%93%E5%87%BA"><span class="nav-number">5.0.2.</span> <span class="nav-text">格式化输出</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Format%E7%B1%BB%E6%A6%82%E8%BF%B0"><span class="nav-number">5.0.2.1.</span> <span class="nav-text">Format类概述</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#DateFormat%E7%B1%BB"><span class="nav-number">5.0.2.2.</span> <span class="nav-text">DateFormat类</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#NumberFormat%E7%B1%BB"><span class="nav-number">5.0.2.3.</span> <span class="nav-text">NumberFormat类</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8E%A7%E5%88%B6%E6%B5%81%E7%A8%8B"><span class="nav-number">6.</span> <span class="nav-text">控制流程</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%9D%97%E4%BD%9C%E7%94%A8%E5%9F%9F"><span class="nav-number">6.0.1.</span> <span class="nav-text">块作用域</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%A7%E6%95%B0"><span class="nav-number">7.</span> <span class="nav-text">大数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E7%BB%84"><span class="nav-number">8.</span> <span class="nav-text">数组</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%A3%B0%E6%98%8E%E6%95%B0%E7%BB%84"><span class="nav-number">8.0.1.</span> <span class="nav-text">声明数组</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#for-each%E5%BE%AA%E7%8E%AF"><span class="nav-number">8.0.2.</span> <span class="nav-text">for each循环</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">John Doe</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">31</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">John Doe</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"live2d-widget-model-haruto"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":false},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>
+
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/love.js"></script>
+
+<!--动态线条背景-->
+<script type="text/javascript"
+color="220,220,220" opacity='0.7' zIndex="-2" count="200" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js">
+</script>
+
+<!--浏览器搞笑标题-->
+<script type="text/javascript" src="\js\FunnyTitle.js"></script>

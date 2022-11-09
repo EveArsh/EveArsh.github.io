@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Kirang Haerang:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="屁话​        这篇文章来记录在学习 Java多线程 的相关基础时的一部分想法。这次主要包含 线程的基础特性， 线程的创建 和 网图抓取相关的包和操作 三个部分的内容。 线程的基础特性​        解释线程之前需要稍微提一下线程运行的前提，进程 和 程序。 进程 和 程序​        程序是静态的，需要在操作系统中运行时，程序才可以发挥作用。而进程，就是在操作系统中运行的程序。 ​">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java多线程的学习笔记--线程的基础特性、线程的创建、网图抓取相关包">
+<meta property="og:url" content="http://example.com/2021/11/26/Java%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0One/index.html">
+<meta property="og:site_name" content="神秘的世界">
+<meta property="og:description" content="屁话​        这篇文章来记录在学习 Java多线程 的相关基础时的一部分想法。这次主要包含 线程的基础特性， 线程的创建 和 网图抓取相关的包和操作 三个部分的内容。 线程的基础特性​        解释线程之前需要稍微提一下线程运行的前提，进程 和 程序。 进程 和 程序​        程序是静态的，需要在操作系统中运行时，程序才可以发挥作用。而进程，就是在操作系统中运行的程序。 ​">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2021-11-26T13:54:29.839Z">
+<meta property="article:modified_time" content="2021-12-03T14:16:42.946Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://example.com/2021/11/26/Java%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0One/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>Java多线程的学习笔记--线程的基础特性、线程的创建、网图抓取相关包 | 神秘的世界</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">神秘的世界</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/11/26/Java%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0One/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="神秘的世界">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Java多线程的学习笔记--线程的基础特性、线程的创建、网图抓取相关包
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-11-26 21:54:29" itemprop="dateCreated datePublished" datetime="2021-11-26T21:54:29+08:00">2021-11-26</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-12-03 22:16:42" itemprop="dateModified" datetime="2021-12-03T22:16:42+08:00">2021-12-03</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="屁话"><a href="#屁话" class="headerlink" title="屁话"></a>屁话</h2><p>​        这篇文章来记录在学习 Java多线程 的相关基础时的一部分想法。这次主要包含 <strong>线程的基础特性</strong>， <strong>线程的创建</strong> 和 <strong>网图抓取相关的包和操作</strong> 三个部分的内容。</p>
+<h2 id="线程的基础特性"><a href="#线程的基础特性" class="headerlink" title="线程的基础特性"></a>线程的基础特性</h2><p>​        解释线程之前需要稍微提一下线程运行的前提，进程 和 程序。</p>
+<h4 id="进程-和-程序"><a href="#进程-和-程序" class="headerlink" title="进程 和 程序"></a>进程 和 程序</h4><p>​        程序是静态的，需要在操作系统中运行时，程序才可以发挥作用。而进程，就是在操作系统中运行的程序。</p>
+<p>​        进程是系统资源分配的单位，在一个进程中可以有多个线程( 比如主线程main、守护线程gc )。</p>
+<p>​    </p>
+<h4 id="线程的一些基本属性"><a href="#线程的一些基本属性" class="headerlink" title="线程的一些基本属性"></a>线程的一些基本属性</h4><p>​        在上方解释了进程的概念，而线程就是独立的执行路径。在一个进程中，如果开辟有多个线程，那么线程的运行全部由调度器( 也就是CPU ) 统一安排，先后顺序无法人为干预。</p>
+<p>​        对于单线程而言，如果在调用主线程main时，调用某一个函数，那么系统会先暂停main的执行。在执行完调用的目标函数后，继续执行main。</p>
+<p>​        对于多线程而言，如果在调用主线程main时，调用某一个函数，那么理论上系统会同时执行main函数和目标的调用函数。不过要注意的是，对于大多计算机而言，多线程的程序都属于模拟多线程。因为执行线程需要CPU，而CPU只有一个，只能一次性执行一个线程，不过CPU的执行速度十分之快，几乎可以实现多线程的效果。</p>
+<p>​        另外，十分重要的是，在对同一份资源进行操作时，极大概率会出现资源抢夺，需要加入并发控制。同时，线程的增多会带来额外的CPU开销。</p>
+<p>​        在线程开启后，开启的线程不一定立刻执行，具体顺序由CPU进行调度。</p>
+<h2 id="线程的创建"><a href="#线程的创建" class="headerlink" title="线程的创建"></a>线程的创建</h2><p>​        线程的创建有三种常用的方式：</p>
+<ul>
+<li>继承 Thread 类</li>
+<li>实现 Runnable 接口</li>
+<li>实现 Callable 接口</li>
+</ul>
+<h4 id="继承-Thread-类"><a href="#继承-Thread-类" class="headerlink" title="继承 Thread 类"></a>继承 Thread 类</h4><p>​        操作流程：继承 Thread 类 &gt;&gt; 重写 run 方法，在 run 方法中编写线程执行体 &gt;&gt; 创建线程对象，调用 start 方法启动线程</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> TestThread;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TestThreadOne</span> <span class="keyword">extends</span> <span class="title">Thread</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 基础 Thread 类，重写 run 方法，使用 start 方法启动线程</span></span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">20</span>; i++)&#123;</span><br><span class="line">            System.out.println( <span class="string">&quot;Test Run&quot;</span> + i );</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        TestThreadOne testThreadOne = <span class="keyword">new</span> TestThreadOne();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 此处会启动线程</span></span><br><span class="line">        testThreadOne.start();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">20</span>; i++) &#123;</span><br><span class="line">            System.out.println( <span class="string">&quot;Test Main&quot;</span> + i );</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="实现-Runnable-接口"><a href="#实现-Runnable-接口" class="headerlink" title="实现 Runnable 接口"></a>实现 Runnable 接口</h4><p>​        操作流程：实现 Runnable 接口 &gt;&gt; 重写 run 方法，在方法内部编写线程主体 &gt;&gt; 创建线程对象，调用 start 方法启动线程</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> TestThread;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TestRunnableOne</span> <span class="keyword">implements</span> <span class="title">Runnable</span></span>&#123;</span><br><span class="line">    <span class="comment">// 创建线程方式2 实现 Runnable 接口</span></span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">20</span>; i++) &#123;</span><br><span class="line">            System.out.println( <span class="string">&quot;Test Run : &quot;</span> + i );</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        TestRunnableOne testRunnableOne = <span class="keyword">new</span> TestRunnableOne();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">new</span> Thread( testRunnableOne ).start();</span><br><span class="line">        <span class="comment">// 此处的代码等价于</span></span><br><span class="line">        <span class="comment">/*</span></span><br><span class="line"><span class="comment">            Thread thread = new Thread( testRunnableOne );</span></span><br><span class="line"><span class="comment">            thread.start();</span></span><br><span class="line"><span class="comment">        * */</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">40</span>; i++) &#123;</span><br><span class="line">            System.out.println( <span class="string">&quot;Test Main : &quot;</span> + i );</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>​        此处要注意的是，使用实现 Runnable 接口的方法来创建线程的话，在启动线程时，不能直接调用 start 方法。需要创建一个 Thread 类对象，将实现了 Runnable 接口的类对象作为参数传入 Thread 的构造方法中。例如：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">new</span> Thread( testRunnableOne ).start();</span><br><span class="line">      <span class="comment">// 此处的代码等价于</span></span><br><span class="line">      <span class="comment">/*</span></span><br><span class="line"><span class="comment">          Thread thread = new Thread( testRunnableOne );</span></span><br><span class="line"><span class="comment">          thread.start();</span></span><br><span class="line"><span class="comment">      * */</span></span><br></pre></td></tr></table></figure>
+
+<p>​        另外，虽然代码中没有体现。但是在创建线程时是可以为线程起名的，例如：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">new</span> Thread( testRunnableOne, <span class="string">&quot;test&quot;</span> ).start();</span><br></pre></td></tr></table></figure>
+
+<p>​        再提一嘴，虽然三种方式都可以创建线程，但是平时推荐使用第二种和第三种。第三种通过实现 Callable 接口是市面上许多公司的用法，而第二种通过实现 Runnable 接口可以使得同一个对象被多个线程使用，避开了 Java 单继承的局限性。</p>
+<h4 id="实现-Callable-接口"><a href="#实现-Callable-接口" class="headerlink" title="实现 Callable 接口"></a>实现 Callable 接口</h4><p>​        操作流程：实现 Callable 接口，需要返回值 &gt;&gt; 重写 Call 方法，需要抛出异常 &gt;&gt; 创建目标对象 &gt;&gt; 创建执行服务 &gt;&gt; 提交执行 &gt;&gt; 获取结果 &gt;&gt; 关闭服务</p>
+<p>​        十分明显的，通过实现 Callable 接口的方式比起另外两种方式要繁琐不少，尤其是后四步，是另外两种方式所不具有的。那么简单给出后四步代码操作的示例：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 创建执行服务	ExecutorService service = Executors.newFixedThreadPool( 3 );</span></span><br><span class="line"><span class="comment">// 在这里的参数填写需要创建多少条线程</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 提交执行	Future&lt; Boolean &gt; future_1 = service.submit( callableOne );</span></span><br><span class="line"><span class="comment">// callableOne 是一个实现了 Callable 接口的实例对象</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 获取结果 boolean r1 = future_1.get();</span></span><br><span class="line"><span class="comment">// 通过 get 函数获取结果，返回值不一定是 boolean，与最开始实现 Callable 接口所定义的返回值相关</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 关闭服务	service.shutdownNow();</span></span><br><span class="line"><span class="comment">// 通过 shutdownNow 方法关闭服务，代码结束</span></span><br></pre></td></tr></table></figure>
+
+<p>​        在对这个方法多出来的步骤进行解释后，下面给出一个使用 Callable 接口实现多线程下载指定网图的代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> TestThread;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.apache.commons.io.FileUtils;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.io.File;</span><br><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"><span class="keyword">import</span> java.net.URL;</span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.*;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TestCallable</span> <span class="keyword">implements</span> <span class="title">Callable</span>&lt;<span class="title">Boolean</span>&gt; </span>&#123;</span><br><span class="line">    <span class="comment">// 使用实现 Callable 接口来进行创建线程</span></span><br><span class="line">    <span class="keyword">private</span> String fileUrl; <span class="comment">// 网络图片地址</span></span><br><span class="line">    <span class="keyword">private</span> String fileName; <span class="comment">// 保存用的文件名</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">TestCallable</span><span class="params">( String fileUrl, String fileName )</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.fileName = fileName;</span><br><span class="line">        <span class="keyword">this</span>.fileUrl = fileUrl;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Boolean <span class="title">call</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        WebDownloaderPlus webDownloaderPlus = <span class="keyword">new</span> WebDownloaderPlus();</span><br><span class="line"></span><br><span class="line">        webDownloaderPlus.downLoader( fileUrl, fileName );</span><br><span class="line">        System.out.println( <span class="string">&quot;下载的文件名为：&quot;</span> + fileName );</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> ExecutionException, InterruptedException </span>&#123;</span><br><span class="line">        TestCallable callableOne = <span class="keyword">new</span> TestCallable( <span class="string">&quot;https://i1.hdslb.com/bfs/archive/030e00ec6c7b8e0263a0fc1ae00c0f433dba6e90.png&quot;</span>, <span class="string">&quot;Ailisa.png&quot;</span> );</span><br><span class="line">        TestCallable callableTwo = <span class="keyword">new</span> TestCallable( <span class="string">&quot;https://i1.hdslb.com/bfs/archive/e59aac45da468e85dcbd0312e720aecb22851bba.png&quot;</span>, <span class="string">&quot;Anna.png&quot;</span> );</span><br><span class="line">        TestCallable callableThree = <span class="keyword">new</span> TestCallable( <span class="string">&quot;https://i0.hdslb.com/bfs/archive/4bb86278ce6d1ffde15f3a2efc40e51007137fe8.jpg&quot;</span>, <span class="string">&quot;Grapefruit.jpg&quot;</span> );</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 创建执行服务</span></span><br><span class="line">        ExecutorService service = Executors.newFixedThreadPool( <span class="number">3</span> );</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 提交执行</span></span><br><span class="line">        Future&lt; Boolean &gt; future_1 = service.submit( callableOne );</span><br><span class="line">        Future&lt; Boolean &gt; future_2 = service.submit( callableTwo );</span><br><span class="line">        Future&lt; Boolean &gt; future_3 = service.submit( callableThree );</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 获取结果</span></span><br><span class="line">        <span class="keyword">boolean</span> r1 = future_1.get();</span><br><span class="line">        <span class="keyword">boolean</span> r2 = future_2.get();</span><br><span class="line">        <span class="keyword">boolean</span> r3 = future_3.get();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 关闭服务</span></span><br><span class="line">        service.shutdownNow();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">WebDownloaderPlus</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">downLoader</span><span class="params">( String fileURL, String fileName )</span></span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            FileUtils.copyURLToFile( <span class="keyword">new</span> URL( fileURL ), <span class="keyword">new</span> File( fileName ) );</span><br><span class="line">        &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">            System.out.println( <span class="string">&quot;IO异常，downLoader方法出现错误&quot;</span> );</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>​        在上方的代码执行后，目标URL所指向的图片会被下载到代码所在的工程目录下。</p>
+<h2 id="网图抓取相关的包-和-操作"><a href="#网图抓取相关的包-和-操作" class="headerlink" title="网图抓取相关的包 和 操作"></a>网图抓取相关的包 和 操作</h2><p>​        在用 Java 程序抓取网图前，需要一定的前置操作，因为 Java 本身的库并没有自带有关的库。</p>
+<h4 id="commons-IO包"><a href="#commons-IO包" class="headerlink" title="commons-IO包"></a>commons-IO包</h4><p>​        这是一个外置的 Jar 包，其中提供了关于网图的有关操作，可以通过百度直接在官网下载。</p>
+<p>​        在导入 Jar 包后，并不能直接使用，如果IDE使用的是 IDEA 。那么可以通过右键 ”连接到库“ 的方式来将 Jar 包加入库中。如果 Jar 包出现可以打开的箭头，说明导入成功了。</p>
+<p>​    </p>
+<h4 id="网图指定抓取的操作"><a href="#网图指定抓取的操作" class="headerlink" title="网图指定抓取的操作"></a>网图指定抓取的操作</h4><p>​        由于是精确的抓取某张图片，因此需要某张图片精确的URL。可以通过在浏览器中按 F12 打开管理器，在选中图片后会有复制其中的URL。其特点就是 以 http 或 https 开头，以 png 或 jpg 等文件后缀结束。</p>
+<p>​        那么下面给出两种代码，一种通过实现 Callable 接口来进行抓取，一种通过继承 Thread 类进行抓取。</p>
+<p>​        实现 Callable 接口：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> TestThread;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.apache.commons.io.FileUtils;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.io.File;</span><br><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"><span class="keyword">import</span> java.net.URL;</span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.*;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TestCallable</span> <span class="keyword">implements</span> <span class="title">Callable</span>&lt;<span class="title">Boolean</span>&gt; </span>&#123;</span><br><span class="line">    <span class="comment">// 使用实现 Callable 接口来进行创建线程</span></span><br><span class="line">    <span class="keyword">private</span> String fileUrl; <span class="comment">// 网络图片地址</span></span><br><span class="line">    <span class="keyword">private</span> String fileName; <span class="comment">// 保存用的文件名</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">TestCallable</span><span class="params">( String fileUrl, String fileName )</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.fileName = fileName;</span><br><span class="line">        <span class="keyword">this</span>.fileUrl = fileUrl;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Boolean <span class="title">call</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        WebDownloaderPlus webDownloaderPlus = <span class="keyword">new</span> WebDownloaderPlus();</span><br><span class="line"></span><br><span class="line">        webDownloaderPlus.downLoader( fileUrl, fileName );</span><br><span class="line">        System.out.println( <span class="string">&quot;下载的文件名为：&quot;</span> + fileName );</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> ExecutionException, InterruptedException </span>&#123;</span><br><span class="line">        TestCallable callableOne = <span class="keyword">new</span> TestCallable( <span class="string">&quot;https://i1.hdslb.com/bfs/archive/030e00ec6c7b8e0263a0fc1ae00c0f433dba6e90.png&quot;</span>, <span class="string">&quot;Ailisa.png&quot;</span> );</span><br><span class="line">        TestCallable callableTwo = <span class="keyword">new</span> TestCallable( <span class="string">&quot;https://i1.hdslb.com/bfs/archive/e59aac45da468e85dcbd0312e720aecb22851bba.png&quot;</span>, <span class="string">&quot;Anna.png&quot;</span> );</span><br><span class="line">        TestCallable callableThree = <span class="keyword">new</span> TestCallable( <span class="string">&quot;https://i0.hdslb.com/bfs/archive/4bb86278ce6d1ffde15f3a2efc40e51007137fe8.jpg&quot;</span>, <span class="string">&quot;Grapefruit.jpg&quot;</span> );</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 创建执行服务</span></span><br><span class="line">        ExecutorService service = Executors.newFixedThreadPool( <span class="number">3</span> );</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 提交执行</span></span><br><span class="line">        Future&lt; Boolean &gt; future_1 = service.submit( callableOne );</span><br><span class="line">        Future&lt; Boolean &gt; future_2 = service.submit( callableTwo );</span><br><span class="line">        Future&lt; Boolean &gt; future_3 = service.submit( callableThree );</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 获取结果</span></span><br><span class="line">        <span class="keyword">boolean</span> r1 = future_1.get();</span><br><span class="line">        <span class="keyword">boolean</span> r2 = future_2.get();</span><br><span class="line">        <span class="keyword">boolean</span> r3 = future_3.get();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 关闭服务</span></span><br><span class="line">        service.shutdownNow();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">WebDownloaderPlus</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">downLoader</span><span class="params">( String fileURL, String fileName )</span></span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            FileUtils.copyURLToFile( <span class="keyword">new</span> URL( fileURL ), <span class="keyword">new</span> File( fileName ) );</span><br><span class="line">        &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">            System.out.println( <span class="string">&quot;IO异常，downLoader方法出现错误&quot;</span> );</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>​        </p>
+<p>​        通过继承 Thread 类：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> TestThread;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.apache.commons.io.FileUtils;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.io.File;</span><br><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"><span class="keyword">import</span> java.net.URL;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TestThreadTwo</span> <span class="keyword">extends</span> <span class="title">Thread</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 练习 Thread， 实现多线程同步下载网图</span></span><br><span class="line">    <span class="keyword">private</span> String fileUrl; <span class="comment">// 网络图片地址</span></span><br><span class="line">    <span class="keyword">private</span> String fileName; <span class="comment">// 保存用的文件名</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">TestThreadTwo</span><span class="params">(String fileUrl, String fileName)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.fileName = fileName;</span><br><span class="line">        <span class="keyword">this</span>.fileUrl = fileUrl;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 下载图片的线程执行体</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        WebDownloader webDownloader = <span class="keyword">new</span> WebDownloader();</span><br><span class="line"></span><br><span class="line">        webDownloader.downLoader( fileUrl, fileName );</span><br><span class="line">        System.out.println( <span class="string">&quot;下载的文件名为：&quot;</span> + fileName );</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        TestThreadTwo testThread_1 = <span class="keyword">new</span> TestThreadTwo( <span class="string">&quot;https://i1.hdslb.com/bfs/archive/030e00ec6c7b8e0263a0fc1ae00c0f433dba6e90.png&quot;</span>, <span class="string">&quot;Ailisa.png&quot;</span> );</span><br><span class="line">        TestThreadTwo testThread_2 = <span class="keyword">new</span> TestThreadTwo( <span class="string">&quot;https://i1.hdslb.com/bfs/archive/e59aac45da468e85dcbd0312e720aecb22851bba.png&quot;</span>, <span class="string">&quot;Anna.png&quot;</span> );</span><br><span class="line">        TestThreadTwo testThread_3 = <span class="keyword">new</span> TestThreadTwo( <span class="string">&quot;https://i0.hdslb.com/bfs/archive/4bb86278ce6d1ffde15f3a2efc40e51007137fe8.jpg&quot;</span>, <span class="string">&quot;Grapefruit.jpg&quot;</span> );</span><br><span class="line"></span><br><span class="line">        testThread_1.start();</span><br><span class="line">        testThread_2.start();</span><br><span class="line">        testThread_3.start();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 下载器类</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">WebDownloader</span></span>&#123;</span><br><span class="line">    <span class="comment">// 下载方法</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">downLoader</span><span class="params">( String fileUrl, String fileName )</span></span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            FileUtils.copyURLToFile( <span class="keyword">new</span> URL( fileUrl ), <span class="keyword">new</span> Fle( fileName ));</span><br><span class="line">        &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">            System.out.println( <span class="string">&quot;IO异常，downLoader方法出现错误&quot;</span> );</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/11/23/Java%E4%B8%AD%E6%96%87%E4%BB%B6%E7%9A%84%E8%BE%93%E5%85%A5%E4%B8%8E%E8%BE%93%E5%87%BA/" rel="prev" title="Java中文件的输入与输出">
+      <i class="fa fa-chevron-left"></i> Java中文件的输入与输出
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/11/28/Java%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0Two/" rel="next" title="Java多线程学习笔记--线程状态、静态代理、Lambda表达式">
+      Java多线程学习笔记--线程状态、静态代理、Lambda表达式 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B1%81%E8%AF%9D"><span class="nav-number">1.</span> <span class="nav-text">屁话</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BA%BF%E7%A8%8B%E7%9A%84%E5%9F%BA%E7%A1%80%E7%89%B9%E6%80%A7"><span class="nav-number">2.</span> <span class="nav-text">线程的基础特性</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%BF%9B%E7%A8%8B-%E5%92%8C-%E7%A8%8B%E5%BA%8F"><span class="nav-number">2.0.1.</span> <span class="nav-text">进程 和 程序</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BA%BF%E7%A8%8B%E7%9A%84%E4%B8%80%E4%BA%9B%E5%9F%BA%E6%9C%AC%E5%B1%9E%E6%80%A7"><span class="nav-number">2.0.2.</span> <span class="nav-text">线程的一些基本属性</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BA%BF%E7%A8%8B%E7%9A%84%E5%88%9B%E5%BB%BA"><span class="nav-number">3.</span> <span class="nav-text">线程的创建</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BB%A7%E6%89%BF-Thread-%E7%B1%BB"><span class="nav-number">3.0.1.</span> <span class="nav-text">继承 Thread 类</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AE%9E%E7%8E%B0-Runnable-%E6%8E%A5%E5%8F%A3"><span class="nav-number">3.0.2.</span> <span class="nav-text">实现 Runnable 接口</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AE%9E%E7%8E%B0-Callable-%E6%8E%A5%E5%8F%A3"><span class="nav-number">3.0.3.</span> <span class="nav-text">实现 Callable 接口</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BD%91%E5%9B%BE%E6%8A%93%E5%8F%96%E7%9B%B8%E5%85%B3%E7%9A%84%E5%8C%85-%E5%92%8C-%E6%93%8D%E4%BD%9C"><span class="nav-number">4.</span> <span class="nav-text">网图抓取相关的包 和 操作</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#commons-IO%E5%8C%85"><span class="nav-number">4.0.1.</span> <span class="nav-text">commons-IO包</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BD%91%E5%9B%BE%E6%8C%87%E5%AE%9A%E6%8A%93%E5%8F%96%E7%9A%84%E6%93%8D%E4%BD%9C"><span class="nav-number">4.0.2.</span> <span class="nav-text">网图指定抓取的操作</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">John Doe</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">31</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">John Doe</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"live2d-widget-model-haruto"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":false},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>
+
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/love.js"></script>
+
+<!--动态线条背景-->
+<script type="text/javascript"
+color="220,220,220" opacity='0.7' zIndex="-2" count="200" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js">
+</script>
+
+<!--浏览器搞笑标题-->
+<script type="text/javascript" src="\js\FunnyTitle.js"></script>

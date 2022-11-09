@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Kirang Haerang:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="一、什么是SpringBootSpringBoot 属于 Java平台上的一种开源应用框架。 Spring Boot是由Pivotal团队提供的全新框架，其设计目的是用来简化新Spring应用的初始搭建以及开发过程。 该框架使用了特定的方式来进行配置，从而使开发人员不再需要定义样板化的配置。 通过这种方式，Spring Boot致力于在蓬勃发展的快速应用开发领域(rapid application">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SpringBoot 的学习">
+<meta property="og:url" content="http://example.com/2022/07/30/SpringBoot-%E7%9A%84%E5%AD%A6%E4%B9%A0/index.html">
+<meta property="og:site_name" content="神秘的世界">
+<meta property="og:description" content="一、什么是SpringBootSpringBoot 属于 Java平台上的一种开源应用框架。 Spring Boot是由Pivotal团队提供的全新框架，其设计目的是用来简化新Spring应用的初始搭建以及开发过程。 该框架使用了特定的方式来进行配置，从而使开发人员不再需要定义样板化的配置。 通过这种方式，Spring Boot致力于在蓬勃发展的快速应用开发领域(rapid application">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/2022/07/30/SpringBoot-%E7%9A%84%E5%AD%A6%E4%B9%A0/20200525161753312.png">
+<meta property="article:published_time" content="2022-07-30T01:51:06.868Z">
+<meta property="article:modified_time" content="2022-09-08T15:26:02.131Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2022/07/30/SpringBoot-%E7%9A%84%E5%AD%A6%E4%B9%A0/20200525161753312.png">
+
+<link rel="canonical" href="http://example.com/2022/07/30/SpringBoot-%E7%9A%84%E5%AD%A6%E4%B9%A0/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>SpringBoot 的学习 | 神秘的世界</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">神秘的世界</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/07/30/SpringBoot-%E7%9A%84%E5%AD%A6%E4%B9%A0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="神秘的世界">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          SpringBoot 的学习
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-07-30 09:51:06" itemprop="dateCreated datePublished" datetime="2022-07-30T09:51:06+08:00">2022-07-30</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-09-08 23:26:02" itemprop="dateModified" datetime="2022-09-08T23:26:02+08:00">2022-09-08</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="一、什么是SpringBoot"><a href="#一、什么是SpringBoot" class="headerlink" title="一、什么是SpringBoot"></a>一、什么是SpringBoot</h1><p>SpringBoot 属于 Java平台上的一种开源应用框架。</p>
+<p>Spring Boot是由Pivotal团队提供的全新<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E6%A1%86%E6%9E%B6/1212667">框架</a>，其设计目的是用来<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E7%AE%80%E5%8C%96/3374416">简化</a>新<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/Spring/85061">Spring</a>应用的初始搭建以及开发过程。</p>
+<p>该框架使用了特定的方式来进行配置，从而使开发人员不再需要定义样板化的配置。</p>
+<p>通过这种方式，Spring Boot致力于在蓬勃发展的快速应用开发领域(rapid application development)成为领导者 – 摘自百度百科</p>
+<h2 id="Spring-框架"><a href="#Spring-框架" class="headerlink" title="Spring 框架"></a>Spring 框架</h2><p>Spring框架是<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/Java%E5%B9%B3%E5%8F%B0/3793459">Java平台</a>上的一种开源应用框架，提供具有控制反转特性的容器。</p>
+<p>尽管Spring框架自身对编程模型没有限制，但其在Java应用中的频繁使用让它备受青睐。</p>
+<p>以至于后来让它作为 <a target="_blank" rel="noopener" href="https://baike.baidu.com/item/EJB/144195">EJB</a>（EnterpriseJavaBeans）模型的补充，甚至是替补。</p>
+<p>Spring框架为开发提供了一系列的解决方案，比如利用控制反转的核心特性，并通过依赖注入实现控制反转来实现管理对象生命周期容器化，利用面向切面编程进行声明式的事务管理，整合多种持久化技术管理数据访问，提供大量优秀的Web框架方便开发等等。</p>
+<p>Spring框架具有控制反转（IOC）特性，IOC旨在方便项目维护和测试，它提供了一种通过Java的反射机制对Java对象进行统一的配置和管理的方法。</p>
+<p>Spring框架利用容器管理对象的生命周期，容器可以通过扫描XML文件或类上特定Java注解来配置对象，开发者可以通过依赖查找或依赖注入来获得对象。Spring框架具有<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E9%9D%A2%E5%90%91%E5%88%87%E9%9D%A2%E7%BC%96%E7%A8%8B/6016335">面向切面编程</a>（AOP）框架，SpringAOP框架基于代理模式，同时运行时可配置；</p>
+<p>AOP框架主要针对模块之间的交叉关注点进行模块化。Spring框架的AOP框架仅提供基本的AOP特性，虽无法与AspectJ框架相比，但通过与AspectJ的集成，也可以满足基本需求。</p>
+<h2 id="SpringBoot-的出现"><a href="#SpringBoot-的出现" class="headerlink" title="SpringBoot 的出现"></a>SpringBoot 的出现</h2><p>由于 SSM 框架日渐增长的配置，为了简化配置，出现了 SpingBoot。</p>
+<p>不仅继承了Spring框架原有的优秀特性，而且还通过简化配置来进一步简化了Spring应用的整个搭建和开发过程。</p>
+<p>另外SpringBoot通过集成大量的框架使得依赖包的版本冲突，以及引用的不稳定性等问题得到了很好的解决。 </p>
+<h2 id="SpringBoot-的优点"><a href="#SpringBoot-的优点" class="headerlink" title="SpringBoot 的优点"></a>SpringBoot 的优点</h2><ul>
+<li>为所有的Spring开发者提供更快的入门方式</li>
+<li>开箱即用，提供各种默认配置来简化项目配置</li>
+<li>内嵌式容器简化 Web 项目</li>
+<li>没有冗余代码生成和 XML 配置</li>
+</ul>
+<h2 id="微服务"><a href="#微服务" class="headerlink" title="微服务"></a>微服务</h2><p>一种软件开发技术- 面向服务的体系结构（SOA）架构样式的一种变体。</p>
+<p>它提倡将单一应用程序划分成一组小的服务，服务之间互相协调、互相配合，为用户提供最终价值。</p>
+<p>每个服务运行在其独立的进程中，服务与服务间采用轻量级的通信机制互相沟通（通常是基于HTTP的RESTful API）。</p>
+<p>每个服务都围绕着具体业务进行构建，并且能够独立地部署到生产环境、类生产环境等。另外，应尽量避免统一的、集中式的服务管理机制，对具体的一个服务而言，应根据上下文，选择合适的语言、工具对其进行构建。</p>
+<h1 id="二、第一个-SpringBoot-程序"><a href="#二、第一个-SpringBoot-程序" class="headerlink" title="二、第一个 SpringBoot 程序"></a>二、第一个 SpringBoot 程序</h1><p>首先，我们需要创建一个基于 SpringBoot 的项目，在创建项目后在 pom.xml 文件中添加下面的代码，也就是 SpringBoot 内嵌 tomcat 的启动器：</p>
+<figure class="highlight xml"><figcaption><span><dependency></dependency></span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-web<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>在加入了 web 启动器之后，我们就可以使用 SpringBoot 内嵌的 tomcat 来进行开发。</p>
+<p>书写程序时，我们需要在 SpringBootStudyDemoApplication 的同级下创建包，这样就可以使用内嵌的 tomcat 来书写程序。</p>
+<p>对于 SpringBoot 的启动类而言，通过源码可以看出，这个类就是一个 Spring 的组件。</p>
+<h2 id="修改启动端口"><a href="#修改启动端口" class="headerlink" title="修改启动端口"></a>修改启动端口</h2><p>修改启动端口，需要在 resources 目录下的 application.properties 文件中进行修改，在文件中写入以下代码：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">server.port=8081</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="修改启动动画（-Banner-）"><a href="#修改启动动画（-Banner-）" class="headerlink" title="修改启动动画（ Banner ）"></a>修改启动动画（ Banner ）</h2><p>首先要在 resources 目录下创建 banner.txt 文件，然后粘入自定义的 Banner 样式，这里以佛祖为例子 ：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">————————————————————————————————————————————————————————————————————</span><br><span class="line">//                          _ooOoo_                               //</span><br><span class="line">//                         o8888888o                              //</span><br><span class="line">//                         88&quot; . &quot;88                              //</span><br><span class="line">//                         (| ^_^ |)                              //</span><br><span class="line">//                         O  =  /O                              //</span><br><span class="line">//                      ____/`---&#x27;\____                           //</span><br><span class="line">//                    .&#x27;  \|     |//  `.                         //</span><br><span class="line">//                   /  \|||  :  |||//                          //</span><br><span class="line">//                  /  _||||| -:- |||||-                         //</span><br><span class="line">//                  |   | \  -  /// |   |                       //</span><br><span class="line">//                  | \_|  &#x27;&#x27;---/&#x27;&#x27;  |   |                       //</span><br><span class="line">//                    .-\__  `-`  ___/-. /                       //</span><br><span class="line">//                ___`. .&#x27;  /--.--  `. . ___                     //</span><br><span class="line">//              .&quot;&quot; &#x27;&lt;  `.___\_&lt;|&gt;_/___.&#x27;  &gt;&#x27;&quot;&quot;.                  //</span><br><span class="line">//            | | :  `- \`.;` _ /`;.`/ - ` : | |                 //</span><br><span class="line">//               `-.   \_ __ /__ _/   .-` /  /                 //</span><br><span class="line">//      ========`-.____`-.___\_____/___.-`____.-&#x27;========         //</span><br><span class="line">//                           `=---=&#x27;                              //</span><br><span class="line">//      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        //</span><br><span class="line">//            佛祖保佑       永不宕机     永无BUG                  //</span><br><span class="line">————————————————————————————————————————————————————————————————————</span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="三、SpringBoot-的自动装配原理"><a href="#三、SpringBoot-的自动装配原理" class="headerlink" title="三、SpringBoot 的自动装配原理"></a>三、SpringBoot 的自动装配原理</h1><h2 id="3-1-pom-xml-文件"><a href="#3-1-pom-xml-文件" class="headerlink" title="3.1 pom.xml 文件"></a>3.1 pom.xml 文件</h2><p>在 pom.xml 文件中有一部分的代码，负责控制代码中导入 jar 包的版本</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">parent</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-parent<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.7.2<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">relativePath</span>/&gt;</span> <span class="comment">&lt;!-- lookup parent from repository --&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">parent</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>我们在使用一些 Jar 包时，不需要填入版本，就是因为版本在上方的父工程中已经配置了版本</p>
+<h2 id="3-2-启动器"><a href="#3-2-启动器" class="headerlink" title="3.2 启动器"></a>3.2 启动器</h2><p>启动器是 SpringBoot 的启动场景。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>SpringBoot 会将场景，变成一个个启动器，比如 spring-boot-starter-web 就会自动帮助我们导入 web 场景依赖</p>
+<p>如果我们需要使用什么功能，就只需要使用对应的启动器即可</p>
+<h2 id="3-3-结论"><a href="#3-3-结论" class="headerlink" title="3.3 结论"></a>3.3 结论</h2><ol>
+<li>SpringBoot 在启动的时候，从类路径下获取指定的值</li>
+<li>将自动配置的类导入容器，自动配置就会生效</li>
+<li>以前需要配置的东西，现在由 SpringBoot 来完成</li>
+<li>整合 JavaEE，解决方案和自动装配的东西都在 spring-boot-autoconfigure 的包下</li>
+<li>她会导入所有需要的组件，以类名的方式返回，这些组件就会被添加到容器</li>
+<li>容器中也会存在非常多的 xxxAutoConfiguration 的文件，就是这些类给容器中导入了这个场景需要的所有组件</li>
+</ol>
+<h1 id="四、SpringBoot配置"><a href="#四、SpringBoot配置" class="headerlink" title="四、SpringBoot配置"></a>四、SpringBoot配置</h1><p>官方推荐使用 yaml 文件作为 SpringBoot 的配置文件，文件名为 application.yaml ，在 IDEA 中新建即可，若出现叶子图标，即为创建成功</p>
+<h2 id="4-1-yaml"><a href="#4-1-yaml" class="headerlink" title="4.1 yaml"></a>4.1 yaml</h2><p>和 properties 文件不同，yaml 文件的书写格式是 （ 以修改端口号为例子 ）：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">server:</span> 			<span class="comment"># 父级目录</span></span><br><span class="line">  <span class="attr">port:</span> <span class="number">8081</span>		<span class="comment"># 子级属性 key ： value（这里 value 的值前有一个空格）</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p>yaml 对空格十分敏感，因此在书写 yaml 文件时，需要时刻注意空格是否多打</p>
+<p>yaml 除了存储键值对外，还可以存储 对象 和 数组：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"># 存储对象 方式一</span><br><span class="line"># 对象名：</span><br><span class="line">#	对象属性： 值</span><br><span class="line">studentOne: </span><br><span class="line">  name: studentName</span><br><span class="line">  age: 18</span><br><span class="line"></span><br><span class="line"># 存储对象 方式二</span><br><span class="line"># 对象名：&#123; 对象属性： 值 &#125;</span><br><span class="line">studentTwo: &#123; name: studentName, age: 18 &#125;</span><br><span class="line"></span><br><span class="line"># 存储数组 方式一</span><br><span class="line">studentOne:</span><br><span class="line">  -one :</span><br><span class="line">    name: studentName</span><br><span class="line">    age: 18</span><br><span class="line">  </span><br><span class="line">  -two :</span><br><span class="line">    name: studentName</span><br><span class="line">    age: 18</span><br><span class="line"></span><br><span class="line"># 存储数组 方式二</span><br><span class="line">studentTwo: [ &#123; name: studentName, age: 18 &#125;, &#123; name: studentName, age: 19 &#125; ]</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="4-2-yaml-向类中注入值"><a href="#4-2-yaml-向类中注入值" class="headerlink" title="4.2 yaml 向类中注入值"></a>4.2 yaml 向类中注入值</h2><p>yaml 文件支持向实体类中注入值，这需要用到 @ConfigurationProperties 注解</p>
+<p>实体类</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Data</span></span><br><span class="line"><span class="meta">@AllArgsConstructor</span></span><br><span class="line"><span class="meta">@NoArgsConstructor</span></span><br><span class="line"></span><br><span class="line"><span class="meta">@Component(&quot;DogOne&quot;)</span></span><br><span class="line"><span class="meta">@ConfigurationProperties(prefix = &quot;dog&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Dog</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line">    <span class="keyword">private</span> String code;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> HashMap&lt; Integer, Object &gt; map;</span><br><span class="line">    <span class="keyword">private</span> ArrayList&lt; Object &gt; list;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>yaml文件</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">dog:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">wangcai</span></span><br><span class="line">  <span class="attr">code:</span> <span class="number">1</span></span><br><span class="line">  <span class="attr">map:</span> &#123; <span class="attr">1:</span> <span class="string">aa</span> , <span class="attr">2:</span> <span class="string">bb</span> &#125;</span><br><span class="line">  <span class="attr">list:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="number">1</span></span><br><span class="line">    <span class="bullet">-</span> <span class="number">2</span></span><br><span class="line">    <span class="bullet">-</span> <span class="number">3</span></span><br></pre></td></tr></table></figure>
+
+<p>我们需要使用 @ConfigurationProperties 来绑定 yaml 文件和 实体类之间的联系，绑定之后，就可以在测试类中进行测试了</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@SpringBootTest</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SpringBootStudyDemoApplicationTests</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="meta">@Qualifier(&quot;DogOne&quot;)</span></span><br><span class="line">    <span class="keyword">private</span> Dog dog;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">contextLoads</span><span class="params">()</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        System.out.println(dog.toString());</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>另外，为了处理爆红，可以加入以下依赖：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-configuration-processor<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">optional</span>&gt;</span>true<span class="tag">&lt;/<span class="name">optional</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="4-3-JSR303校验"><a href="#4-3-JSR303校验" class="headerlink" title="4.3 JSR303校验"></a>4.3 JSR303校验</h2><p>JSR303 数据校验，这个就是我们可以在字段是增加一层过滤器验证，可以保证数据的合法性</p>
+<p>要使用 JSR303 数据校验，需要提前在对应类中加上 @Validated 注解</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Data</span></span><br><span class="line"><span class="meta">@AllArgsConstructor</span></span><br><span class="line"><span class="meta">@NoArgsConstructor</span></span><br><span class="line"></span><br><span class="line"><span class="meta">@Component(&quot;DogOne&quot;)</span></span><br><span class="line"><span class="meta">@ConfigurationProperties(prefix = &quot;dog&quot;)</span></span><br><span class="line"></span><br><span class="line"><span class="meta">@Validated</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Dog</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@NotNull(message = &quot;姓名不能为空&quot;)</span></span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line">    <span class="keyword">private</span> String code;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> HashMap&lt; Integer, Object &gt; map;</span><br><span class="line">    <span class="keyword">private</span> ArrayList&lt; Object &gt; list;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在加上了 @Validated 注解后，就可以使用 JSR303 校验相关的注解了，如 @NotNull 代表对应的字段不能为空，其中，message 属性表示 当对应的属性为空时，报告的错误内容</p>
+<p>除此之外还有许多和校验有关的注解：</p>
+<p><img src="/2022/07/30/SpringBoot-%E7%9A%84%E5%AD%A6%E4%B9%A0/20200525161753312.png"></p>
+<h2 id="4-4-多套环境的配置和切换"><a href="#4-4-多套环境的配置和切换" class="headerlink" title="4.4 多套环境的配置和切换"></a>4.4 多套环境的配置和切换</h2><p>多套环境的切换需要提前配置多套 application 文件</p>
+<p>后面用 - 来标注环境的作用，如开发环境 application-dev，测试环境 application-test，或者使用下方代码来命名环境：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">spring:</span></span><br><span class="line">  <span class="attr">application:</span></span><br><span class="line">    <span class="attr">name:</span> <span class="string">dev</span></span><br></pre></td></tr></table></figure>
+
+<p>通过下方的代码来完成不同环境间的切换：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">spring:</span></span><br><span class="line">  <span class="attr">profiles:</span></span><br><span class="line">    <span class="attr">active:</span> <span class="string">dev</span></span><br></pre></td></tr></table></figure>
+
+<p>上方的代码代表将环境切换至 dev 环境</p>
+<h1 id="五、Web-开发-和-静态资源的导入"><a href="#五、Web-开发-和-静态资源的导入" class="headerlink" title="五、Web 开发 和 静态资源的导入"></a>五、Web 开发 和 静态资源的导入</h1><p>在创建 SpringBoot 项目时，需要勾选 Web 选项</p>
+<h2 id="5-1-导入静态资源"><a href="#5-1-导入静态资源" class="headerlink" title="5.1 导入静态资源"></a>5.1 导入静态资源</h2><p>要在 SpringBoot 中导入静态资源，可以看看其相应的配置源码 ： WebMvcAutoConfiguration</p>
+<p>在这个类中，定义了有关 SpringBoot 的静态资源的导入的有关方式，比如：</p>
+<p> 启用过滤器 : 在 yaml 文件中设置属性 spring.mvc.hiddenmethod.filter = true</p>
+<p>书回正题，在 WebMvcAutoConfiguration 中我们可以找到这个函数 ：WebMvcAutoConfigurationAdapter</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">WebMvcAutoConfigurationAdapter</span><span class="params">(WebProperties webProperties, WebMvcProperties mvcProperties, ListableBeanFactory beanFactory, ObjectProvider&lt;HttpMessageConverters&gt; messageConvertersProvider, ObjectProvider&lt;WebMvcAutoConfiguration.ResourceHandlerRegistrationCustomizer&gt; resourceHandlerRegistrationCustomizerProvider, ObjectProvider&lt;DispatcherServletPath&gt; dispatcherServletPath, ObjectProvider&lt;ServletRegistrationBean&lt;?&gt;&gt; servletRegistrations)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.resourceProperties = webProperties.getResources();</span><br><span class="line">    <span class="keyword">this</span>.mvcProperties = mvcProperties;</span><br><span class="line">    <span class="keyword">this</span>.beanFactory = beanFactory;</span><br><span class="line">    <span class="keyword">this</span>.messageConvertersProvider = messageConvertersProvider;</span><br><span class="line">    <span class="keyword">this</span>.resourceHandlerRegistrationCustomizer = (WebMvcAutoConfiguration.ResourceHandlerRegistrationCustomizer)resourceHandlerRegistrationCustomizerProvider.getIfAvailable();</span><br><span class="line">    <span class="keyword">this</span>.dispatcherServletPath = dispatcherServletPath;</span><br><span class="line">    <span class="keyword">this</span>.servletRegistrations = servletRegistrations;</span><br><span class="line">    <span class="keyword">this</span>.mvcProperties.checkConfiguration();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在其中，我们点入WebProperties 下的类，就可以看见一些不一样的东西：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String[] CLASSPATH_RESOURCE_LOCATIONS = <span class="keyword">new</span> String[]&#123;</span><br><span class="line">			 <span class="string">&quot;classpath:/META-INF/resources/&quot;</span>, </span><br><span class="line">			 <span class="string">&quot;classpath:/resources/&quot;</span>, </span><br><span class="line">			 <span class="string">&quot;classpath:/static/&quot;</span>, </span><br><span class="line">			 <span class="string">&quot;classpath:/public/&quot;</span></span><br><span class="line">&#125;;</span><br><span class="line">     </span><br></pre></td></tr></table></figure>
+
+<p>可以看见，SpringBoot 对静态资源早有设置，只要静态资源在这四个目录下，就都可以被 SpringBoot 识别</p>
+<p>另外，通过源码的排序可以猜测出，若四个目录下同时存在同名文件，访问顺序为 ： </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/META-INF/resources &gt; resources &gt; static &gt; public</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="5-2-关于首页的定制"><a href="#5-2-关于首页的定制" class="headerlink" title="5.2 关于首页的定制"></a>5.2 关于首页的定制</h2><p>关于 index 的生成和定制</p>
+<p>同样我们可以在 WebMvcAutoConfiguration 中找到相关的函数 getIndexHtml 和 WelcomePageHandlerMapping</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> Resource <span class="title">getIndexHtml</span><span class="params">(Resource location)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        Resource resource = location.createRelative(<span class="string">&quot;index.html&quot;</span>);</span><br><span class="line">        <span class="keyword">if</span> (resource.exists() &amp;&amp; resource.getURL() != <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> resource;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">catch</span> (Exception var3) &#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Bean</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> WelcomePageHandlerMapping <span class="title">welcomePageHandlerMapping</span><span class="params">(ApplicationContext applicationContext, FormattingConversionService mvcConversionService, ResourceUrlProvider mvcResourceUrlProvider)</span> </span>&#123;</span><br><span class="line">    WelcomePageHandlerMapping welcomePageHandlerMapping = <span class="keyword">new</span> WelcomePageHandlerMapping(<span class="keyword">new</span> TemplateAvailabilityProviders(applicationContext), applicationContext, <span class="keyword">this</span>.getWelcomePage(), <span class="keyword">this</span>.mvcProperties.getStaticPathPattern());</span><br><span class="line">    welcomePageHandlerMapping.setInterceptors(<span class="keyword">this</span>.getInterceptors(mvcConversionService, mvcResourceUrlProvider));</span><br><span class="line">    welcomePageHandlerMapping.setCorsConfigurations(<span class="keyword">this</span>.getCorsConfigurations());</span><br><span class="line">    <span class="keyword">return</span> welcomePageHandlerMapping;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里由于展不开源码，导致不好阅读，可以在 IDEA 中去阅读源码</p>
+<p>这两段代码说明，首页的读取会选择在之前的四个目录下的任意目录中的名为 “ index.jsp ” 的文件来作为首页启动 </p>
+<h1 id="六、thymeleaf-模板引擎"><a href="#六、thymeleaf-模板引擎" class="headerlink" title="六、thymeleaf 模板引擎"></a>六、thymeleaf 模板引擎</h1><p> SpringBoot默认不支持JSP，因为jsp相对于一些<a target="_blank" rel="noopener" href="https://so.csdn.net/so/search?q=%E6%A8%A1%E6%9D%BF%E5%BC%95%E6%93%8E&spm=1001.2101.3001.7020">模板引擎</a>，性能都比较低，官方推荐使用thymeleaf</p>
+<p> Thymeleaf 是一个 Java 模板引擎开发库，可以处理和生成 HTML、<a target="_blank" rel="noopener" href="https://so.csdn.net/so/search?q=XML&spm=1001.2101.3001.7020">XML</a>、JavaScript、CSS 和 文本 ，在 Web 和非 Web 环境下都可以正常工作</p>
+<h2 id="6-1-模板引擎"><a href="#6-1-模板引擎" class="headerlink" title="6.1 模板引擎"></a>6.1 模板引擎</h2><p>模板引擎（这里特指用于Web开发的模板引擎）是为了使用户界面与业务数据（内容）分离而产生的</p>
+<p>它可以生成特定格式的文档，用于网站的模板引擎就会生成一个标准的<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/HTML/97049?fromModule=lemma_inlink">HTML</a>文档</p>
+<h2 id="6-2-Thymeleaf-的分析"><a href="#6-2-Thymeleaf-的分析" class="headerlink" title="6.2 Thymeleaf 的分析"></a>6.2 Thymeleaf 的分析</h2><p>要注意的是，Thymeleaf 应该是 3.0 以上的版本，否则我们的程序都无法正常运行</p>
+<p>打开 IDEA 搜索 Thymeleaf 对应的配置类 ThymeleafProperties 我们可以看到以下代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> String DEFAULT_PREFIX = <span class="string">&quot;classpath:/templates/&quot;</span>;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> String DEFAULT_SUFFIX = <span class="string">&quot;.html&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> String prefix = <span class="string">&quot;classpath:/templates/&quot;</span>;</span><br><span class="line"><span class="keyword">private</span> String suffix = <span class="string">&quot;.html&quot;</span>;</span><br><span class="line"><span class="keyword">private</span> String mode = <span class="string">&quot;HTML&quot;</span>;</span><br></pre></td></tr></table></figure>
+
+<p>这是标准的前后缀设置，这意味着，在 templates 目录下的  .html 文件都会被 Thymeleaf 识别分析</p>
+<h2 id="6-3-Thymeleaf-表达式"><a href="#6-3-Thymeleaf-表达式" class="headerlink" title="6.3 Thymeleaf 表达式"></a>6.3 Thymeleaf 表达式</h2><p>如果想用 Thymeleaf 来完成前后端的交互，比如传值等操作的话，需要在前端页面导入相关的依赖：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">xmlns:th=&quot;http://www.thymeleaf.org&quot;</span><br></pre></td></tr></table></figure>
+
+<p>然后就可以使用 Thymeleaf 表达式，常见的 Thymeleaf 表达式有以下这些：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&lt;a th:href=&quot;@&#123;/user/login&#125;&quot;&gt;&lt;/a&gt;</span><br><span class="line"> </span><br><span class="line">&lt;a th:src=&quot;@&#123;/user/login&#125;&quot;/&gt;</span><br><span class="line"></span><br><span class="line">&lt;div th:text=&quot;#&#123;user&#125;&quot;&gt; &lt;/div&gt;</span><br><span class="line"></span><br><span class="line">&lt;div th:each=&quot;value: $&#123;msg&#125;&quot; th:text=&quot;$&#123;value&#125;&quot; &gt;&lt;/div&gt;</span><br><span class="line"></span><br><span class="line">&lt;p&gt;Name: &lt;span th: text=&quot; *&#123;firstName&#125;&quot; &gt;Sebastian&lt;/span&gt;. &lt;/p&gt;</span><br><span class="line"> </span><br><span class="line">&lt;p&gt;Surname: &lt;span th: text=&quot; *&#123;lastName&#125;&quot; &gt;Pepper&lt;/span&gt;. &lt;/p&gt;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="6-4-Thymeleaf-语法"><a href="#6-4-Thymeleaf-语法" class="headerlink" title="6.4 Thymeleaf 语法"></a>6.4 Thymeleaf 语法</h2><h3 id="6-4-1-Thymeleaf-的常用属性解读"><a href="#6-4-1-Thymeleaf-的常用属性解读" class="headerlink" title="6.4.1 Thymeleaf 的常用属性解读"></a>6.4.1 Thymeleaf 的常用属性解读</h3><p>html有的属性，Thymeleaf基本都有，而常用的属性大概有七八个</p>
+<p>其中th属性执行的优先级从1~8，数字越低优先级越高</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">一、th:text ：设置当前元素的文本内容，相同功能的还有th:utext，两者的区别在于前者不会转义html标签，后者会。优先级不高：</span><br><span class="line">order=7</span><br><span class="line"></span><br><span class="line">二、th:value：设置当前元素的value值，类似修改指定属性的还有th:src，th:href。优先级不高：order=6</span><br><span class="line"></span><br><span class="line">三、th:each：遍历循环元素，和th:text或th:value一起使用。注意该属性修饰的标签位置，详细往后看。优先级很高：order=2</span><br><span class="line"></span><br><span class="line">四、th:if：条件判断，类似的还有th:unless，th:switch，th:case。优先级较高：order=3</span><br><span class="line"></span><br><span class="line">五、th:insert：代码块引入，类似的还有th:replace，th:include，三者的区别较大，若使用不恰当会破坏html结构，常用于公共代码块提取的场景。优先级最高：order=1</span><br><span class="line"></span><br><span class="line">六、th:fragment：定义代码块，方便被th:insert引用。优先级最低：order=8</span><br><span class="line"></span><br><span class="line">七、th:object：声明变量，一般和*&#123;&#125;一起配合使用，达到偷懒的效果。优先级一般：order=4</span><br><span class="line"></span><br><span class="line">八、th:attr：修改任意属性，实际开发中用的较少，因为有丰富的其他th属性帮忙，类似的还有th:attrappend，th:attrprepend。优先级一般：order=5</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="6-4-2-Thymeleaf-的基本语法"><a href="#6-4-2-Thymeleaf-的基本语法" class="headerlink" title="6.4.2 Thymeleaf 的基本语法"></a>6.4.2 Thymeleaf 的基本语法</h3><p><strong>标准表达式语法</strong><br>${…} 变量表达式 Variable Expressions<br>*{…} 选择变量表达式 Selection Variable Expressions<br>#{…} 消息表达式 Message Expressions<br>@{…} 链接url表达式 Link URL Expressions<br>~{…} 代码块表达式 Fragment Expressions</p>
+<p><strong>字面量</strong><br>‘one text’,’another text’…文本<br>0,1,3.0,12.45… 数值<br>true false 布尔类型<br>null 空<br>one,sometext,main 文本字符</p>
+<p><strong>文本操作</strong><br>+ 字符串连接<br>|The name is ${name}| 字符串连接</p>
+<p><strong>算数运算</strong><br>+ - * / % 二元运算符<br>- 负号 一元运算符</p>
+<p><strong>布尔操作</strong><br>and or 二元操作符<br>! not 非 一元操作符</p>
+<p><strong>关系操作符</strong><br>&gt; &lt; &gt;= &lt;= gt lt ge le<br>== != eq ne</p>
+<p><strong>条件判断</strong><br>(if) ? (then) if-then<br>(if) ? (then):(else) if-then-else</p>
+<h3 id="6-4-3-常用-Thymeleaf-属性使用"><a href="#6-4-3-常用-Thymeleaf-属性使用" class="headerlink" title="6.4.3 常用 Thymeleaf 属性使用"></a>6.4.3 常用 Thymeleaf 属性使用</h3><p>使用Thymeleaf属性需要注意点以下五点：</p>
+<p>一、若要使用Thymeleaf语法，首先要声明名称空间： xmlns:th=”<a target="_blank" rel="noopener" href="http://www.thymeleaf.org&quot;/">http://www.thymeleaf.org&quot;</a></p>
+<p>二、设置文本内容 th:text，设置input的值 th:value，循环输出 th:each，条件判断 th:if，插入代码块 th:insert，定义代码块 th:fragment，声明变量 th:object</p>
+<p>三、th:each 的用法需要格外注意，打个比方：如果你要循环一个div中的p标签，则th:each属性必须放在p标签上。若你将th:each属性放在div上，则循环的是将整个div。</p>
+<p>四、变量表达式中提供了很多的内置方法，该内置方法是用#开头，请不要与#{}消息表达式弄混。</p>
+<p>五、th:insert，th:replace，th:include 三种插入代码块的效果相似，但区别很大。</p>
+<h1 id="七、MVC配置"><a href="#七、MVC配置" class="headerlink" title="七、MVC配置"></a>七、MVC配置</h1><p>Spring Boot为Spring MVC提供了自动配置，适用于大多数应用程序</p>
+<p>如果你想保留Spring Boot MVC功能，并且你想添加额外的 MVC配置（拦截器，格式化程序，视图控制器和其他功能），你可以添加自己 的 @Configuration 和 WebMvcConfigurer 类</p>
+<h2 id="7-1-SpringMVC-在-SpringBoot-中的扩展"><a href="#7-1-SpringMVC-在-SpringBoot-中的扩展" class="headerlink" title="7.1 SpringMVC 在 SpringBoot 中的扩展"></a>7.1 SpringMVC 在 SpringBoot 中的扩展</h2><p>首先，我们创建一个名为 config 的包，代表我们自己对 SpringMVC 的配置</p>
+<p>通过源码可以得知，WebMvcConfigurer 类是一个接口类，那么我们继承这个接口即可，同时添加 @Configuration  注解</p>
+<p>接下来，就可以通过重写各种方法，来完成对 SpringMVC 的各种配置</p>
+<h2 id="7-2-视图解析器-ContentNegotiatingViewResolver"><a href="#7-2-视图解析器-ContentNegotiatingViewResolver" class="headerlink" title="7.2  视图解析器  ContentNegotiatingViewResolver"></a>7.2  视图解析器  ContentNegotiatingViewResolver</h2><p>我们通过对 ContentNegotiatingViewResolver 类源码的分析可以得知，这个类实现了 ViewResolver 接口类，因此可以被称之为视图解析器</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ContentNegotiatingViewResolver</span> </span></span><br><span class="line"><span class="class">	<span class="keyword">extends</span> <span class="title">WebApplicationObjectSupport</span> </span></span><br><span class="line"><span class="class">	<span class="keyword">implements</span> <span class="title">ViewResolver</span>, <span class="title">Ordered</span>, <span class="title">InitializingBean</span></span></span><br></pre></td></tr></table></figure>
+
+<p>通过 debug 可以看到，ContentNegotiatingViewResolver 视图解析器会默认启动，不用特意配置，在下面以视图解析器为例子，展示DIY 的方法</p>
+<h2 id="7-3-DIY-组件"><a href="#7-3-DIY-组件" class="headerlink" title="7.3 DIY 组件"></a>7.3 DIY 组件</h2><p>接下来以视图解析器为例子，来完成一次 DIY 组件的配置，并将其装配到 SpringBoot 中</p>
+<p>首先，我们需要实现 ViewResolver 接口类，这样就可以创造一个视图解析器，为了方便，我们将其设置为<strong>静态内部类</strong>：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 自定义的 视图解析器</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">MyViewResolver</span> <span class="keyword">implements</span> <span class="title">ViewResolver</span></span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> View <span class="title">resolveViewName</span><span class="params">(String viewName, Locale locale)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>然后书写一个带有 @Bean 注解的方法，将其注入到 Bean 容器中：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Bean</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> MyViewResolver <span class="title">viewResolver</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> MyViewResolver();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这样在启动时，MyViewResolver 类就会作为视图解析器参加程序的运行</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/07/22/SSM%E6%95%B4%E5%90%88/" rel="prev" title="SSM整合">
+      <i class="fa fa-chevron-left"></i> SSM整合
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/09/01/Git%E7%9A%84%E5%AD%A6%E4%B9%A0/" rel="next" title="Git的学习">
+      Git的学习 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E4%BB%80%E4%B9%88%E6%98%AFSpringBoot"><span class="nav-number">1.</span> <span class="nav-text">一、什么是SpringBoot</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Spring-%E6%A1%86%E6%9E%B6"><span class="nav-number">1.1.</span> <span class="nav-text">Spring 框架</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SpringBoot-%E7%9A%84%E5%87%BA%E7%8E%B0"><span class="nav-number">1.2.</span> <span class="nav-text">SpringBoot 的出现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SpringBoot-%E7%9A%84%E4%BC%98%E7%82%B9"><span class="nav-number">1.3.</span> <span class="nav-text">SpringBoot 的优点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BE%AE%E6%9C%8D%E5%8A%A1"><span class="nav-number">1.4.</span> <span class="nav-text">微服务</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E7%AC%AC%E4%B8%80%E4%B8%AA-SpringBoot-%E7%A8%8B%E5%BA%8F"><span class="nav-number">2.</span> <span class="nav-text">二、第一个 SpringBoot 程序</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BF%AE%E6%94%B9%E5%90%AF%E5%8A%A8%E7%AB%AF%E5%8F%A3"><span class="nav-number">2.1.</span> <span class="nav-text">修改启动端口</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BF%AE%E6%94%B9%E5%90%AF%E5%8A%A8%E5%8A%A8%E7%94%BB%EF%BC%88-Banner-%EF%BC%89"><span class="nav-number">2.2.</span> <span class="nav-text">修改启动动画（ Banner ）</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%89%E3%80%81SpringBoot-%E7%9A%84%E8%87%AA%E5%8A%A8%E8%A3%85%E9%85%8D%E5%8E%9F%E7%90%86"><span class="nav-number">3.</span> <span class="nav-text">三、SpringBoot 的自动装配原理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#3-1-pom-xml-%E6%96%87%E4%BB%B6"><span class="nav-number">3.1.</span> <span class="nav-text">3.1 pom.xml 文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-2-%E5%90%AF%E5%8A%A8%E5%99%A8"><span class="nav-number">3.2.</span> <span class="nav-text">3.2 启动器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-3-%E7%BB%93%E8%AE%BA"><span class="nav-number">3.3.</span> <span class="nav-text">3.3 结论</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9B%9B%E3%80%81SpringBoot%E9%85%8D%E7%BD%AE"><span class="nav-number">4.</span> <span class="nav-text">四、SpringBoot配置</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#4-1-yaml"><span class="nav-number">4.1.</span> <span class="nav-text">4.1 yaml</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-2-yaml-%E5%90%91%E7%B1%BB%E4%B8%AD%E6%B3%A8%E5%85%A5%E5%80%BC"><span class="nav-number">4.2.</span> <span class="nav-text">4.2 yaml 向类中注入值</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-3-JSR303%E6%A0%A1%E9%AA%8C"><span class="nav-number">4.3.</span> <span class="nav-text">4.3 JSR303校验</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-4-%E5%A4%9A%E5%A5%97%E7%8E%AF%E5%A2%83%E7%9A%84%E9%85%8D%E7%BD%AE%E5%92%8C%E5%88%87%E6%8D%A2"><span class="nav-number">4.4.</span> <span class="nav-text">4.4 多套环境的配置和切换</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BA%94%E3%80%81Web-%E5%BC%80%E5%8F%91-%E5%92%8C-%E9%9D%99%E6%80%81%E8%B5%84%E6%BA%90%E7%9A%84%E5%AF%BC%E5%85%A5"><span class="nav-number">5.</span> <span class="nav-text">五、Web 开发 和 静态资源的导入</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#5-1-%E5%AF%BC%E5%85%A5%E9%9D%99%E6%80%81%E8%B5%84%E6%BA%90"><span class="nav-number">5.1.</span> <span class="nav-text">5.1 导入静态资源</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-2-%E5%85%B3%E4%BA%8E%E9%A6%96%E9%A1%B5%E7%9A%84%E5%AE%9A%E5%88%B6"><span class="nav-number">5.2.</span> <span class="nav-text">5.2 关于首页的定制</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%85%AD%E3%80%81thymeleaf-%E6%A8%A1%E6%9D%BF%E5%BC%95%E6%93%8E"><span class="nav-number">6.</span> <span class="nav-text">六、thymeleaf 模板引擎</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#6-1-%E6%A8%A1%E6%9D%BF%E5%BC%95%E6%93%8E"><span class="nav-number">6.1.</span> <span class="nav-text">6.1 模板引擎</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-2-Thymeleaf-%E7%9A%84%E5%88%86%E6%9E%90"><span class="nav-number">6.2.</span> <span class="nav-text">6.2 Thymeleaf 的分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-3-Thymeleaf-%E8%A1%A8%E8%BE%BE%E5%BC%8F"><span class="nav-number">6.3.</span> <span class="nav-text">6.3 Thymeleaf 表达式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-4-Thymeleaf-%E8%AF%AD%E6%B3%95"><span class="nav-number">6.4.</span> <span class="nav-text">6.4 Thymeleaf 语法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#6-4-1-Thymeleaf-%E7%9A%84%E5%B8%B8%E7%94%A8%E5%B1%9E%E6%80%A7%E8%A7%A3%E8%AF%BB"><span class="nav-number">6.4.1.</span> <span class="nav-text">6.4.1 Thymeleaf 的常用属性解读</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-4-2-Thymeleaf-%E7%9A%84%E5%9F%BA%E6%9C%AC%E8%AF%AD%E6%B3%95"><span class="nav-number">6.4.2.</span> <span class="nav-text">6.4.2 Thymeleaf 的基本语法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-4-3-%E5%B8%B8%E7%94%A8-Thymeleaf-%E5%B1%9E%E6%80%A7%E4%BD%BF%E7%94%A8"><span class="nav-number">6.4.3.</span> <span class="nav-text">6.4.3 常用 Thymeleaf 属性使用</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%83%E3%80%81MVC%E9%85%8D%E7%BD%AE"><span class="nav-number">7.</span> <span class="nav-text">七、MVC配置</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#7-1-SpringMVC-%E5%9C%A8-SpringBoot-%E4%B8%AD%E7%9A%84%E6%89%A9%E5%B1%95"><span class="nav-number">7.1.</span> <span class="nav-text">7.1 SpringMVC 在 SpringBoot 中的扩展</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-2-%E8%A7%86%E5%9B%BE%E8%A7%A3%E6%9E%90%E5%99%A8-ContentNegotiatingViewResolver"><span class="nav-number">7.2.</span> <span class="nav-text">7.2  视图解析器  ContentNegotiatingViewResolver</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-3-DIY-%E7%BB%84%E4%BB%B6"><span class="nav-number">7.3.</span> <span class="nav-text">7.3 DIY 组件</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">John Doe</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">31</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">John Doe</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"live2d-widget-model-haruto"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":false},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>
+
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/love.js"></script>
+
+<!--动态线条背景-->
+<script type="text/javascript"
+color="220,220,220" opacity='0.7' zIndex="-2" count="200" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js">
+</script>
+
+<!--浏览器搞笑标题-->
+<script type="text/javascript" src="\js\FunnyTitle.js"></script>

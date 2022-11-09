@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Kirang Haerang:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="​    在Java的标准类库中，Date类的实例有一个特别的状态，即 特定的时间点 ​    尽管在使用Date类不必在意这一点，但Date时间是用距离一个固定时间点的毫秒数（可正可负）表示的，这个时间点就是所谓的 纪元 ，即UTC（Coordinated Universal Time 国际协调时间）时间1970年1月1日00：00：00。 ​    但是，Date类对于处理人类记录日期的日历信">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java库中的LocalDate类">
+<meta property="og:url" content="http://example.com/2021/09/10/Java%E5%BA%93%E4%B8%AD%E7%9A%84LocalDate%E7%B1%BB/index.html">
+<meta property="og:site_name" content="神秘的世界">
+<meta property="og:description" content="​    在Java的标准类库中，Date类的实例有一个特别的状态，即 特定的时间点 ​    尽管在使用Date类不必在意这一点，但Date时间是用距离一个固定时间点的毫秒数（可正可负）表示的，这个时间点就是所谓的 纪元 ，即UTC（Coordinated Universal Time 国际协调时间）时间1970年1月1日00：00：00。 ​    但是，Date类对于处理人类记录日期的日历信">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2021-09-10T15:44:44.804Z">
+<meta property="article:modified_time" content="2021-09-11T07:19:16.052Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://example.com/2021/09/10/Java%E5%BA%93%E4%B8%AD%E7%9A%84LocalDate%E7%B1%BB/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>Java库中的LocalDate类 | 神秘的世界</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">神秘的世界</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/09/10/Java%E5%BA%93%E4%B8%AD%E7%9A%84LocalDate%E7%B1%BB/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="神秘的世界">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Java库中的LocalDate类
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-09-10 23:44:44" itemprop="dateCreated datePublished" datetime="2021-09-10T23:44:44+08:00">2021-09-10</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-09-11 15:19:16" itemprop="dateModified" datetime="2021-09-11T15:19:16+08:00">2021-09-11</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>​    在Java的标准类库中，Date类的实例有一个特别的状态，即 <strong>特定的时间点</strong></p>
+<p>​    尽管在使用Date类不必在意这一点，但Date时间是用距离一个固定时间点的毫秒数（可正可负）表示的，这个时间点就是所谓的 <strong>纪元</strong> ，即UTC（Coordinated Universal Time 国际协调时间）时间1970年1月1日00：00：00。</p>
+<p>​    但是，Date类对于处理人类记录日期的日历信息并不是那么有用，如“December 31，1999”，这种特定的日期描述遵循了世界上大多数地区使用的Gregorian阳历。但是，同样的这个时间点采用中国或者希伯来的阴历就不那么准确了。</p>
+<p>​    对此Java的类库设计者决定将保存时间与给时间点命名分开。Java类标准库分别包含了两个类：一个是用来表示时间点的Date类，另一个是用大家熟悉的日历表示法表示日期的LocalDate类，当然，在Java8以后，引入了另外一些类来处理日期和时间的不同方面。</p>
+<p>​    将时间度量与日历分开是一种很好的面向对象设计，通常，最好使用不同的类来表示不同的概念。</p>
+<p>​    对于LocalDate类，请不要使用其构造器来构造LocalDate类对象，实际上，应当使用静态 <strong>工厂方法</strong> ，它会代表你调用构造器，如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">LocalDate Test = LocalDate.now();</span><br></pre></td></tr></table></figure>
+
+<p>​    这个表达式会构造一个新对象，表示构造这个对象时的日期，当然，可以提供年、月、日来构造一个对应特定日期的对象，如：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">LocalDate Test = LocalDate.of(<span class="number">1999</span>,<span class="number">12</span>,<span class="number">31</span>);</span><br></pre></td></tr></table></figure>
+
+<p>​    此时Test指向的LocalDate对象便是一个特定的时间对象（1999年12月31日），另外，一旦拥有了一个LocalDate对象，可以使用getYear，getMonthValue，getDayOfMonth得到年，月，日：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> Year = Test.getYear(); <span class="comment">//1999</span></span><br><span class="line"><span class="keyword">int</span> Month = Test.getMonthValue(); <span class="comment">//12</span></span><br><span class="line"><span class="keyword">int</span> Day = Test.getDayOfMonth(); <span class="comment">//31</span></span><br></pre></td></tr></table></figure>
+
+<p>​    这看起来似乎没有多大的意义，毕竟这获得的值都是构造对象时所使用的那些值，不过，有时可能有一个计算得到的日期，然后你希望调用这些方法来了解它的更多信息。</p>
+<p>​    例如，plusDays方法会得到一个新的LocalDate类对象，如果应用这个方法得到的对象称为当前对象，这个新日期对象则是距当前对象指定天数的一个新日期：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">LocalDate aLaterTest = Test.plusDay(<span class="number">1000</span>);</span><br><span class="line">year = aLaterTest.getYear(); <span class="comment">//2002</span></span><br><span class="line">month = aLaterTest.getMonthValue(); <span class="comment">//09</span></span><br><span class="line">Day = aLaterTest.getDayOfMonth(); <span class="comment">//26</span></span><br></pre></td></tr></table></figure>
+
+<p>​    LocalDate类封装了实例来维护所设置的日期。如果不查看源代码，就不可能知道类内部的日期表示。当然，封装的意义就在于内部表示不重要，重要的是类对外提供的方法。</p>
+<p>​    实际上，Date类也有得到日，月，年的方法，分别是getDay，getMonth，getYear，不过这些方法<strong>已经废弃</strong>。当类库的设计者意识到某个方法最初就不该引入时，就会把它标记为废弃，不再鼓励他人使用。</p>
+<p>​    类库的设计者意识到应当单独提供类来处理日历，不过在此之前这些方法已经是Date类的一部分了。Java1.1中引入较早的一组日历类时，Date方法被标记为废弃不用。虽然现在仍然可以使用这些方法，但编译器在编译时会对此提出警告，最好还是不要使用这些废弃的方法，因为将来的某个类库版本很有可能会将这些方法完全删除。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/07/14/SWing%E2%80%94%E2%80%94Java%E5%A6%82%E4%BD%95%E7%94%BB%E5%87%BA%E6%96%B9%E6%A0%BC%E7%BA%B8/" rel="prev" title="Swing - 如何画出方格纸">
+      <i class="fa fa-chevron-left"></i> Swing - 如何画出方格纸
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/09/26/%E7%AE%97%E6%B3%95%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-1/" rel="next" title="学习笔记——算法设计的学习笔记 One">
+      学习笔记——算法设计的学习笔记 One <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">John Doe</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">31</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">John Doe</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"live2d-widget-model-haruto"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":false},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>
+
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/love.js"></script>
+
+<!--动态线条背景-->
+<script type="text/javascript"
+color="220,220,220" opacity='0.7' zIndex="-2" count="200" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js">
+</script>
+
+<!--浏览器搞笑标题-->
+<script type="text/javascript" src="\js\FunnyTitle.js"></script>
